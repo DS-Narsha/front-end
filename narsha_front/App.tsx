@@ -1,7 +1,9 @@
 import React from 'react';
 import {Text} from 'react-native';
+import Nav from './src/components/Nav';
 
 export default function App() {
-  const textElement = React.createElement(Text, null, 'Hello world!');
-  return textElement;
+  return (
+    <Nav />
+  )
 }
