@@ -30,7 +30,7 @@ const Nav = () => {
             <Tab.Navigator 
             initialRouteName="Main"
             screenOptions={({route}) => ({
-                tabBarStyle: {height: 70, paddingBottom: 10},
+                tabBarStyle: {height: 70, paddingBottom: 10, paddingTop: 10, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: "#fffaaf"},
                 tabBarIcon: ({focused, size}) => {
                     if(route.name === "Main") {
                         
