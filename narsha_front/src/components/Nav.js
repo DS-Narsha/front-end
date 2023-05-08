@@ -30,10 +30,9 @@ const Nav = () => {
             <Tab.Navigator 
             initialRouteName="Main"
             screenOptions={({route}) => ({
-                tabBarStyle: {height: 70, paddingBottom: 10, paddingTop: 10, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: "#fffaaf"},
+                tabBarStyle: {height: 70, paddingBottom: 10, paddingTop: 10, borderTopLeftRadius: 30, borderTopRightRadius: 30},
                 tabBarIcon: ({focused, size}) => {
                     if(route.name === "Main") {
-                        
                         return focused ?  <ActiveMainSvg/> : <MainSvg/>
                     } else if(route.name === "Achieve") {
                         return focused ? <ActiveAchieveSvg /> : < AchieveSvg />
