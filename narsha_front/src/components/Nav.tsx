@@ -15,11 +15,11 @@ import AlarmSvg from "../assets/Group 52.svg";
 import ActiveAlarmSvg from "../assets/Group 57.svg";
 import MypageSvg from "../assets/Group 53.svg";
 import ActiveMypageSvg from "../assets/Group 58.svg";
-import MainScreen from "./Screen/MainScreen";
-import AchieveScreen from "./Screen/AchieveScreen";
-import WriteScreen from "./Screen/WriteScreen";
-import AlarmScreen from "./Screen/AlarmScreen";
-import MypageScreen from "./Screen/MypageScreen";
+import MainScreen from "../pages/MainScreen";
+import AchieveScreen from "../pages/AchieveScreen";
+import WriteScreen from "../pages/WriteScreen";
+import AlarmScreen from "../pages/AlarmScreen";
+import MypageScreen from "../pages/MypageScreen";
 
 const Nav = () => {
 
@@ -30,8 +30,9 @@ const Nav = () => {
             <Tab.Navigator 
             initialRouteName="Main"
             screenOptions={({route}) => ({
-                tabBarStyle: {height: 70, paddingBottom: 10, paddingTop: 10, borderTopLeftRadius: 30, borderTopRightRadius: 30},
-                tabBarIcon: ({focused, size}) => {
+                tabBarShowLabel: false,
+                tabBarStyle: {height: 70, paddingBottom: 10, paddingTop: 5, borderTopLeftRadius: 30, borderTopRightRadius: 30},
+                tabBarIcon: ({focused}) => {
                     if(route.name === "Main") {
                         return focused ?  <ActiveMainSvg/> : <MainSvg/>
                     } else if(route.name === "Achieve") {
@@ -46,9 +47,7 @@ const Nav = () => {
                     
                 },
             })}
-            tabBarOptions={{
-               showLabel: false 
-            }}>
+            >
                 <Tab.Screen name="Main" component={MainScreen} />
                 <Tab.Screen name="Achieve" component={AchieveScreen} />
                 <Tab.Screen name="Write" component={WriteScreen} />
