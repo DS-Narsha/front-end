@@ -1,21 +1,21 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import MainPage from '../pages/Home';
-import AchievePage from '../pages/Achievement';
-import WritePage from '../pages/Write';
-import AlarmPage from '../pages/Alarm';
+import MainPage from '../pages/MainPage';
+import AchievePage from '../pages/AchievePage';
+import WritePage from '../pages/WritePage';
+import AlarmPage from '../pages/AlarmPage';
 import MyPage from '../pages/MyPage';
-import Home_on from '../assets/home_on.svg';
-import Home_off from '../assets/home_off.svg';
-import Achievement_on from '../assets/achievement_on.svg';
-import Achievement_off from '../assets/achievement_off.svg';
-import Write_on from '../assets/write_on.svg';
-import Write_off from '../assets/write_off.svg';
-import Alarm_on from '../assets/alarm_on.svg';
-import Alarm_off from '../assets/alarm_off.svg';
-import MyPage_on from '../assets/myPage_on.svg';
-import MyPage_off from '../assets/myPage_off.svg';
+import Main_Sel from '../assets/main-sel.svg';
+import Main_Desel from '../assets/main-desel.svg';
+import Achieve_Sel from '../assets/achieve-desel.svg';
+import Achieve_DeSel from '../assets/achieve-sel.svg';
+import Write_Sel from '../assets/write-sel.svg';
+import Write_Desel from '../assets/write-desel.svg';
+import Alarm_Sel from '../assets/alarm-sel.svg';
+import Alarm_Desel from '../assets/alarm-desel.svg';
+import MyPage_Sel from '../assets/mypage-sel.svg';
+import MyPage_Desel from '../assets/mypage-desel.svg';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,15 +35,15 @@ const MainNavigator = () => {
           tabBarShowLabel: false,
           tabBarIcon: ({focused, color, size}) => {
             if (route.name === 'MainPage') {
-              return focused ? <Home_on /> : <Home_off style={{}} />; // 메인
+              return focused ? <Main_Sel /> : <Main_Desel style={{}} />; // 메인
             } else if (route.name === 'AchievePage') {
-              return focused ? <Achievement_on /> : <Achievement_off />; //업적
+              return focused ? <Achieve_Sel /> : <Achieve_DeSel />; //업적
             } else if (route.name === 'WritePage') {
-              return focused ? <Write_on /> : <Write_off />; //글쓰기
+              return focused ? <Write_Sel /> : <Write_Desel />; //글쓰기
             } else if (route.name === 'AlarmPage') {
-              return focused ? <Alarm_on /> : <Alarm_off />; //알림
+              return focused ? <Alarm_Sel /> : <Alarm_Desel />; //알림
             } else if (route.name === 'MyPage') {
-              return focused ? <MyPage_on /> : <MyPage_off />; //마이페이지
+              return focused ? <MyPage_Sel /> : <MyPage_Desel />; //마이페이지
             }
           },
         })}>

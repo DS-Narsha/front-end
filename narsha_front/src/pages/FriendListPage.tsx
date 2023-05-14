@@ -7,8 +7,8 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import userImage from '../assets/user_image.png';
-import DS from '../assets/DS.png';
+import userImage from '../assets/user-image.png';
+import DS from '../assets/ds.png';
 
 const styles = StyleSheet.create({
   ds_container: {
@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     backgroundColor: '#fbffe1',
     borderRadius: 20,
-    padding:8,
-    color:'#61A257',
+    padding: 8,
+    color: '#61A257',
   },
   container: {
     padding: 15,
