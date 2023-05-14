@@ -1,8 +1,8 @@
 import React from 'react';
-import MainNavigator from './src/screens/MainNavigator';
+import Nav from './src/components/NavBar';
 
 export default function App() {
   return (
-      <MainNavigator /> //네비게이션 바 호출
-    )
+    <Nav />
+  )
 }
