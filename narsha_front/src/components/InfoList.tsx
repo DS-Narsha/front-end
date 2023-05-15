@@ -2,10 +2,11 @@ import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 import InfoIcon from '../assets/InfoIcon.svg';
 import DS from '../assets/DS.png';
+import { Svg } from 'react-native-svg';
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: '#F9FAC8',
+    backgroundColor: '#FCFDE1',
   },  
   ds_container: {
     flexDirection: 'row',
@@ -70,7 +71,7 @@ export default function InfoList() {
 이 곳에 올라온답니다.`}</Text>
       </View>
 
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container}>
         <View style={styles.topItem}>
           <InfoIcon />
           <View>
@@ -84,9 +85,9 @@ export default function InfoList() {
           ellipsizeMode="tail">{`훈민정음 해례본]은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 
     이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 
     그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container}>
         <View style={styles.topItem}>
           <InfoIcon />
           <View>
@@ -100,9 +101,9 @@ export default function InfoList() {
           ellipsizeMode="tail">{`훈민정음 해례본]은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 
     이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 
     그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container}>
         <View style={styles.topItem}>
           <InfoIcon />
           <View>
@@ -116,9 +117,9 @@ export default function InfoList() {
           ellipsizeMode="tail">{`훈민정음 해례본]은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 
     이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 
     그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container}>
         <View style={styles.topItem}>
           <InfoIcon />
           <View>
@@ -132,9 +133,9 @@ export default function InfoList() {
           ellipsizeMode="tail">{`훈민정음 해례본]은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 
     이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 
     그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={styles.container}>
+      <TouchableOpacity style={styles.container}>
         <View style={styles.topItem}>
           <InfoIcon />
           <View>
@@ -148,7 +149,8 @@ export default function InfoList() {
           ellipsizeMode="tail">{`훈민정음 해례본]은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 
     이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 
     그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}</Text>
-      </View>
+      </TouchableOpacity>
+
     </View>
   );
 }

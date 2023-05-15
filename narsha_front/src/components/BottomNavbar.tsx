@@ -2,6 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
+import { Svg } from 'react-native-svg';
 import ScreenA from '../pages/ScreenA';
 import ScreenB from '../pages/ScreenB';
 import ScreenC from '../pages/ScreenC';
