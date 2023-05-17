@@ -8,19 +8,32 @@ import StudentList from "../assets/teacherMenu/studentList.svg";
 import AppTime from "../assets/teacherMenu/appTime.svg";
 import GroupCode from "../assets/teacherMenu/groupCode.svg";
 import Undefinedfunc from "../assets/teacherMenu/undefinedSetting.svg" 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function TeacherMenu({ navigation }: any) {
   return(
     <View style={styles.container}>
       <View style={styles.container2}>
-        <View style={{padding: 15}}><Notification /></View>
-        <View style={{padding: 15}}><StudentList /></View>
-        <View style={{padding: 15}}><AppTime /></View>
+        <TouchableOpacity>
+          <View style={{padding: 15}}><Notification /></View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={{padding: 15}}><StudentList /></View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={{padding: 15}}><AppTime /></View>
+        </TouchableOpacity>
       </View>
       <View style={styles.container3}>
-        <View style={{padding: 15}}><GroupCode /></View>
-        <View style={{padding: 15}}><Undefinedfunc /></View>
-        <View style={{padding: 15}}><Undefinedfunc /></View>
+        <TouchableOpacity>
+          <View style={{padding: 15}}><GroupCode /></View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={{padding: 15}}><Undefinedfunc /></View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={{padding: 15}}><Undefinedfunc /></View>
+        </TouchableOpacity>
       </View>
     </View>
   );

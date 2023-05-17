@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import EmptyPhoto from "../assets/empty.svg"
 import ContentPhoto from "../assets/content.svg"
@@ -44,8 +44,12 @@ export default function MyPage() {
         </View>
       </View>
       <View style={styles.btnbox}>
-        <View style={styles.btn}><FriendList /></View>
-        <View style={styles.btn}><BadgeList /></View>
+        <TouchableOpacity>
+          <View style={styles.btn}><FriendList /></View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.btn}><BadgeList /></View>
+        </TouchableOpacity>
       </View>
     </View>
   );

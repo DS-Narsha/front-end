@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import ProfilePhoto from "../assets/profilePhoto.svg"
 import EditButton from "../assets/editButton.svg"
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function EditProfile() {
 
@@ -38,7 +39,9 @@ export default function EditProfile() {
         value={textIntro}
         onChangeText={onChangeTextIntro}
       />
-      <View style={styles.edit}><EditButton /></View>
+      <TouchableOpacity>
+        <View style={styles.edit}><EditButton /></View>
+      </TouchableOpacity>
     </View>
   );
 }
