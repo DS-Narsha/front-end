@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import MyTextInput from "../../components/MyTextInput";
-import AppLogo from "../../assets/image 6.svg";
+import AppLogo from "../../assets/app-logo.svg";
 import CustomButton from "../../components/CustomButton";
 
 
@@ -45,9 +45,11 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     logoText: {
-        fontSize: 28,
+        fontSize: 26,
         marginTop: 30,
-        marginBottom: 20
+        marginBottom: 20,
+        color: "#35562F",
+        fontWeight: "bold"
     },
     formArea: {
         marginTop: 40,

@@ -9,11 +9,9 @@ import SignUpPage from './src/pages/SignUp/Admin/SignUpPage';
 import InputGroupPage from './src/pages/SignUp/User/InputGroupPage';
 import UserSignUpPage from './src/pages/SignUp/User/UserSignUpPage';
 import SelectGroupPage from './src/pages/Login/SelectGroupPage';
-import RoundButton from './src/components/RoundButton';
-
 
 export default function App() {
   return (
-    <RoundButton step="1" />
+    <Nav />
   )
 }

@@ -5,7 +5,7 @@ import {
     View,
 } from 'react-native';
 
-// 텍스트 입력 받는 창(아이디, 비밀번호 등등)
+// 텍스트 입력 받는 창(아이디는 제외, 비밀번호 등등)
 
 const MyTextInput = ({...otherProps}) => {
     return (
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     inputText: {
-        fontSize: 16,
+        fontSize: 14,
         marginLeft: 10,
     },
 })

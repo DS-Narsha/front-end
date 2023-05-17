@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-// 초록색 버튼(다음 버튼, 확인 버튼)
+// 그룹명 버튼
 
 interface Props {
     title: ReactNode;
@@ -17,7 +17,7 @@ function GroupButton({title}: Props) {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: "#F9FAC8",
+        backgroundColor: "#E3F1A9",
         borderRadius: 30,
         height: 90,
         justifyContent: "center",

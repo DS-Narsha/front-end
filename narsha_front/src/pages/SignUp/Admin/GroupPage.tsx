@@ -5,8 +5,7 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
-import ArraowSvg from "../../../assets/arrow.svg";
-import RoundButton from "../../../components/RoundButton";
+import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
 import CustomButton from "../../../components/CustomButton";
 
@@ -15,10 +14,14 @@ import CustomButton from "../../../components/CustomButton";
 const GroupPage = () => {
     return (
       <View style={styles.container}>
-        <ArraowSvg />
+        <TouchableOpacity>
+            <BackSvg />
+        </TouchableOpacity>
         <View style={styles.content}>
             <View style={styles.roundBtnContainer}>
-                <RoundButton step="3"/>
+                <Text style={styles.round1}></Text>
+                <Text style={styles.round1}></Text>
+                <Text style={styles.round1}></Text>
             </View>
             
             <View style={styles.textArea}>
@@ -41,7 +44,9 @@ const GroupPage = () => {
                 </View>
             </View>
             <View>
-                <CustomButton title="다음"/>
+                <TouchableOpacity>
+                    <CustomButton title="다음"/>
+                </TouchableOpacity>
             </View>
         </View>
       </View>          
@@ -55,13 +60,22 @@ const styles = StyleSheet.create({
         padding: 20
     },
     content: {
-        padding: 25,
+        padding: 20,
     },
     roundBtnContainer: {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
-        marginBottom: 30
+        marginBottom: 30,
+        marginTop: 15
+    },
+    round1: {
+        backgroundColor: "#98DC63",
+        borderRadius: 50,
+        width: 18,
+        height: 18,
+        marginLeft: 25,
+        marginRight: 25
     },
     textArea: {
         justifyContent: "center",

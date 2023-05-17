@@ -5,21 +5,26 @@ import {
 } from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs"
-import MainSvg from "../assets/Group 49.svg";
-import ActiveMainSvg from "../assets/Group 54.svg";
-import AchieveSvg from "../assets/Group 50.svg";
-import ActiveAchieveSvg from "../assets/Group 55.svg";
-import WriteSvg from "../assets/Group 51.svg";
-import ActiveWriteSvg from "../assets/Group 56.svg";
-import AlarmSvg from "../assets/Group 52.svg";
-import ActiveAlarmSvg from "../assets/Group 57.svg";
-import MypageSvg from "../assets/Group 53.svg";
-import ActiveMypageSvg from "../assets/Group 58.svg";
-import MainScreen from "../pages/MainScreen";
-import AchieveScreen from "../pages/AchieveScreen";
-import WriteScreen from "../pages/WriteScreen";
-import AlarmScreen from "../pages/AlarmScreen";
-import MypageScreen from "../pages/MypageScreen";
+import MainSvg from "../assets/main-desel.svg";
+import ActiveMainSvg from "../assets/main-sel.svg";
+
+import AchieveSvg from "../assets/achieve-desel.svg";
+import ActiveAchieveSvg from "../assets/achieve-sel.svg";
+
+import WriteSvg from "../assets/write-desel.svg";
+import ActiveWriteSvg from "../assets/write-sel.svg";
+
+import AlarmSvg from "../assets/alarm-desel.svg";
+import ActiveAlarmSvg from "../assets/alarm-sel.svg";
+
+import MypageSvg from "../assets/mypage-desel.svg";
+import ActiveMypageSvg from "../assets/mypage-sel.svg";
+
+import MainScreen from "../pages/MainPage";
+import AchieveScreen from "../pages/AchievePage";
+import WriteScreen from "../pages/WritePage";
+import AlarmScreen from "../pages/AlarmPage";
+import MypageScreen from "../pages/MypagePage";
 
 const Nav = () => {
 

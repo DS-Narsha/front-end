@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 
 // 업적 스크린 페이지
 
-const AchieveScreen = () => {
+const AchievePage = () => {
     return (
         <View>
             <Text>AchieveScreen</Text>
@@ -11,4 +11,4 @@ const AchieveScreen = () => {
     );
 };
 
-export default AchieveScreen;
+export default AchievePage;

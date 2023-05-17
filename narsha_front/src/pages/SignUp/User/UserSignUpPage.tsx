@@ -5,7 +5,7 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
-import AppLogo from "../../../assets/image 6.svg";
+import AppLogo from "../../../assets/app-logo.svg";
 import CustomButton from "../../../components/CustomButton";
 
 // 사용자_회원가입 완료 페이지
@@ -45,8 +45,9 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 22,
-        fontWeight: "bold",
-        marginBottom: 18
+  
+        marginBottom: 18,
+        color: "#000000"
     },
 })
 

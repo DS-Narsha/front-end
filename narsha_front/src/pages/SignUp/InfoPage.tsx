@@ -3,10 +3,10 @@ import {
     StyleSheet, 
     Text,
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    TextInput
 } from 'react-native';
-import ArraowSvg from "../../assets/arrow.svg";
-import RoundButton from "../../components/RoundButton";
+import BackSvg from "../../assets/back.svg";
 import MyTextInput from "../../components/MyTextInput";
 import CustomButton from "../../components/CustomButton";
 
@@ -16,12 +16,15 @@ import CustomButton from "../../components/CustomButton";
 const InfoPage = () => {
     return (
       <View style={styles.container}>
-        <ArraowSvg />
+        <TouchableOpacity>
+            <BackSvg />
+        </TouchableOpacity>
         <View style={styles.content}>
             <View style={styles.roundBtnContainer}>
-                <RoundButton step="2"/>
+                <Text style={styles.round1}></Text>
+                <Text style={styles.round1}></Text>
+                <Text style={styles.round2}></Text>
             </View>
-            
             <View style={styles.textArea}>
                 <Text style={styles.text}>정보를 입력하세요.</Text>
             </View>
@@ -31,12 +34,19 @@ const InfoPage = () => {
                 <Text style={styles.formText}>닉네임</Text>
                 <MyTextInput />
                 <Text style={styles.formText}>아이디</Text>
-                <MyTextInput />
+                <View style={styles.inputContainer}>
+                    <TextInput 
+                    style={styles.inputText} 
+                    placeholder="중복확인"/>
+                    <Text style={styles.warningText} >*이미 존재하는 아이디입니다.</Text>
+                </View>
                 <Text style={styles.formText}>비밀번호</Text>
                 <MyTextInput />
             </View>
             <View>
-                <CustomButton title="다음"/>
+                <TouchableOpacity>
+                    <CustomButton title="다음"/>
+                </TouchableOpacity>
             </View>
         </View>
       </View>          
@@ -50,13 +60,30 @@ const styles = StyleSheet.create({
         padding: 20
     },
     content: {
-        padding: 25,
+        padding: 20,
     },
     roundBtnContainer: {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
-        marginBottom: 30
+        marginBottom: 30,
+        marginTop: 15
+    },
+    round1: {
+        backgroundColor: "#98DC63",
+        borderRadius: 50,
+        width: 18,
+        height: 18,
+        marginLeft: 25,
+        marginRight: 25
+    },
+    round2: {
+        backgroundColor: "#D9D9D9",
+        borderRadius: 50,
+        width: 18,
+        height: 18,
+        marginLeft: 25,
+        marginRight: 25
     },
     textArea: {
         justifyContent: "center",
@@ -65,7 +92,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 24,
         color: "#35562F",
-        fontWeight: "bold",
+        fontWeight: "800",
         marginBottom: 50
     },
     formArea: {
@@ -77,6 +104,25 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         marginBottom: 5
+    },
+    inputContainer: {
+        backgroundColor: "#ffffff",
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: "#C0C0C0",
+        width: '100%',
+        height: 48,
+        marginBottom: 45,
+    },
+    inputText: {
+        fontSize: 14,
+        marginLeft: 10,
+    },
+    warningText: {
+        marginLeft: 15,
+        marginTop: 2,
+        color: "#FF0000",
+        fontSize: 12
     }
 })
 

@@ -5,8 +5,7 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
-import ArraowSvg from "../../../assets/arrow.svg";
-import RoundButton from "../../../components/RoundButton";
+import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
 import CustomButton from "../../../components/CustomButton";
 
@@ -15,13 +14,17 @@ import CustomButton from "../../../components/CustomButton";
 const InputGroupPage = () => {
     return (
       <View style={styles.container}>
-        <ArraowSvg />
+        <TouchableOpacity>
+            <BackSvg />
+        </TouchableOpacity>
         <View style={styles.content}>
             <View style={styles.roundBtnContainer}>
-                <RoundButton step="3"/>
+                <Text style={styles.round1}></Text>
+                <Text style={styles.round1}></Text>
+                <Text style={styles.round1}></Text>
             </View>
             <View style={styles.textArea}>
-                <Text style={styles.text}>그룹코드를 입력해주세요.</Text>
+                <Text style={styles.title}>그룹코드를 입력해주세요.</Text>
             </View>
 
             <View style={styles.formArea}>
@@ -29,12 +32,14 @@ const InputGroupPage = () => {
                 <MyTextInput />
             </View>
             <View style={styles.textArea}>
-                <Text>선생님이 알려주신 그룹 코드를 입력하면</Text>
-                <Text>반 친구들과 SNS에서</Text>
-                <Text>나의 이야기를 공유할 수 있어요!</Text>
-                </View>
+                <Text style={styles.text}>선생님이 알려주신 그룹 코드를 입력하면</Text>
+                <Text style={styles.text}>반 친구들과 SNS에서</Text>
+                <Text style={styles.text}>나의 이야기를 공유할 수 있어요!</Text>
+            </View>
             <View>
-                <CustomButton title="다음"/>
+                <TouchableOpacity>
+                    <CustomButton title="다음"/>
+                </TouchableOpacity>
             </View>
         </View>
       </View>          
@@ -48,20 +53,29 @@ const styles = StyleSheet.create({
         padding: 20
     },
     content: {
-        padding: 25,
+        padding: 20,
     },
     roundBtnContainer: {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
-        marginBottom: 20
+        marginBottom: 30,
+        marginTop: 15
+    },
+    round1: {
+        backgroundColor: "#98DC63",
+        borderRadius: 50,
+        width: 18,
+        height: 18,
+        marginLeft: 25,
+        marginRight: 25
     },
     textArea: {
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 170
     },
-    text: {
+    title: {
         fontSize: 24,
         color: "#35562F",
         fontWeight: "bold",
@@ -73,9 +87,14 @@ const styles = StyleSheet.create({
     formText: {
         fontSize: 16,
         fontWeight: "bold",
-        marginBottom: 5
+        marginBottom: 5,
+        color: "#000000"
     },
-    
+    text: {
+        fontSize: 14,
+        color: "#000000",
+        fontWeight: "400"
+    }
 })
 
 
