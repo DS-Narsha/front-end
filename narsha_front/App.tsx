@@ -5,5 +5,5 @@ import InfoList from './src/components/InfoList';
 import SelectImage from './src/components/SelectImage';
 
 export default function App() {
-  return <BottomNavbar/>;
+  return <FriendList/>;
 }
