@@ -1,6 +1,11 @@
+import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import NavBar from './src/components/NavBar';
+import MainNavigator from './src/components/navigation/MainNavigator';
 
 export default function App() {
-  return <NavBar />;
+  return (
+    <NavigationContainer>
+      <MainNavigator />
+    </NavigationContainer>
+  );
 }
