@@ -1,10 +1,14 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View, Text} from 'react-native';
 
-export default function Achievement() {
-  return (
-    <View>
-        <Text>AchieveScreen</Text>
-    </View>
-);
-}
+// 업적 스크린 페이지
+
+const AchievePage = () => {
+    return (
+        <View>
+            <Text>AchieveScreen</Text>
+        </View>
+    );
+};
+
+export default AchievePage;
