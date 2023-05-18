@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Image} from 'react-native';
 import DS from '../assets/DS.png';
 import Arrow from '../assets/arrow-left.png';
 import SingleFriend from '../components/SingleFriend';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   top: {
@@ -34,11 +35,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function FriendList() {
+//@ts-ignore
+export default function FriendList({navigation}) {
   return (
     <View>
       <View style={styles.top}>
-        <Image source={Arrow} style={{margin: 20}} />
+        <TouchableOpacity onPress={() => navigation.pop()}>
+          <Image source={Arrow} style={{margin: 20}} />
+        </TouchableOpacity>
         <Text style={{margin: 20, marginLeft: 100, fontSize: 18}}>
           친구 목록
         </Text>

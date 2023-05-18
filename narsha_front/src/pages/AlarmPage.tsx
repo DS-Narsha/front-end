@@ -1,14 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 // 알람 스크린 페이지
 
-const AlarmScreen = () => {
-    return (
-        <View>
-            <Text>AlarmScreen</Text>
-        </View>
-    );
+// @ts-ignore
+const AlarmPage = () => {
+  return <View></View>;
 };
 
-export default AlarmScreen;
+export default AlarmPage;
