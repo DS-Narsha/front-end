@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import DS from '../assets/DS.png';
 import Arrow from '../assets/arrow-left.png';
-import SingleFriend from './SingleFriend';
+import SingleFriend from '../components/SingleFriend';
 
 const styles = StyleSheet.create({
   top: {

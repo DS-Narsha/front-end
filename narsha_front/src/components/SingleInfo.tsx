@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import InfoIcon from '../assets/InfoIcon.svg';
+import InfoIcon from '../assets/info-icon.svg';
 
 const styles = StyleSheet.create({
   container: {

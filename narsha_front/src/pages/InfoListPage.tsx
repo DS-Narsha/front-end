@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
-import DS from '../assets/ds.png';
+import DS from '../assets/DS.png';
 import {Svg} from 'react-native-svg';
 import Arrow from '../assets/arrow-left.png';
 import Write from '../assets/write.png';
-import SingleInfo from './SingleInfo';
+import SingleInfo from '../components/SingleInfo';
 
 const styles = StyleSheet.create({
   top: {

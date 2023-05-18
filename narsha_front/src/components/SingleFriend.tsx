@@ -7,7 +7,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import userImage from '../assets/user_image.png';
+import userImage from '../assets/user-image.png';
 
 const styles = StyleSheet.create({
   container: {
