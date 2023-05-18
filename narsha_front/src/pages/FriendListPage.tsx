@@ -1,16 +1,18 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  Platform,
-} from 'react-native';
-import userImage from '../assets/user-image.png';
-import DS from '../assets/ds.png';
+import {StyleSheet, View, Text, Image} from 'react-native';
+import DS from '../assets/DS.png';
+import Arrow from '../assets/arrow-left.png';
+import SingleFriend from './SingleFriend';
 
 const styles = StyleSheet.create({
+  top: {
+    flexDirection: 'row',
+    height: 63,
+    width: 400,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    backgroundColor: '#E3F1A9',
+  },
   ds_container: {
     flexDirection: 'row',
     marginTop: 30,
@@ -30,47 +32,18 @@ const styles = StyleSheet.create({
     padding: 8,
     color: '#61A257',
   },
-  container: {
-    padding: 15,
-    marginTop: 10,
-    marginHorizontal: 8,
-    flexDirection: 'row',
-  },
-  item: {
-    margin: 2,
-  },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 20,
-    marginRight: 10,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOpacity: 0.5,
-        shadowOffset: {height: 10, width: 10},
-        shadowRadius: 10,
-      },
-
-      android: {
-        elevation: 20,
-      },
-    }),
-  },
-  user_id: {
-    margin: 3,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  user_name: {
-    margin: 3,
-    fontSize: 14,
-  },
 });
 
 export default function FriendList() {
   return (
     <View>
+      <View style={styles.top}>
+        <Image source={Arrow} style={{margin: 20}} />
+        <Text style={{margin: 20, marginLeft: 100, fontSize: 18}}>
+          친구 목록
+        </Text>
+      </View>
+
       <View style={styles.ds_container}>
         <Image style={styles.ds_image} source={DS} />
         <Text
@@ -80,69 +53,12 @@ export default function FriendList() {
 친구들의 게시글을 구경하러 가볼까요?`}</Text>
       </View>
 
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.container}>
-        <Image source={userImage} style={styles.image} />
-        <View style={styles.item}>
-          <Text style={styles.user_id}>User_ID</Text>
-          <Text style={styles.user_name}>User_Name</Text>
-        </View>
-      </TouchableOpacity>
+      <SingleFriend />
+      <SingleFriend />
+      <SingleFriend />
+      <SingleFriend />
+      <SingleFriend />
+      <SingleFriend />
     </View>
   );
 }
