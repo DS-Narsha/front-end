@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import DS from '../assets/DS.png';
-import Arrow from '../assets/arrow-left.png';
+import Arrow from '../assets/arrow-left.svg';
 import SingleFriend from '../components/SingleFriend';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -41,7 +41,7 @@ export default function FriendList({navigation}) {
     <View>
       <View style={styles.top}>
         <TouchableOpacity onPress={() => navigation.pop()}>
-          <Image source={Arrow} style={{margin: 20}} />
+          <Arrow style={{margin: 20}} />
         </TouchableOpacity>
         <Text style={{margin: 20, marginLeft: 100, fontSize: 18}}>
           친구 목록

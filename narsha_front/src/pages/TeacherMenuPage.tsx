@@ -11,17 +11,20 @@ export default function TeacherMenu({navigation}: any) {
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('InfoList')}>
           <View style={{padding: 15}}>
             <Notification />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('StudentListPage')}>
           <View style={{padding: 15}}>
             <StudentList />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('TimeSelectPage')}>
           <View style={{padding: 15}}>
             <AppTime />
           </View>
