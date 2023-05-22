@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
 import DS from '../assets/DS.png';
 import {Svg} from 'react-native-svg';
-import Arrow from '../assets/arrow-left.png';
-import Write from '../assets/write.png';
+import Arrow from '../assets/arrow-left.svg';
+import Write from '../assets/write.svg';
 import SingleInfo from '../components/SingleInfo';
 
 const styles = StyleSheet.create({
@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function InfoList() {
+export default function NoticeList() {
   return (
     <View style={styles.body}>
       <View style={styles.top}>
-        <Image source={Arrow} style={{margin: 20}} />
+        <Arrow style={{margin: 20}} />
         <Text
           style={{
             margin: 20,
@@ -53,7 +53,7 @@ export default function InfoList() {
           }}>
           공지 목록 페이지
         </Text>
-        <Image source={Write} style={{margin: 20, marginLeft: 60}} />
+        <Write style={{margin: 20, marginLeft: 60}} />
       </View>
 
       <View style={styles.ds_container}>

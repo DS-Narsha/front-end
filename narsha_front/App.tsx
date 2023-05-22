@@ -4,8 +4,10 @@ import MainNavigator from './src/components/navigation/MainNavigator';
 
 export default function App() {
   return (
+    
     <NavigationContainer>
       <MainNavigator />
     </NavigationContainer>
+
   );
 }

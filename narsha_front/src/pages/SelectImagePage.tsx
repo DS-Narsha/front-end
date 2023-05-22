@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import images from '../assets/images.jpeg';
 import FirstDot from '../assets/first-dot.png';
-import ArrowLeft from '../assets/arrow-left.png';
-import ArrowRight from '../assets/arrow-right.png';
+import ArrowLeft from '../assets/arrow-left.svg';
+import ArrowRight from '../assets/arrow-right.svg';
 
 const styles = StyleSheet.create({
   top: {
@@ -40,9 +40,9 @@ export default function SelectImage() {
   return (
     <View>
       <View style={styles.top}>
-        <Image source={ArrowLeft} style={{margin: 30}} />
+        <ArrowLeft style={{margin: 30}} />
         <Image source={FirstDot} style={{margin: 30, marginLeft: 65}} />
-        <Image source={ArrowRight} style={{margin: 30, marginLeft: 60}} />
+        <ArrowRight style={{margin: 30, marginLeft: 60}} />
       </View>
 
       <View style={{padding: 20}}>
