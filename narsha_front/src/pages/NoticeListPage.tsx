@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function InfoList({navigation}: any) {
+// @ts-ignore
+export default function NoticeList({navigation}) {
   return (
     <View style={styles.body}>
       <View style={styles.top}>
@@ -58,6 +59,8 @@ export default function InfoList({navigation}: any) {
           onPress={() => navigation.navigate('NoticeWritePage')}>
           <Image source={Write} style={{margin: 20, marginLeft: 60}} />
         </TouchableOpacity>
+
+        <Write style={{margin: 20, marginLeft: 60}} />
       </View>
 
       <View style={styles.ds_container}>
