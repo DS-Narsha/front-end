@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Main from '../../pages/MainPage';
 // import AlarmPage from '../../pages/AlarmPage';
 import NoticeList from '../../pages/NoticeListPage';
-import NoticeWrite from '../../pages/NoticeWritePage';
+import NoticeWritePage from '../../pages/NoticeWritePage';
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
@@ -15,7 +15,7 @@ export default function MainNavigatorStack() {
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="NoticeList" component={NoticeList} />
-        <Stack.Screen name="NoticeWrite" component={NoticeWrite} />
+        <Stack.Screen name="NoticeWritePage" component={NoticeWritePage} />
         {/* <Stack.Screen name="AlarmPage" component={AlarmPage} /> */}
       </Stack.Navigator>
     </NavigationContainer>

@@ -43,6 +43,11 @@ export default function MyPage({navigation}) {
             <PencilIcon />
           </View>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={{flexDirection: 'row'}}
+          onPress={() => navigation.navigate('TeacherMenu')}>
+          <Text>선생님 메뉴</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.container3}>
         <View style={styles.content}>

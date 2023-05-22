@@ -5,6 +5,7 @@ import {Svg} from 'react-native-svg';
 import Arrow from '../assets/arrow-left.png';
 import Write from '../assets/write.png';
 import SingleInfo from '../components/SingleInfo';
+import NoticeWritePage from './NoticeWritePage';
 
 const styles = StyleSheet.create({
   top: {
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function InfoList() {
+export default function InfoList({navigation}: any) {
   return (
     <View style={styles.body}>
       <View style={styles.top}>
@@ -53,7 +54,9 @@ export default function InfoList() {
           }}>
           공지 목록 페이지
         </Text>
-        <Image source={Write} style={{margin: 20, marginLeft: 60}} />
+        <TouchableOpacity onPress={() => navigation.navigate('NoticeWritePage')}>
+          <Image source={Write} style={{margin: 20, marginLeft: 60}} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.ds_container}>

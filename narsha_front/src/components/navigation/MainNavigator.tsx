@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AchievePage from '../../pages/AchievePage';
-import WritePage from '../../pages/NoticeWritePage';
+import WritePage from '../../pages/WritePage';
 import AlarmPage from '../../pages/AlarmPage';
 import Main_Sel from '../../assets/main-sel.svg';
 import Main_Desel from '../../assets/main-desel.svg';
@@ -23,6 +23,11 @@ const MainNavigator = () => {
     <Tab.Navigator
       initialRouteName="Main"
       screenOptions={({route}) => ({
+        headerStyle:{
+          backgroundColor: '#E3F1A9',
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius:20,
+        },
         tabBarStyle: {
           height: 70,
           paddingBottom: 10,
