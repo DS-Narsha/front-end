@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
       },
 })
 
-export default function BadgeList() {
+export default function BadgeList({navigation}) {
     return (
         <View>
             <View style={styles.top}>
