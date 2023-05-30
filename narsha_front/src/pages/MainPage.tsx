@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Button} from 'react-native';
 import NoticeModal from '../components/NoticeModal';
 import MainPost from '../components/MainPost';
@@ -34,8 +34,10 @@ const MainScreen = () => {
                 <NoticeModal />
                 <MainPost />
             </View>
-
-            <NEW style={styles.absolute} />
+        
+            <TouchableOpacity style={styles.absolute}>
+            <RecentPost />
+            </TouchableOpacity>
             
             {/* <RecentPost /> */}
         </>

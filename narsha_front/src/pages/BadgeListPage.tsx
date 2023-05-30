@@ -10,6 +10,7 @@ import {
 import DS from '../assets/DS.png';
 import Arrow from '../assets/arrow-left.svg';
 import images from '../assets/images.jpeg';
+import SingleBadge from '../components/SingleBadge';
 
 const styles = StyleSheet.create({
     top: {
@@ -46,16 +47,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         margin:15
       },
-      img: {
-        borderRadius: 10,
-        width: 100,
-        height: 100,
-        margin:10,
-      },
-      text:{
-        textAlign:'center', 
-        fontSize:14
-      }
 })
 
 export default function BadgeList() {
@@ -79,46 +70,22 @@ export default function BadgeList() {
 여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
             </View>
 
-        <View style={styles.gridView}>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-        </View>
+            <View style={styles.gridView}>
+              <SingleBadge />
+              <SingleBadge />
+              <SingleBadge />
+            </View>
 
-        <View style={styles.gridView}>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-        </View>
+            <View style={styles.gridView}>
+              <SingleBadge />
+              <SingleBadge />
+              <SingleBadge />
+            </View>
 
-        <View style={styles.gridView}>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-          <View>
-            <Image source={images} style={styles.img} />
-            <Text style={styles.text}>뱃지 이름</Text>
-          </View>
-        </View>
+            <View style={styles.gridView}>
+              <SingleBadge />
+              <SingleBadge />
+            </View>
       </View>
     );
 }
