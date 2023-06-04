@@ -103,7 +103,7 @@ export default function MyPage({navigation}) {
             <FriendList />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('BadgeList')}>
           <View style={styles.btn}>
             <BadgeList />
           </View>
