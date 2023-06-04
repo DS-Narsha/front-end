@@ -28,7 +28,6 @@ const MainNavigator = () => {
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20,
         },
-        headerShown: false,
         tabBarStyle: {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
@@ -58,7 +57,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name="Main"
         component={MainStack}
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: true, headerShown: false}}
       />
       <Tab.Screen
         name="AchievePage"
@@ -68,7 +67,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name="WritePage"
         component={WritePage}
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: true, headerShown: false}}
       />
       <Tab.Screen
         name="AlarmPage"
@@ -78,7 +77,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name="MyPage"
         component={MypageStack}
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: true, headerShown: false}}
       />
     </Tab.Navigator>
   );

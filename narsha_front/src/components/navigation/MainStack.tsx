@@ -13,12 +13,11 @@ export default function MainNavigatorStack() {
       <Stack.Navigator
         initialRouteName="Main"
         screenOptions={{
-          headerStyle:{
+          headerStyle: {
             backgroundColor: '#E3F1A9',
             borderBottomLeftRadius: 20,
-            borderBottomRightRadius:20,
+            borderBottomRightRadius: 20,
           },
-          
         }}>
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="NoticeList" component={NoticeList} />

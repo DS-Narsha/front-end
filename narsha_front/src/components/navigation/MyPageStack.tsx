@@ -23,7 +23,6 @@ export default function MainNavigatorStack() {
             backgroundColor: '#E3F1A9',
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
-            height: 60,
           },
           headerBackImage: () => {
             return (
