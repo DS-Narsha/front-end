@@ -7,7 +7,6 @@ import {
     Modal,
     ActivityIndicator
 } from 'react-native';
-import GroupButton from "../../components/GroupButton";
 
 const Loading = () => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -24,7 +23,10 @@ const Loading = () => {
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                 <ActivityIndicator />
-                <Text style={styles.modalText}>댓글에 부적절한 내용이 있는지 확인하고 있어요!잠시만 기다려주세요.</Text>
+                <View  style={styles.modalTextArea}>
+                    <Text style={styles.modalText}>댓글에 부적절한 내용이 있는지 확인하고 있어요!</Text>
+                    <Text style={styles.modalText}>잠시만 기다려주세요.</Text>
+                </View>
                 </View>
                 </View>
             </Modal>
@@ -61,7 +63,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingBottom: 6,
         borderRadius: 20,
-        marginRight: 35
     },
     btnText: {
         fontSize: 20,
@@ -70,19 +71,20 @@ const styles = StyleSheet.create({
     },
     centeredView: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: "rgba(150, 150, 150, 0.5)"
     },
     modalView: {
-        margin: 20,
+        bottom: 40,
         backgroundColor: 'white',
-        width: "80%",
+        width: "85%",
         flexDirection: "row",
         borderRadius: 20,
         paddingLeft: 25,
         paddingRight: 25,
-        paddingBottom: 25,
+        paddingTop: 15,
+        paddingBottom: 15,
         alignItems: 'center',
         justifyContent: "center",
         shadowColor: '#000',
@@ -106,27 +108,17 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginRight: 15
     },
-    button2: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-        backgroundColor: "#D9D9D9",
-        width: 115,
-        marginTop: 20
-    },
-    textStyle: {
-        color: 'black',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        paddingBottom: 2
-    },
     modalText: {
         marginBottom: 3,
         textAlign: 'center',
         color: 'black',
-        fontSize: 13
+        fontSize: 13,
     },
-    
+    modalTextArea: {
+        marginLeft: 13,
+        justifyContent: "center",
+        alignItems: "flex-start",
+    }
 })
 
 

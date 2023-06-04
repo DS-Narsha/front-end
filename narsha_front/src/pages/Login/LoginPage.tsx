@@ -23,7 +23,9 @@ const LoginPage = () => {
             </View>
             <View style={styles.textArea}>
                 <Text>App이름 회원이 아니신가요?</Text>
-                <Text>회원가입하기</Text>
+                <TouchableOpacity>
+                    <Text>회원가입 하기</Text>
+                </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => console.log("버튼 눌림")}>
                 <CustomButton title="로그인" />
