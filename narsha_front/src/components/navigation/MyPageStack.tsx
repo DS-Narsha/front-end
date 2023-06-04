@@ -9,6 +9,7 @@ import TeacherMenu from '../../pages/TeacherMenuPage';
 import TimeSelectPage from '../../pages/TimeSelectPage';
 import StudentListPage from '../../pages/StudentListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
+import BadgeList from '../../pages/BadgeListPage';
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
@@ -20,6 +21,7 @@ export default function MainNavigatorStack() {
         <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="FriendList" component={FriendList} />
+        <Stack.Screen name="BadgeList" component={BadgeList} />
         <Stack.Screen name="InfoList" component={InfoList} />
         <Stack.Screen name="TeacherMenu" component={TeacherMenu} />
         <Stack.Screen name="TimeSelectPage" component={TimeSelectPage} />
