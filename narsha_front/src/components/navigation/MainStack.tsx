@@ -1,5 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {View} from 'react-native';
+import BackSvg from '../../assets/back.svg';
 
 import Main from '../../pages/MainPage';
 // import AlarmPage from '../../pages/AlarmPage';
@@ -18,6 +20,14 @@ export default function MainNavigatorStack() {
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
           },
+          headerBackImage: () => {
+            return (
+              <View style={{marginLeft: 7}}>
+                <BackSvg />
+              </View>
+            );
+          },
+          headerTitleAlign: 'center',
         }}>
         <Stack.Screen
           name="Main"

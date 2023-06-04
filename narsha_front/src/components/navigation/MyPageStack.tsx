@@ -1,6 +1,6 @@
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {View} from 'react-native';
+import {Button, View} from 'react-native';
 import MyPage from '../../pages/mypage/MyPage';
 import EditProfile from '../../pages/mypage/EditProfilePage';
 import FriendList from '../../pages/mypage/FriendListPage';
@@ -11,6 +11,7 @@ import StudentListPage from '../../pages/StudentListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
 import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
+import Write from '../../assets/write.svg';
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
@@ -56,7 +57,20 @@ export default function MainNavigatorStack() {
         <Stack.Screen
           name="InfoList"
           component={InfoList}
-          options={{title: '공지 목록'}}
+          options={({navigation}) => ({
+            title: '공지 목록',
+            headerRight: () => {
+              return (
+                <View style={{marginRight: 16}}>
+                  <Write
+                    onPress={() => {
+                      navigation.navigate('NoticeWritePage');
+                    }}
+                  />
+                </View>
+              );
+            },
+          })}
         />
         <Stack.Screen
           name="TeacherMenu"
