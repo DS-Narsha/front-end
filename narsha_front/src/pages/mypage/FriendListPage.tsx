@@ -39,15 +39,6 @@ const styles = StyleSheet.create({
 export default function FriendList({navigation}) {
   return (
     <View>
-      <View style={styles.top}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
-          <Arrow style={{margin: 20}} />
-        </TouchableOpacity>
-        <Text style={{margin: 20, marginLeft: 100, fontSize: 18}}>
-          친구 목록
-        </Text>
-      </View>
-
       <View style={styles.ds_container}>
         <Image style={styles.ds_image} source={DS} />
         <Text

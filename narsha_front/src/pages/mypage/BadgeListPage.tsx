@@ -52,15 +52,6 @@ const styles = StyleSheet.create({
 export default function BadgeList({navigation}) {
   return (
     <View>
-      <View style={styles.top}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
-          <Arrow style={{margin: 20}} />
-        </TouchableOpacity>
-        <Text style={{margin: 20, marginLeft: 80, fontSize: 18}}>
-          뱃지 목록 페이지
-        </Text>
-      </View>
-
       <View style={styles.ds_container}>
         <Image style={styles.ds_image} source={DS} />
         <Text
