@@ -33,15 +33,51 @@ export default function MainNavigatorStack() {
           },
           headerTitleAlign: 'center',
         }}>
-        <Stack.Screen name="MyPage" component={MyPage} />
-        <Stack.Screen name="EditProfile" component={EditProfile} />
-        <Stack.Screen name="FriendList" component={FriendList} />
-        <Stack.Screen name="BadgeList" component={BadgeList} />
-        <Stack.Screen name="InfoList" component={InfoList} />
-        <Stack.Screen name="TeacherMenu" component={TeacherMenu} />
-        <Stack.Screen name="TimeSelectPage" component={TimeSelectPage} />
-        <Stack.Screen name="StudentListPage" component={StudentListPage} />
-        <Stack.Screen name="NoticeWritePage" component={NoticeWritePage} />
+        <Stack.Screen
+          name="MyPage"
+          component={MyPage}
+          options={{title: '마이 페이지'}}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{title: '프로필 수정'}}
+        />
+        <Stack.Screen
+          name="FriendList"
+          component={FriendList}
+          options={{title: '친구 목록'}}
+        />
+        <Stack.Screen
+          name="BadgeList"
+          component={BadgeList}
+          options={{title: '뱃지 목록'}}
+        />
+        <Stack.Screen
+          name="InfoList"
+          component={InfoList}
+          options={{title: '공지 목록'}}
+        />
+        <Stack.Screen
+          name="TeacherMenu"
+          component={TeacherMenu}
+          options={{title: '선생님 관리 메뉴'}}
+        />
+        <Stack.Screen
+          name="TimeSelectPage"
+          component={TimeSelectPage}
+          options={{title: '앱 사용시간 설정하기'}}
+        />
+        <Stack.Screen
+          name="StudentListPage"
+          component={StudentListPage}
+          options={{title: '그룹에 가입한 학생 목록'}}
+        />
+        <Stack.Screen
+          name="NoticeWritePage"
+          component={NoticeWritePage}
+          options={{title: '공지 작성 페이지'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

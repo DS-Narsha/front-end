@@ -62,7 +62,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name="AchievePage"
         component={AchievePage}
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: true, title: '업적 페이지'}}
       />
       <Tab.Screen
         name="WritePage"
@@ -72,7 +72,7 @@ const MainNavigator = () => {
       <Tab.Screen
         name="AlarmPage"
         component={AlarmPage}
-        options={{tabBarBadge: '30', unmountOnBlur: true}}
+        options={{tabBarBadge: '30', unmountOnBlur: true, title: '알림 페이지'}}
       />
       <Tab.Screen
         name="MyPage"

@@ -44,32 +44,12 @@ const styles = StyleSheet.create({
 export default function NoticeList({navigation}) {
   return (
     <View style={styles.body}>
-      <View style={styles.top}>
-        <Arrow style={{margin: 20}} />
-        <Text
-          style={{
-            margin: 20,
-            marginLeft: 80,
-            fontSize: 18,
-            textAlign: 'center',
-          }}>
-          공지 목록 페이지
-        </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('NoticeWritePage')}>
-          <Image source={Write} style={{margin: 20, marginLeft: 60}} />
-        </TouchableOpacity>
-
-        <Write style={{margin: 20, marginLeft: 60}} />
-      </View>
-
       <View style={styles.ds_container}>
         <Image style={styles.ds_image} source={DS} />
         <Text
           style={styles.ds_text}>{`선생님이 여러분 모두에게 알리기 위한 내용들은
 이 곳에 올라온답니다.`}</Text>
       </View>
-
       <SingleInfo />
       <SingleInfo />
       <SingleInfo />

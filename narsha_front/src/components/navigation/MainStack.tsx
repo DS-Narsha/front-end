@@ -19,9 +19,21 @@ export default function MainNavigatorStack() {
             borderBottomRightRadius: 20,
           },
         }}>
-        <Stack.Screen name="Main" component={Main} />
-        <Stack.Screen name="NoticeList" component={NoticeList} />
-        <Stack.Screen name="NoticeWritePage" component={NoticeWritePage} />
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{title: 'App name'}}
+        />
+        <Stack.Screen
+          name="NoticeList"
+          component={NoticeList}
+          options={{title: '공지 목록'}}
+        />
+        <Stack.Screen
+          name="NoticeWritePage"
+          component={NoticeWritePage}
+          options={{title: '공지 작성'}}
+        />
         {/* <Stack.Screen name="AlarmPage" component={AlarmPage} /> */}
       </Stack.Navigator>
     </NavigationContainer>
