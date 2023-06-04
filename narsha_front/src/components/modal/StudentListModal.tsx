@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
-import InitialProfileImage from "../assets/initial-profile-image.svg";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import InitialProfileImage from '../../assets/initial-profile-image.svg';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function StudentListModal() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,8 +34,7 @@ export default function StudentListModal() {
               </View>
             </View>
             <View style={styles.modalEnd}>
-              <Pressable
-                onPress={() => setModalVisible(!modalVisible)}>
+              <Pressable onPress={() => setModalVisible(!modalVisible)}>
                 <View style={styles.btn}>
                   <Text style={styles.strongText}>설정하기</Text>
                 </View>
@@ -44,20 +43,25 @@ export default function StudentListModal() {
           </View>
         </View>
       </Modal>
-      
+
       <Pressable onPress={() => setModalVisible(true)}>
         <View style={styles.container2}>
-          <View><InitialProfileImage /></View>
           <View>
-            <View style={styles.textcontainer}><Text style={styles.strongText}>학생 이름</Text></View>
-            <View style={styles.textcontainer}><Text style={styles.nickname}>닉네임</Text></View>
+            <InitialProfileImage />
+          </View>
+          <View>
+            <View style={styles.textcontainer}>
+              <Text style={styles.strongText}>학생 이름</Text>
+            </View>
+            <View style={styles.textcontainer}>
+              <Text style={styles.nickname}>닉네임</Text>
+            </View>
           </View>
         </View>
       </Pressable>
-
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -65,11 +69,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
-    backgroundColor: "rgba(150, 150, 150, 0.5)"
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
   },
   modalView: {
     margin: 20,
-    width: "68%",
+    width: '68%',
     height: 220,
     backgroundColor: 'white',
     borderRadius: 20,
@@ -85,21 +89,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  modalHead:{
+  modalHead: {
     flex: 0.8,
-    width: "100%",
+    width: '100%',
     borderTopLeftRadius: 20,
-    borderTopRightRadius:20,
+    borderTopRightRadius: 20,
     backgroundColor: '#AADF98',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  modalBody:{
+  modalBody: {
     flex: 2,
-    width: "100%",
+    width: '100%',
     alignItems: 'flex-start',
   },
-  modalEnd:{
+  modalEnd: {
     flex: 0.8,
     width: '100%',
     alignItems: 'center',
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 20,
   },
-  btn:{
+  btn: {
     backgroundColor: '#AADF98',
     height: 30,
     width: 100,
@@ -125,21 +129,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
   },
-  btnText:{
+  btnText: {
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
   },
-  container:{
+  container: {
     margin: 10,
     width: 350,
     height: 70,
-    backgroundColor: "#F9FAC8",
+    backgroundColor: '#F9FAC8',
     borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  container2:{
+  container2: {
     margin: 15,
     width: 350,
     height: 70,
@@ -150,12 +154,12 @@ const styles = StyleSheet.create({
   textcontainer: {
     marginHorizontal: 10,
   },
-  strongText:{
+  strongText: {
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
   },
-  nickname:{
+  nickname: {
     fontSize: 12,
     color: '#909090',
   },
@@ -163,5 +167,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 14,
     color: '#909090',
-  }
+  },
 });

@@ -1,8 +1,8 @@
 import React, {useRef, useState} from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 
-import ProfilePhoto from '../assets/profilePhoto.svg';
-import EditButton from '../assets/editButton.svg';
+import ProfilePhoto from '../../assets/profilePhoto.svg';
+import EditButton from '../../assets/editButton.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 //@ts-ignore

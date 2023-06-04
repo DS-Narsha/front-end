@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
-import DS from '../assets/DS.png';
-import Arrow from '../assets/arrow-left.svg';
-import SingleFriend from '../components/SingleFriend';
+import DS from '../../assets/DS.png';
+import Arrow from '../../assets/arrow-left.svg';
+import SingleFriend from '../../components/SingleFriend';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({

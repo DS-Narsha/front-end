@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AchievePage from '../../pages/AchievePage';
-import WritePage from '../../pages/WritePage';
+import WritePage from '../../pages/post/WritePage';
 import AlarmPage from '../../pages/AlarmPage';
 import Main_Sel from '../../assets/main-sel.svg';
 import Main_Desel from '../../assets/main-desel.svg';
@@ -23,22 +23,22 @@ const MainNavigator = () => {
     <Tab.Navigator
       initialRouteName="Main"
       screenOptions={({route}) => ({
-        headerStyle:{
+        headerStyle: {
           backgroundColor: '#E3F1A9',
           borderBottomLeftRadius: 20,
-          borderBottomRightRadius:20,
+          borderBottomRightRadius: 20,
         },
-        headerShown:false,
+        headerShown: false,
         tabBarStyle: {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           position: 'absolute',
-          overflow:'hidden',
+          overflow: 'hidden',
           height: 70,
           left: 0,
           bottom: 0,
           right: 0,
-          paddingBottom: 8
+          paddingBottom: 8,
         },
         tabBarShowLabel: false,
         tabBarIcon: ({focused, color, size}) => {
@@ -55,15 +55,31 @@ const MainNavigator = () => {
           }
         },
       })}>
-      <Tab.Screen name="Main" component={MainStack} options={{ unmountOnBlur: true }}/>
-      <Tab.Screen name="AchievePage" component={AchievePage} options={{ unmountOnBlur: true }}/>
-      <Tab.Screen name="WritePage" component={WritePage} options={{ unmountOnBlur: true }}/>
+      <Tab.Screen
+        name="Main"
+        component={MainStack}
+        options={{unmountOnBlur: true}}
+      />
+      <Tab.Screen
+        name="AchievePage"
+        component={AchievePage}
+        options={{unmountOnBlur: true}}
+      />
+      <Tab.Screen
+        name="WritePage"
+        component={WritePage}
+        options={{unmountOnBlur: true}}
+      />
       <Tab.Screen
         name="AlarmPage"
         component={AlarmPage}
-        options={{tabBarBadge: '30', unmountOnBlur: true }}
+        options={{tabBarBadge: '30', unmountOnBlur: true}}
       />
-      <Tab.Screen name="MyPage" component={MypageStack} options={{ unmountOnBlur: true }}/>
+      <Tab.Screen
+        name="MyPage"
+        component={MypageStack}
+        options={{unmountOnBlur: true}}
+      />
     </Tab.Navigator>
   );
 };

@@ -8,18 +8,17 @@ import {
   View,
 } from 'react-native';
 
-import EmptyPhoto from '../assets/empty.svg';
-import ContentPhoto from '../assets/content.svg';
-import PencilIcon from '../assets/pencil-icon.svg';
-import FriendList from '../assets/friend-list.svg';
-import BadgeList from '../assets/badge-list.svg';
-import { useFocusEffect } from '@react-navigation/native';
+import EmptyPhoto from '../../assets/empty.svg';
+import ContentPhoto from '../../assets/content.svg';
+import PencilIcon from '../../assets/pencil-icon.svg';
+import FriendList from '../../assets/friend-list.svg';
+import BadgeList from '../../assets/badge-list.svg';
+import {useFocusEffect} from '@react-navigation/native';
 
 //@ts-ignore
 export default function MyPage({navigation}) {
-
   return (
-    <View style={styles.container} >
+    <View style={styles.container}>
       <View style={styles.container2}>
         <EmptyPhoto />
         <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>

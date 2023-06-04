@@ -3,7 +3,7 @@ import {Button, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import EditProfile from '../../pages/EditProfilePage';
+import EditProfile from '../../pages/mypage/EditProfilePage';
 import TeacherMenu from '../../pages/TeacherMenuPage';
 
 const Stack = createStackNavigator();
