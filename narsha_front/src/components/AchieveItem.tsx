@@ -6,42 +6,46 @@ const AchieveItem = ({title, content, progress, hint}) => {
   return (
     <View>
       <View style={styles.achieveItem}>
-        <View style={styles.achieveTitle}>
-          <Text style={styles.achieveBadge}></Text>
-          <Text style={styles.achieveMisson}>{title}</Text>
+        <View style={styles.titleContainer}>
+          <View style={styles.achieveTitle}>
+            <Text style={styles.achieveBadge}></Text>
+            <Text style={styles.achieveMisson}>{title}</Text>
+          </View>
           <View style={styles.achieveCheck}>
             <Text style={styles.achieveCheckText}>{progress}</Text>
           </View>
         </View>
         <View style={styles.achieveBody}>
           <Text style={styles.achieveDetail}>{content}</Text>
-          <Text style={styles.achieveHint}>{hint}</Text>
         </View>
+        <Text style={styles.achieveHint}>힌트: {hint}</Text>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  achieveContainer: {
-    paddingLeft: 27,
-    paddingRight: 27,
-  },
-  achieveItem: {
-    backgroundColor: '#CCCBCB',
-    height: 160,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25,
-    marginBottom: 20,
-  },
-  achieveTitle: {
+  titleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 10,
+  },
+  achieveItem: {
+    flexDirection: 'column',
+    backgroundColor: '#CCCBCB',
+    height: 160,
+    borderRadius: 25,
+    marginBottom: 20,
+    paddingHorizontal: 19,
+  },
+  achieveTitle: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
   },
   achieveBody: {
-    marginTop: 16,
+    marginTop: 5,
   },
   achieveBadge: {
     backgroundColor: '#909090',
@@ -51,9 +55,8 @@ const styles = StyleSheet.create({
   achieveMisson: {
     color: '#000000',
     fontSize: 14,
-    marginLeft: 24,
-    marginRight: 44,
     fontWeight: '600',
+    marginLeft: 10,
   },
   achieveCheck: {
     backgroundColor: '#ffffff',
@@ -62,6 +65,7 @@ const styles = StyleSheet.create({
     height: 52,
     justifyContent: 'center',
     alignItems: 'center',
+    float: 'right',
   },
   achieveCheckText: {
     color: '#000000',
