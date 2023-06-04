@@ -9,10 +9,6 @@ import BackSvg from "../assets/back.svg";
 const AchievePage = () => {
     return (
         <View>
-            {/* <View style={styles.topContainer}>
-                <BackSvg />
-                <Text style={styles.topText}>업적</Text>
-            </View> */}
             <View style={styles.textContainer}>
                 <Text style={styles.text}>여러분의 SNS 사용을 도와줄 업적입니다~</Text>
                 <Text style={styles.text}>업적을 달성하면 칭호와 뱃지를 얻을 수 있어요!</Text>
@@ -87,17 +83,6 @@ const AchievePage = () => {
 };
 
 const styles = StyleSheet.create({
-    topContainer: {
-        backgroundColor: '#E3F1A9',
-        height: 63,
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
-        width: "100%",
-        flexDirection: "row",
-        alignItems: "center",
-        paddingLeft: 20,
-        
-    },
     topText: {
         fontSize: 18,
         marginLeft: 140,

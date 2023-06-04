@@ -12,7 +12,14 @@ export default function MainNavigatorStack() {
     <NavigationContainer independent={true}>
       <Stack.Navigator
         initialRouteName="Main"
-        screenOptions={{headerShown: false}}>
+        screenOptions={{
+          headerStyle:{
+            backgroundColor: '#E3F1A9',
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius:20,
+          },
+          
+        }}>
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="NoticeList" component={NoticeList} />
         <Stack.Screen name="NoticeWritePage" component={NoticeWritePage} />

@@ -1,6 +1,8 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
+import {
+  View,
+} from 'react-native';
 import MyPage from '../../pages/MyPage';
 import EditProfile from '../../pages/EditProfilePage';
 import FriendList from '../../pages/FriendListPage';
@@ -9,15 +11,33 @@ import TeacherMenu from '../../pages/TeacherMenuPage';
 import TimeSelectPage from '../../pages/TimeSelectPage';
 import StudentListPage from '../../pages/StudentListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
+import BackSvg from "../../assets/back.svg";
 import BadgeList from '../../pages/BadgeListPage';
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
+  
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator
         initialRouteName="MyPage"
-        screenOptions={{headerShown: false}}>
+        screenOptions={{
+          headerStyle:{
+            backgroundColor: '#E3F1A9',
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius:20,
+            height: 60,
+          },
+          headerBackImage: () => {
+            return (
+              <View style={{marginLeft: 7}}>
+              <BackSvg />
+              </View>
+            );
+          },
+          headerTitleAlign: "center"
+        }}
+        >
         <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="FriendList" component={FriendList} />

@@ -28,12 +28,17 @@ const MainNavigator = () => {
           borderBottomLeftRadius: 20,
           borderBottomRightRadius:20,
         },
+        headerShown:false,
         tabBarStyle: {
-          height: 70,
-          paddingBottom: 10,
-          paddingTop: 5,
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
+          position: 'absolute',
+          overflow:'hidden',
+          height: 70,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          paddingBottom: 8
         },
         tabBarShowLabel: false,
         tabBarIcon: ({focused, color, size}) => {
@@ -50,15 +55,15 @@ const MainNavigator = () => {
           }
         },
       })}>
-      <Tab.Screen name="Main" component={MainStack} />
-      <Tab.Screen name="AchievePage" component={AchievePage} />
-      <Tab.Screen name="WritePage" component={WritePage} />
+      <Tab.Screen name="Main" component={MainStack} options={{ unmountOnBlur: true }}/>
+      <Tab.Screen name="AchievePage" component={AchievePage} options={{ unmountOnBlur: true }}/>
+      <Tab.Screen name="WritePage" component={WritePage} options={{ unmountOnBlur: true }}/>
       <Tab.Screen
         name="AlarmPage"
         component={AlarmPage}
-        options={{tabBarBadge: '30'}}
+        options={{tabBarBadge: '30', unmountOnBlur: true }}
       />
-      <Tab.Screen name="MyPage" component={MypageStack} />
+      <Tab.Screen name="MyPage" component={MypageStack} options={{ unmountOnBlur: true }}/>
     </Tab.Navigator>
   );
 };
