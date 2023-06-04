@@ -9,15 +9,16 @@ const styles = StyleSheet.create({
   absolute: {
     position: 'absolute',
     right: 10,
-    bottom: 10,
+    bottom: 50,
   },
 });
 
-const MainScreen = () => {
+//@ts-ignore
+const MainScreen = ({navigation}) => {
   return (
     <View>
       <View>
-        <NoticeModal />
+        <NoticeModal navigation={navigation} />
         <MainPost />
       </View>
 

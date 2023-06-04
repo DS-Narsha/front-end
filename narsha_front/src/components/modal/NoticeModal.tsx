@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function NoticeModal() {
+//@ts-ignore
+export default function NoticeModal({navigation}) {
   return (
     <View style={styles.container}>
       <InfoIcon />
@@ -39,7 +40,10 @@ export default function NoticeModal() {
           공지 제목만 1줄 보이도록 합니다.
         </Text>
       </View>
-      <Hamburger style={{margin: 5, marginLeft: 80}} />
+      <Hamburger
+        style={{margin: 5, marginLeft: 80}}
+        onPress={() => navigation.navigate('NoticeList')}
+      />
     </View>
   );
 }
