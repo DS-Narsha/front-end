@@ -33,11 +33,16 @@ const styles = StyleSheet.create({
   },
   achieveItem: {
     flexDirection: 'column',
-    backgroundColor: '#CCCBCB',
-    height: 160,
+    backgroundColor: '#FCFDE1',
+    height: 170,
     borderRadius: 25,
     marginBottom: 20,
     paddingHorizontal: 19,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   achieveTitle: {
     flexDirection: 'row',
@@ -53,36 +58,43 @@ const styles = StyleSheet.create({
     height: 40,
   },
   achieveMisson: {
-    color: '#000000',
+    color: '#61A257',
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 10,
     marginRight: 45,
+    flexWrap: 'wrap',
   },
   achieveCheck: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#C0C0C0',
     borderRadius: 50,
     width: 52,
     height: 52,
     justifyContent: 'center',
     alignItems: 'center',
     float: 'right',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   achieveCheckText: {
-    color: '#000000',
-    paddingBottom: 5,
+    color: '#ffffff',
     fontSize: 12,
     fontWeight: '600',
   },
   achieveDetail: {
     color: '#454545',
     fontSize: 13,
+    flexWrap: 'wrap',
   },
   achieveHint: {
     fontSize: 13,
     color: '#909090',
     marginTop: 5,
     marginBottom: 2,
+    flexWrap: 'wrap',
   },
 });
 
