@@ -12,6 +12,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     backgroundColor: '#FFF',
     borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   topItem: {
     flexDirection: 'row',
