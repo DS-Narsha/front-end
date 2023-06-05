@@ -6,7 +6,7 @@ import Hamburger from '../../assets/hamburger.svg';
 const styles = StyleSheet.create({
   container: {
     padding: 22,
-    marginTop: 13,
+    marginTop: 14,
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 13,
@@ -14,6 +14,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 20,
     flexDirection: 'row',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    elevation: 5,
+    shadowRadius: 10,
+    borderColor: '#D9D9D9',
+    borderWidth: 1,
   },
   titleText: {
     marginTop: -5,
