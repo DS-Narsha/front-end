@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     marginLeft: 10,
+    marginRight: 45,
   },
   achieveCheck: {
     backgroundColor: '#ffffff',
