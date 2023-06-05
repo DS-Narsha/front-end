@@ -12,6 +12,7 @@ import NoticeWritePage from '../../pages/NoticeWritePage';
 import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
 import Write from '../../assets/write.svg';
+import Setting from '../../assets/teacher-setting.svg';
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
@@ -37,7 +38,20 @@ export default function MainNavigatorStack() {
         <Stack.Screen
           name="MyPage"
           component={MyPage}
-          options={{title: '마이 페이지'}}
+          options={({navigation}) => ({
+            title: '@아이디',
+            headerRight: () => {
+              return (
+                <View style={{marginRight: 16}}>
+                  <Setting
+                    onPress={() => {
+                      navigation.navigate('TeacherMenu');
+                    }}
+                  />
+                </View>
+              );
+            },
+          })}
         />
         <Stack.Screen
           name="EditProfile"

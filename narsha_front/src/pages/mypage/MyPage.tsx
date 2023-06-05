@@ -1,42 +1,32 @@
-import React, {useRef, useState} from 'react';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import EmptyPhoto from '../../assets/empty.svg';
-import ContentPhoto from '../../assets/content.svg';
 import PencilIcon from '../../assets/pencil-icon.svg';
 import FriendList from '../../assets/friend-list.svg';
 import BadgeList from '../../assets/badge-list.svg';
-import {useFocusEffect} from '@react-navigation/native';
+import {ScrollView} from 'react-native-gesture-handler';
 
 //@ts-ignore
 export default function MyPage({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
-        <EmptyPhoto />
+        <View style={styles.profile} />
         <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
           나르샤
         </Text>
-        <Text style={{fontSize: 12, padding: 1}}>5월30일</Text>
+        <Text style={{fontSize: 12, padding: 1}}>5월 30일</Text>
         <Text style={{fontSize: 13, padding: 2}}>
           안녕하세요~~나르샤 개인 페이지~~
         </Text>
         <TouchableOpacity
-          style={{flexDirection: 'row'}}
+          style={{flexDirection: 'row', marginTop: 5}}
           onPress={() => navigation.navigate('EditProfile')}>
           <Text
             style={{
               fontWeight: 'bold',
               fontSize: 10,
               padding: 2,
-              marginRight: 2,
             }}>
             프로필 수정
           </Text>
@@ -44,58 +34,93 @@ export default function MyPage({navigation}) {
             <PencilIcon />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{flexDirection: 'row'}}
-          onPress={() => navigation.navigate('TeacherMenu')}>
-          <Text>선생님 메뉴</Text>
-        </TouchableOpacity>
       </View>
-      <View style={styles.container3}>
-        <View style={styles.content}>
-          <View style={styles.photo}>
-            <ContentPhoto />
+      <ScrollView style={styles.postingListContainer}>
+        <View style={styles.container3}>
+          <View style={styles.content}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
           </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
+          <View style={styles.content}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
           </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
+          <View style={styles.content}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
           </View>
+          <View style={styles.content}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('../../assets/images.jpeg')}
+                style={styles.image}
+              />
+            </View>
+          </View>
+          {/* height */}
+          <View style={{height: 100}} />
         </View>
-        <View style={styles.content}>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-        </View>
-        <View style={styles.content}>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-        </View>
-        <View style={styles.content}>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-          <View style={styles.photo}>
-            <ContentPhoto />
-          </View>
-        </View>
-      </View>
+      </ScrollView>
       <View style={styles.btnbox}>
         <TouchableOpacity onPress={() => navigation.navigate('FriendList')}>
           <View style={styles.btn}>
@@ -113,6 +138,20 @@ export default function MyPage({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  profile: {
+    backgroundColor: '#D9D9D9',
+    width: 90,
+    height: 90,
+    borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 10,
+    elevation: 5,
+    marginTop: 20,
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -120,9 +159,10 @@ const styles = StyleSheet.create({
   container2: {
     backgroundColor: '#FCFDE1',
     width: '100%',
-    height: 200,
+    height: 230,
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 16,
   },
   container3: {
     backgroundColor: '#FFFFFF',
@@ -137,16 +177,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  photo: {
-    padding: 5,
+  imageContainer: {
+    borderRadius: 10,
+    margin: 5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 7,
+  },
+  image: {
+    borderRadius: 10,
+    width: 110,
+    height: 110,
+  },
+  postingListContainer: {
+    flex: 1,
   },
   btnbox: {
     flexDirection: 'column',
     position: 'absolute',
-    top: '28%',
+    top: '29%',
     left: '70%',
   },
   btn: {
     padding: 2,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 7,
   },
 });
