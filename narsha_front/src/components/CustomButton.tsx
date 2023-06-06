@@ -7,11 +7,17 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 interface Props {
   title: ReactNode;
   color: ReactNode;
+  stack: ReactNode;
+  navi: any;
 }
 
-function CustomButton({title, color}: Props) {
+function CustomButton({title, color, stack, navi}: Props) {
   return (
-    <TouchableOpacity style={btnStyles({color}).button}>
+    <TouchableOpacity
+      style={btnStyles({color}).button}
+      onPress={() => {
+        navi.navigate(stack);
+      }}>
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
