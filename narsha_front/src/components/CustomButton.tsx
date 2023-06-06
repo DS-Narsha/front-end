@@ -1,32 +1,44 @@
-import React, { ReactNode } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {ReactNode} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 // 초록색 버튼(다음 버튼, 확인 버튼)
 
 interface Props {
-    title: ReactNode;
+  title: ReactNode;
+  color: ReactNode;
 }
 
-function CustomButton({title}: Props) {
-    return (
-        <View style={styles.button}>
-            <Text style={styles.text}>{title}</Text>
-        </View>
-    );
+function CustomButton({title, color}: Props) {
+  return (
+    <TouchableOpacity style={btnStyles({color}).button}>
+      <Text style={styles.text}>{title}</Text>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontSize: 18,
+    color: '#000000',
+  },
+});
+
+//@ts-ignore
+const btnStyles = ({color}) =>
+  StyleSheet.create({
     button: {
-        backgroundColor: "#AADF98",
-        borderRadius: 30,
-        height: 50,
-        justifyContent: "center",
-        alignItems: "center"
+      backgroundColor: color,
+      borderRadius: 30,
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      elevation: 5,
     },
-    text: {
-        fontSize: 18,
-        color: "#000000"
-    },
-})
+  });
 
 export default CustomButton;
