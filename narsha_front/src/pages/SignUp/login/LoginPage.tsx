@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import MyTextInput from '../../../components/MyTextInput';
-import AppLogo from '../../assets/app-logo.svg';
+import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 
 const LoginPage = () => {
