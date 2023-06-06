@@ -4,7 +4,8 @@ import MyTextInput from '../../../components/MyTextInput';
 import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 
-const LoginPage = () => {
+//@ts-ignore
+const LoginPage = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.logo}>
@@ -17,13 +18,19 @@ const LoginPage = () => {
       </View>
       <View style={styles.textArea}>
         <Text>App이름 회원이 아니신가요?</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('UserType');
+          }}>
           <Text>회원가입 하기</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => console.log('버튼 눌림')}>
-        <CustomButton title="로그인" />
-      </TouchableOpacity>
+      <CustomButton
+        title="로그인"
+        color={'#AADF98'}
+        stack={'Main'}
+        navi={navigation}
+      />
     </View>
   );
 };

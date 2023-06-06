@@ -10,6 +10,7 @@ import UserSignUpPage from '../../pages/signup/user/UserSignUpPage';
 import StartPage from '../../pages/StartPage';
 import InfoPage from '../../pages/signup/InfoPage';
 import UserPage from '../../pages/signup/UserPage';
+import MainStack from '../../components/navigation/MainStack';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,11 @@ export default function AuthStack() {
         <Stack.Screen
           name="Login"
           component={LoginPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Main"
+          component={MainStack}
           options={{headerShown: false}}
         />
         <Stack.Screen
