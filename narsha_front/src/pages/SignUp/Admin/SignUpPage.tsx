@@ -22,13 +22,10 @@ const SignUpPage = ({navigation}) => {
         </View>
         <Text style={styles.text1}>입니다!</Text>
       </View>
-      <TouchableOpacity>
-        <CustomButton
-          title="확인"
-          stack={'Main'}
-          navi={navigation}
-          color={'#AADF98'}
-        />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.reset({routes: [{name: 'Main'}]})}>
+        <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
     </View>
   );
@@ -69,6 +66,22 @@ const styles = StyleSheet.create({
   },
   CodeContainer: {
     flexDirection: 'row',
+  },
+  button: {
+    backgroundColor: '#AADF98',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
+  },
+  btnText: {
+    fontSize: 18,
+    color: '#000000',
   },
 });
 

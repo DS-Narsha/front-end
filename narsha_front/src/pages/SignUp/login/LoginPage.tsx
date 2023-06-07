@@ -25,12 +25,11 @@ const LoginPage = ({navigation}) => {
           <Text>회원가입 하기</Text>
         </TouchableOpacity>
       </View>
-      <CustomButton
-        title="로그인"
-        color={'#AADF98'}
-        stack={'Main'}
-        navi={navigation}
-      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.reset({routes: [{name: 'Main'}]})}>
+        <Text style={styles.btnText}>확인!</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -60,6 +59,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 130,
+  },
+  button: {
+    backgroundColor: '#AADF98',
+    borderRadius: 30,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
+  },
+  btnText: {
+    fontSize: 18,
+    color: '#000000',
   },
 });
 

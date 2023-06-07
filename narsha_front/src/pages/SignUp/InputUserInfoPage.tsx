@@ -46,7 +46,7 @@ const InputUserInfoPage = ({navigation}) => {
           <TouchableOpacity>
             <CustomButton
               title="다음"
-              stack={'UserSignUp'}
+              stack={'SignUp'}
               navi={navigation}
               color={'#AADF98'}
             />

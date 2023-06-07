@@ -10,7 +10,7 @@ import UserSignUpPage from '../../pages/signup/user/UserSignUpPage';
 import StartPage from '../../pages/StartPage';
 import InputUserInfoPage from '../../pages/signup/InputUserInfoPage';
 import UserPage from '../../pages/signup/SelectUserTypePage';
-import MainStack from '../../components/navigation/MainStack';
+import MainNavigator from '../../components/navigation/MainNavigator';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +30,7 @@ export default function AuthStack() {
         />
         <Stack.Screen
           name="Main"
-          component={MainStack}
+          component={MainNavigator}
           options={{headerShown: false}}
         />
         <Stack.Screen
@@ -51,11 +51,6 @@ export default function AuthStack() {
         <Stack.Screen
           name="InputGroup"
           component={InputGroupPage}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="UserSignUp"
-          component={UserSignUpPage}
           options={{headerShown: false}}
         />
         <Stack.Screen
