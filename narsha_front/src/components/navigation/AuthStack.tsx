@@ -8,7 +8,7 @@ import SignUpPage from '../../pages/signup/admin/SignUpPage';
 import InputGroupPage from '../../pages/signup/user/InputGroupPage';
 import UserSignUpPage from '../../pages/signup/user/UserSignUpPage';
 import StartPage from '../../pages/StartPage';
-import InfoPage from '../../pages/signup/InfoPage';
+import InfoPage from '../../pages/signup/InputUserInfoPage';
 import UserPage from '../../pages/signup/SelectUserTypePage';
 import MainStack from '../../components/navigation/MainStack';
 
@@ -59,7 +59,7 @@ export default function AuthStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Info"
+          name="InputUserInfoPage"
           component={InfoPage}
           options={{headerShown: false}}
         />
