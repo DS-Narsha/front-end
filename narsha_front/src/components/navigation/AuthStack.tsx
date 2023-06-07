@@ -9,7 +9,7 @@ import InputGroupPage from '../../pages/signup/user/InputGroupPage';
 import UserSignUpPage from '../../pages/signup/user/UserSignUpPage';
 import StartPage from '../../pages/StartPage';
 import InfoPage from '../../pages/signup/InfoPage';
-import UserPage from '../../pages/signup/UserPage';
+import UserPage from '../../pages/signup/SelectUserTypePage';
 import MainStack from '../../components/navigation/MainStack';
 
 const Stack = createStackNavigator();
