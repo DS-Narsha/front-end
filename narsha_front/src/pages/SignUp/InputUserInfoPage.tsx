@@ -13,10 +13,11 @@ import CustomButton from '../../components/CustomButton';
 // 이름, 닉네임, 아이디, 비밀번호와 같은 정보 입력하는 페이지
 // 아이디 중복확인 부분 아직 구현 안 함
 
-const InputUserInfoPage = () => {
+//@ts-ignore
+const InputUserInfoPage = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.pop()}>
         <BackSvg />
       </TouchableOpacity>
       <View style={styles.content}>
@@ -43,7 +44,12 @@ const InputUserInfoPage = () => {
         </View>
         <View>
           <TouchableOpacity>
-            <CustomButton title="다음" />
+            <CustomButton
+              title="다음"
+              stack={'UserSignUp'}
+              navi={navigation}
+              color={'#AADF98'}
+            />
           </TouchableOpacity>
         </View>
       </View>
