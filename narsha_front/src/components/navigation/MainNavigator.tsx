@@ -28,6 +28,7 @@ const MainNavigator = () => {
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20,
         },
+        tabBarHideOnKeyboard: true,
         tabBarStyle: {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
