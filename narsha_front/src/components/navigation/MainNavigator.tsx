@@ -1,7 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import AchievePage from '../../pages/AchievePage';
-import WritePage from '../../pages/post/WritePage';
 import AlarmPage from '../../pages/AlarmPage';
 import Main_Sel from '../../assets/main-sel.svg';
 import Main_Desel from '../../assets/main-desel.svg';
@@ -15,6 +14,7 @@ import MyPage_Sel from '../../assets/mypage-sel.svg';
 import MyPage_Desel from '../../assets/mypage-desel.svg';
 import MainStack from './MainStack';
 import MypageStack from './MyPageStack';
+import PostStack from './PostStack'
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,7 @@ const MainNavigator = () => {
             return focused ? <Main_Sel /> : <Main_Desel style={{}} />; // 메인
           } else if (route.name === 'AchievePage') {
             return focused ? <Achieve_Sel /> : <Achieve_DeSel />; //업적
-          } else if (route.name === 'WritePage') {
+          } else if (route.name === 'PostPage') {
             return focused ? <Write_Sel /> : <Write_Desel />; //글쓰기
           } else if (route.name === 'AlarmPage') {
             return focused ? <Alarm_Sel /> : <Alarm_Desel />; //알림
@@ -66,8 +66,8 @@ const MainNavigator = () => {
         options={{unmountOnBlur: true, title: '업적 페이지'}}
       />
       <Tab.Screen
-        name="WritePage"
-        component={WritePage}
+        name="PostPage"
+        component={PostStack}
         options={{unmountOnBlur: true, headerShown: false}}
       />
       <Tab.Screen
