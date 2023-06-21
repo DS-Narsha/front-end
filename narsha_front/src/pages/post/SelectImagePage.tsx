@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View, Image, Text, ScrollView} from 'react-native';
 import images from '../../assets/images.jpeg';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import ArrowRight from '../../assets/arrow-right.svg';
 
 const styles = StyleSheet.create({
 container:{
-    flex: 1
+    flex: 1,
 },
 top: {
   flexDirection: 'column',
@@ -36,17 +36,19 @@ dot:{
   margin: 20,
 },
   pickImg: {
-    height: 350,
-    width: 350,
+    height: 300,
+    width: 300,
     borderRadius: 10,
     marginBottom: 20,
+    paddingHorizontal: 16,
+    
   },
   gridView: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingTop: 10,
+    paddingTop: 7,
     justifyContent: 'space-between',
-    paddingBottom: 80,
+    paddingHorizontal: 22
   },
   img: {
     borderRadius: 10,
@@ -59,7 +61,7 @@ dot:{
 // @ts-ignore
 export default function SelectImage({navigation}) {
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.top}>
         <View style={styles.progressbox}>
           <ArrowLeft/>
@@ -72,26 +74,39 @@ export default function SelectImage({navigation}) {
         </View>
         <Text>이미지를 선택해주세요.</Text>
       </View>
-
-      <View style={{padding: 20}}>
-        <Image source={images} style={styles.pickImg} />
-        <View style={styles.gridView}>
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
-          <Image source={images} style={styles.img} />
+      <View style={styles.container}>
+        <View style={{alignItems: 'center', marginTop: 20}}>
+          <Image source={images} style={styles.pickImg} />
         </View>
+        <ScrollView>
+          <View style={styles.gridView}>
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+          </View>
+          <View style={styles.gridView}>
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+          </View>
+          <View style={styles.gridView}>
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+          </View>
+          <View style={styles.gridView}>
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+          </View>
+          <View style={styles.gridView}>
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+            <Image source={images} style={styles.img} />
+          </View>
+          {/* height */}
+          <View style={{height: 70}} />
+        </ScrollView>
       </View>
     </View>
   );
