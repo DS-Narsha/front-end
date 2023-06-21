@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
-import SendBtn from '../../assets/send-btn.svg'
+import ArrowRight from '../../assets/arrow-right.svg';
 
 const styles = StyleSheet.create({
   container:{
@@ -20,8 +20,7 @@ progress:{
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  marginLeft: 70,
-  marginRight: 56
+  marginHorizontal: 70
 },
 progressbox:{
   paddingHorizontal: 16,
@@ -37,29 +36,23 @@ dot:{
 },
 });
 
-//@ts-ignore
-const WritePage = ({navigation}) => {
+
+const PostLoadingPage = () => {
   return (
     <View style={styles.container}>
-      {/* top */}
       <View style={styles.top}>
         <View style={styles.progressbox}>
-          <ArrowLeft/>
           <View style={styles.progress}>
             <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
             <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
           </View>
-          <SendBtn />
         </View>
-        <Text>글을 작성해볼까요?</Text>
+        <Text>이미지에서 여러분의 정보가 있는지 확인 중..</Text>
       </View>
-      {/* content */}
-      <Text>WritePage</Text>
+      <Text>PostLoadingPage</Text>
     </View>
   );
 };
 
-
-
-export default WritePage;
+export default PostLoadingPage;

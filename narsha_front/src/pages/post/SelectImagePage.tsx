@@ -1,20 +1,40 @@
 import React from 'react';
-import {StyleSheet, View, Image} from 'react-native';
-import images from '../assets/images.jpeg';
-import FirstDot from '../assets/first-dot.png';
-import ArrowLeft from '../assets/arrow-left.svg';
-import ArrowRight from '../assets/arrow-right.svg';
+import {StyleSheet, View, Image, Text} from 'react-native';
+import images from '../../assets/images.jpeg';
+import ArrowLeft from '../../assets/arrow-left.svg';
+import ArrowRight from '../../assets/arrow-right.svg';
 
 const styles = StyleSheet.create({
-  top: {
-    flexDirection: 'row',
-    height: 83,
-    width: 400,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    backgroundColor: '#E3F1A9',
-    marginBottom: 20,
-  },
+container:{
+    flex: 1
+},
+top: {
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems:'center',
+  height: 105,
+  borderBottomLeftRadius: 30,
+  borderBottomRightRadius: 30,
+  backgroundColor: '#E3F1A9',
+},
+progress:{
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginHorizontal: 70
+},
+progressbox:{
+  paddingHorizontal: 16,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+dot:{
+  width: 21,
+  height: 21,
+  borderRadius: 50,
+  margin: 20,
+},
   pickImg: {
     height: 350,
     width: 350,
@@ -36,13 +56,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function SelectImage() {
+// @ts-ignore
+export default function SelectImage({navigation}) {
   return (
     <View>
       <View style={styles.top}>
-        <ArrowLeft style={{margin: 30}} />
-        <Image source={FirstDot} style={{margin: 30, marginLeft: 65}} />
-        <ArrowRight style={{margin: 30, marginLeft: 60}} />
+        <View style={styles.progressbox}>
+          <ArrowLeft/>
+          <View style={styles.progress}>
+            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+          </View>
+          <ArrowRight onPress={() => navigation.navigate("PostPage")} />
+        </View>
+        <Text>이미지를 선택해주세요.</Text>
       </View>
 
       <View style={{padding: 20}}>
