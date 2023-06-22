@@ -33,7 +33,7 @@ export default function MyPage({navigation}) {
     <View style={styles.container}>
       {!isLoading && (
       <>
-        <View style={styles.container2}>
+        <View style={styles.profileContainer}>
           <View style={styles.profile} />
           <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
             {data.nikname}
@@ -59,7 +59,7 @@ export default function MyPage({navigation}) {
           </TouchableOpacity>
         </View>
         <ScrollView style={styles.postingListContainer}>
-          <View style={styles.container3}>
+          <View style={styles.postingListContentContainer}>
             <View style={styles.content}>
               <View style={styles.imageContainer}>
                 <Image
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  container2: {
+  profileContainer: {
     backgroundColor: '#FCFDE1',
     width: '100%',
     height: 230,
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
   },
-  container3: {
+  postingListContentContainer: {
     backgroundColor: '#FFFFFF',
     flex: 1,
     width: '100%',

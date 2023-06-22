@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useQuery, useMutation, useQueryClient  } from '@tanstack/react-query';
 import ProfilePhoto from '../../assets/profilePhoto.svg';
 import EditButton from '../../assets/editButton.svg';
@@ -29,6 +30,7 @@ export default function EditProfile({navigation}) {
       let formData = new FormData(); // from-data object
       formData.append("content", JSON.stringify({          
         userGroupId: 1,
+        // profileImg: profileImage,
         birth: textBirthday,
         nikname:textNickname,
         intro:textIntro
@@ -51,6 +53,7 @@ export default function EditProfile({navigation}) {
     // get old data
     const oldData = await queryClient.getQueryData(['profile-detail'])
     // setting datas at UI, 특정 속성 수정
+    // queryClient.setQueryData(['profile-detail', "profileImg"], profileImage);
     queryClient.setQueryData(['profile-detail', "nikname"], textNickname);
     queryClient.setQueryData(['profile-detail', "birth"], textBirthday);
     queryClient.setQueryData(['profile-detail', "intro"], textIntro);
@@ -77,16 +80,48 @@ export default function EditProfile({navigation}) {
     }
   })
 
+  // const [profileImage, onChangeProfileImage] = useState(data.profileImg)
   const [textBirthday, onChangeTextBirthday] = useState(data.birth);
   const [textNickname, onChangeTextNickname] = useState(data.nikname);
   const [textIntro, onChangeTextIntro] = useState(data.intro);
+
+//달력 모달 설정
+  const FormatDate = (day: any) => {
+    let dateString =
+      day.getFullYear() +
+      '.' +
+      (day.getMonth() + 1) +
+      '.' +
+      day.getDate();
+
+    return dateString; 
+  };
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+
+  const handleConfirm = (date: any) => {
+    // console.warn("A date has been picked: ", date);
+    onChangeTextBirthday(FormatDate(date));
+    hideDatePicker();
+  };
 
   return (
     <View style={styles.container}>
       {!isLoading && (
         <>
         <View style={styles.photo}>
-          <ProfilePhoto />
+          <Image 
+            source = {{uri : "https://img1.daumcdn.net/thumb/C176x176/?fname=https://blog.kakaocdn.net/dn/bhrekR/btqzQtNHiXU/G6qSoOJdxcsfcri8lRGc9K/img.png"}}
+            style={{width: 115, height: 115}} />
         </View>
         <TextInput
           editable={false}
@@ -97,8 +132,18 @@ export default function EditProfile({navigation}) {
           style={styles.text}
           placeholder="생일"
           value={textBirthday}
+          onTouchStart={showDatePicker}
           onChangeText={onChangeTextBirthday}
         />
+        <View>
+          {/* <Button title="Show Date Picker" onPress={showDatePicker} /> */}
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+        </View>
         <TextInput
           style={styles.text}
           placeholder="닉네임"

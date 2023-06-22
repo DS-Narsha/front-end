@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import MyTextInput from '../components/MyTextInput';
+import SingleTextInput from '../components/SingleTextInput';
 import MultiTextInput from '../components/MultiTextInput';
 
 // 공지 작성 페이지
@@ -8,12 +8,12 @@ import MultiTextInput from '../components/MultiTextInput';
 export default function NoticeWritePage({navigation}: any) {
   return (
     <View style={styles.container}>
-      <View style={styles.container2}>
+      <View style={styles.writingNoticeContainer}>
         <View style={styles.titlecontainer}>
           <Text style={styles.title}>공지 제목</Text>
         </View>
         <View style={styles.textinput}>
-          <MyTextInput placeholder="" />
+          <SingleTextInput placeholder="" />
         </View>
         <View style={styles.titlecontainer}>
           <Text style={styles.title}>공지 내용</Text>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  container2: {
+  writingNoticeContainer: {
     marginTop: 55,
   },
   textinput: {
