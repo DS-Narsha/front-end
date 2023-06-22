@@ -9,6 +9,20 @@ import {
 } from 'react-native';
 import userImage from '../assets/user-image.png';
 
+
+export default function SingleFriend() {
+  return (
+    <TouchableOpacity style={styles.container}>
+      <Image source={userImage} style={styles.image} />
+      <View style={styles.item}>
+        <Text style={styles.user_id}>User_ID</Text>
+        <Text style={styles.user_name}>User_Name</Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
+
 const styles = StyleSheet.create({
   container: {
     padding: 15,
@@ -24,18 +38,6 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 20,
     marginRight: 10,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOpacity: 0.5,
-        shadowOffset: {height: 10, width: 10},
-        shadowRadius: 10,
-      },
-
-      android: {
-        elevation: 20,
-      },
-    }),
   },
   user_id: {
     margin: 3,
@@ -47,15 +49,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-export default function SingleFriend() {
-  return (
-    <TouchableOpacity style={styles.container}>
-      <Image source={userImage} style={styles.image} />
-      <View style={styles.item}>
-        <Text style={styles.user_id}>User_ID</Text>
-        <Text style={styles.user_name}>User_Name</Text>
-      </View>
-    </TouchableOpacity>
-  );
-}

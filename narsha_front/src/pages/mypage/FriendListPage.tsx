@@ -4,6 +4,40 @@ import DS from '../../assets/DS.png';
 import Arrow from '../../assets/arrow-left.svg';
 import SingleFriend from '../../components/SingleFriend';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
+
+//@ts-ignore
+export default function FriendList({navigation}) {
+  return (
+    <View>
+      <View style={styles.ds_container}>
+        <Image style={styles.ds_image} source={DS} />
+        <Text
+          style={
+            styles.ds_text
+          }>{`같은 그룹의 친구들을 이 곳에서 볼 수 있답니다!
+친구들의 게시글을 구경하러 가볼까요?`}</Text>
+      </View>
+      
+      <ScrollView>
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+        <SingleFriend />
+      </ScrollView>
+      
+    </View>
+  );
+}
+
 
 const styles = StyleSheet.create({
   top: {
@@ -34,26 +68,3 @@ const styles = StyleSheet.create({
     color: '#61A257',
   },
 });
-
-//@ts-ignore
-export default function FriendList({navigation}) {
-  return (
-    <View>
-      <View style={styles.ds_container}>
-        <Image style={styles.ds_image} source={DS} />
-        <Text
-          style={
-            styles.ds_text
-          }>{`같은 그룹의 친구들을 이 곳에서 볼 수 있답니다!
-친구들의 게시글을 구경하러 가볼까요?`}</Text>
-      </View>
-
-      <SingleFriend />
-      <SingleFriend />
-      <SingleFriend />
-      <SingleFriend />
-      <SingleFriend />
-      <SingleFriend />
-    </View>
-  );
-}
