@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {PermissionsAndroid, StyleSheet, View, Image, Text, ScrollView, Platform, FlatList, Button} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, ScrollView, Platform, FlatList, Button} from 'react-native';
 import {useCameraRoll, CameraRoll} from "@react-native-camera-roll/camera-roll";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
@@ -36,41 +36,74 @@ dot:{
   margin: 20,
 },
   pickImg: {
-    height: 330,
-    width: 330,
+    height: 300,
+    width: 300,
     borderRadius: 10,
     marginBottom: 20,
     paddingHorizontal: 16,
     backgroundColor: '#c0c0c0'
   },
   img: {
-    borderRadius: 10,
     width: 100,
     height: 100,
     marginBottom: 10,
     resizeMode: 'cover',
     marginHorizontal: 5
   },
+  selPhoto:{
+    opacity: 0.7,
+    fontSize: 16,
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  selPhotoText:{
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#98DC63'
+  }
 });
 
 // @ts-ignore
 export default function SelectImage({navigation}) {
   const [photos, getPhotos] = useCameraRoll();
   const [pageSize, setPageSize] = useState(40);
+  let selectInputs = useRef<string[]>([]); // select photos, send next page
+  let currentSelect =  useRef(""); // currnet select
+
+  useEffect(()=>{
+    permissionFunc(); // permission code
+    getPhotos(); // getPhotos
+  }, [])
+
   const _RenderItem = useCallback(({ item }: any) => {
     return (
-        <Image
+      <TouchableOpacity onPress={() => {
+          selectHandler(item.node.image.uri)
+        }}>
+          
+        <ImageBackground
           source={{ uri: item.node.image.uri }}
-          style={styles.img}
-        />
+          style={[styles.img, selectInputs.current.includes(item.node.image.uri) && styles.selPhoto]}
+          imageStyle={{borderRadius: 10}}
+        >
+          {
+          selectInputs.current.includes(item.node.image.uri) && 
+          <Text style={styles.selPhotoText}>
+            {selectInputs.current.indexOf(item.node.image.uri) + 1}
+          </Text>
+          }
+        </ImageBackground>
+      </TouchableOpacity>
     );
   }, []);
 
-useEffect(()=>{
-  permissionFunc();
-  getPhotos();
-}, [])
+  // select image
+  const selectHandler = (uri: string) => {
+    if (selectInputs.current.includes(uri))  selectInputs.current = selectInputs.current.filter((el) => el !== uri);
+    else selectInputs.current.push(uri)
+  }
 
+// permission code
 const permissionFunc = async() =>{
   if (Platform.OS === "android" && !(await hasAndroidPermission())) {
     return;
