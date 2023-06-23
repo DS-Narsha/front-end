@@ -1,7 +1,7 @@
-import React from 'react';
-import {StyleSheet, View, Image, Text, ScrollView} from 'react-native';
-import images from '../../assets/images.jpeg';
-import ArrowLeft from '../../assets/arrow-left.svg';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {PermissionsAndroid, StyleSheet, View, Image, Text, ScrollView, Platform, FlatList, Button} from 'react-native';
+import {useCameraRoll, CameraRoll} from "@react-native-camera-roll/camera-roll";
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
 
 const styles = StyleSheet.create({
@@ -36,78 +36,127 @@ dot:{
   margin: 20,
 },
   pickImg: {
-    height: 300,
-    width: 300,
+    height: 330,
+    width: 330,
     borderRadius: 10,
     marginBottom: 20,
     paddingHorizontal: 16,
-    
-  },
-  gridView: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingTop: 7,
-    justifyContent: 'space-between',
-    paddingHorizontal: 22
+    backgroundColor: '#c0c0c0'
   },
   img: {
     borderRadius: 10,
     width: 100,
     height: 100,
     marginBottom: 10,
+    resizeMode: 'cover',
+    marginHorizontal: 5
   },
 });
 
 // @ts-ignore
 export default function SelectImage({navigation}) {
-  return (
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <View style={styles.progressbox}>
-          <ArrowLeft/>
-          <View style={styles.progress}>
-            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
-          </View>
-          <ArrowRight onPress={() => navigation.navigate("PostPage")} />
-        </View>
-        <Text>이미지를 선택해주세요.</Text>
-      </View>
-      <View style={styles.container}>
-        <View style={{alignItems: 'center', marginTop: 20}}>
-          <Image source={images} style={styles.pickImg} />
-        </View>
-        <ScrollView>
-          <View style={styles.gridView}>
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-          </View>
-          <View style={styles.gridView}>
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-          </View>
-          <View style={styles.gridView}>
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-          </View>
-          <View style={styles.gridView}>
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-          </View>
-          <View style={styles.gridView}>
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-            <Image source={images} style={styles.img} />
-          </View>
-          {/* height */}
-          <View style={{height: 70}} />
-        </ScrollView>
-      </View>
-    </View>
-  );
+  const [photos, getPhotos] = useCameraRoll();
+  const [pageSize, setPageSize] = useState(40);
+  const _RenderItem = useCallback(({ item }: any) => {
+    return (
+        <Image
+          source={{ uri: item.node.image.uri }}
+          style={styles.img}
+        />
+    );
+  }, []);
+
+useEffect(()=>{
+  permissionFunc();
+  getPhotos();
+}, [])
+
+const permissionFunc = async() =>{
+  if (Platform.OS === "android" && !(await hasAndroidPermission())) {
+    return;
+  }
 }
+
+async function hasAndroidPermission() {
+  const getCheckPermissionPromise = () => {
+    if (Number(Platform.Version) >= 33) {
+      return Promise.all([
+        PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES),
+        PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO),
+      ]).then(
+        ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
+          hasReadMediaImagesPermission && hasReadMediaVideoPermission,
+      );
+    } else {
+      return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+    }
+  };
+
+  const hasPermission = await getCheckPermissionPromise();
+  if (hasPermission) {
+    return true;
+  }
+  const getRequestPermissionPromise = () => {
+    if (Number(Platform.Version) >= 33) {
+      return PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+        PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+      ]).then(
+        (statuses) =>
+          statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] ===
+            PermissionsAndroid.RESULTS.GRANTED,
+      );
+    } else {
+      return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE).then((status) => status === PermissionsAndroid.RESULTS.GRANTED);
+    }
+  };
+
+  return await getRequestPermissionPromise();
+}
+
+return (
+  <View style={styles.container}>
+    <View style={styles.top}>
+      <View style={styles.progressbox}>
+        <View style={styles.progress}>
+          <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+          <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+          <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+        </View>
+        <ArrowRight onPress={() => navigation.navigate("PostPage")} />
+      </View>
+      <Text>이미지를 선택해주세요.</Text>
+    </View>
+    {/* height */}
+    <View style={{height: 20}} />
+    <View style={styles.container}>
+    <View style={{alignItems: 'center'}}>
+          <View style={styles.pickImg} />
+    </View>
+      {photos ? (
+        <FlatList
+          data={photos.edges}
+          renderItem={_RenderItem}
+          key={'#'}
+          keyExtractor={(item, index) => '#' + index.toString()}
+          // 페이징 처리
+          onEndReached={() => {
+            setPageSize(pageSize + 40);
+          }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 210,
+            flexGrow: 1,
+            justifyContent: 'space-around',
+            alignSelf:'center'
+          }}
+          numColumns={3}
+        />
+      ) : (<Text>이미지가 없습니다.</Text>)}
+    </View>
+  </View>
+)
+
+};
