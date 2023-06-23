@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, ScrollView, Platform, FlatList, Button} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, ScrollView, Platform, FlatList, Image} from 'react-native';
 import {useCameraRoll, CameraRoll} from "@react-native-camera-roll/camera-roll";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
@@ -41,7 +41,9 @@ dot:{
     borderRadius: 10,
     marginBottom: 20,
     paddingHorizontal: 16,
-    backgroundColor: '#c0c0c0'
+    backgroundColor: '#c0c0c0',
+    justifyContent: 'center',
+    alignItems:'center'
   },
   img: {
     width: 100,
@@ -52,7 +54,6 @@ dot:{
   },
   selPhoto:{
     opacity: 0.7,
-    fontSize: 16,
     justifyContent: 'center',
     alignItems:'center'
   },
@@ -60,6 +61,10 @@ dot:{
     fontSize: 30,
     fontWeight: 'bold',
     color: '#98DC63'
+  },
+  currentPickImg:{
+    fontSize: 20,
+    fontWeight: 'bold',
   }
 });
 
@@ -68,12 +73,12 @@ export default function SelectImage({navigation}) {
   const [photos, getPhotos] = useCameraRoll();
   const [pageSize, setPageSize] = useState(40);
   let selectInputs = useRef<string[]>([]); // select photos, send next page
-  let currentSelect =  useRef(""); // currnet select
+  const [currentPhoto, setCurrentPhoto] = useState("")
 
-  useEffect(()=>{
+  useEffect(() => {
     permissionFunc(); // permission code
     getPhotos(); // getPhotos
-  }, [])
+  },[])
 
   const _RenderItem = useCallback(({ item }: any) => {
     return (
@@ -99,8 +104,14 @@ export default function SelectImage({navigation}) {
 
   // select image
   const selectHandler = (uri: string) => {
-    if (selectInputs.current.includes(uri))  selectInputs.current = selectInputs.current.filter((el) => el !== uri);
-    else selectInputs.current.push(uri)
+    if (selectInputs.current.includes(uri)) {
+      selectInputs.current = selectInputs.current.filter((el) => el !== uri);
+      setCurrentPhoto(selectInputs.current[selectInputs.current.length -1])
+    }
+    else {
+      selectInputs.current.push(uri)
+      setCurrentPhoto(uri)
+    }
   }
 
 // permission code
@@ -166,7 +177,11 @@ return (
     <View style={{height: 20}} />
     <View style={styles.container}>
     <View style={{alignItems: 'center'}}>
-          <View style={styles.pickImg} />
+      <ImageBackground source={currentPhoto ? {uri: currentPhoto} : require("../../assets/images.jpeg")}
+      imageStyle={{borderRadius: 10}}
+      style={styles.pickImg}>
+        {!currentPhoto && <Text style={styles.currentPickImg}>이미지를 선택해볼까요?</Text>}
+      </ImageBackground>
     </View>
       {photos ? (
         <FlatList
