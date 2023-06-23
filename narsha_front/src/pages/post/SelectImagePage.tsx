@@ -15,7 +15,7 @@ top: {
   height: 105,
   borderBottomLeftRadius: 30,
   borderBottomRightRadius: 30,
-  backgroundColor: '#E3F1A9',
+  backgroundColor: '#F9FAC8',
 },
 progress:{
   flexDirection: 'row',
