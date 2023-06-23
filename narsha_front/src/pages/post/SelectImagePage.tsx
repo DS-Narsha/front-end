@@ -71,14 +71,17 @@ dot:{
 // @ts-ignore
 export default function SelectImage({navigation}) {
   const [photos, getPhotos] = useCameraRoll();
-  const [pageSize, setPageSize] = useState(40);
+  const [pageSize, setPageSize] = useState(24);
   let selectInputs = useRef<string[]>([]); // select photos, send next page
   const [currentPhoto, setCurrentPhoto] = useState("")
 
   useEffect(() => {
     permissionFunc(); // permission code
-    getPhotos(); // getPhotos
   },[])
+
+  useEffect(() => {
+    getPhotos({first: pageSize}); // getPhotos
+  },[pageSize])
 
   const _RenderItem = useCallback(({ item }: any) => {
     return (
@@ -191,11 +194,11 @@ return (
           keyExtractor={(item, index) => '#' + index.toString()}
           // 페이징 처리
           onEndReached={() => {
-            setPageSize(pageSize + 40);
+            setPageSize(pageSize + 24);
           }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: 210,
+            paddingBottom: 100,
             flexGrow: 1,
             justifyContent: 'space-around',
             alignSelf:'center'
