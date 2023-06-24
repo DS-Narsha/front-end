@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Text, View, StyleSheet, Button} from 'react-native';
 import Notification from '../assets/teacherMenu/notification.svg';
 import StudentList from '../assets/teacherMenu/studentList.svg';
 import AppTime from '../assets/teacherMenu/appTime.svg';
-import GroupCode from '../assets/teacherMenu/groupCode.svg';
+// import GroupCode from '../assets/teacherMenu/groupCode.svg';
 import Undefinedfunc from '../assets/teacherMenu/undefinedSetting.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import GroupCodeModal from '../components/modal/GroupCodeModal';
 
 export default function TeacherMenu({navigation}: any) {
   return (
     <View style={styles.container}>
-      <View style={styles.container2}>
+      <View style={styles.firstRowContainer}>
         <TouchableOpacity
           onPress={() => navigation.navigate('InfoList')}>
           <View style={{padding: 15}}>
@@ -30,10 +31,11 @@ export default function TeacherMenu({navigation}: any) {
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.container3}>
+      <View style={styles.secondRowContainer}>
         <TouchableOpacity>
           <View style={{padding: 15}}>
-            <GroupCode />
+            {/* <GroupCode /> */}
+            <GroupCodeModal/>
           </View>
         </TouchableOpacity>
         <TouchableOpacity>
@@ -58,12 +60,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  container2: {
+  firstRowContainer: {
     height: 'auto',
     width: 'auto',
     flexDirection: 'row',
   },
-  container3: {
+  secondRowContainer: {
     height: 'auto',
     width: 'auto',
     flexDirection: 'row',

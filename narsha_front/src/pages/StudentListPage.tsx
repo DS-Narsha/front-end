@@ -3,13 +3,14 @@ import {View, StyleSheet} from 'react-native';
 
 import StudentListModal from '../components/modal/StudentListModal';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 
 // 업적 스크린 페이지
 
 export default function StudentListPage({navigation}: any) {
   return (
-    <View style={styles.container}>
-      <View style={styles.container2}>
+    <ScrollView style={styles.scrollContainer}>
+      <View style={styles.studentListContainer}>
         <TouchableOpacity>
           <StudentListModal />
         </TouchableOpacity>
@@ -35,16 +36,16 @@ export default function StudentListPage({navigation}: any) {
           <StudentListModal />
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  container2: {
+  studentListContainer: {
     marginTop: 60,
     flexDirection: 'column',
     alignItems: 'center',

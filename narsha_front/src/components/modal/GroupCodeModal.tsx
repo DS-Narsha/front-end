@@ -1,12 +1,36 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
-import InitialProfileImage from '../../assets/initial-profile-image.svg';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import GroupCode from '../../assets/teacherMenu/groupCode.svg';
+import { useQuery } from '@tanstack/react-query';
 
-export default function StudentListModal() {
+export default function GroupCodeModal() {
+  const getGroupCode = async () =>{
+    try{
+      const res = await fetch(`http://localhost:8080/api/profile/detail?profileId=${1}`,{
+        method:"GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await res.json();
+      return json;
+    } catch(err){
+      console.log(err);
+    }
+
+  }
+
+  const {status, data, error, isLoading} = useQuery({
+    queryKey: ["group-code"], 
+    queryFn: getGroupCode
+  })
+
   const [modalVisible, setModalVisible] = useState(false);
   return (
-    <View style={styles.container}>
+    <View>
+      {!isLoading &&(
+      <>
+        <View style={styles.container}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -16,50 +40,42 @@ export default function StudentListModal() {
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+
             <View style={styles.modalHead}>
-              <Text style={styles.btnText}>학생 이름</Text>
+              <Text style={styles.modalTitleText}>그룹 코드</Text>
             </View>
+
             <View style={styles.modalBody}>
               <View style={styles.modalText}>
-                <Text style={styles.strongText}>아이디</Text>
-                <Text style={styles.content}>내용</Text>
-              </View>
-              <View style={styles.modalText}>
-                <Text style={styles.strongText}>비밀번호</Text>
-                <Text style={styles.content}>내용</Text>
-              </View>
-              <View style={styles.modalText}>
-                <Text style={styles.strongText}>생일</Text>
-                <Text style={styles.content}>내용</Text>
+                <Text style={styles.strongText}>그룹 코드: </Text>
+                <Text style={styles.content}>{data.userGroup.group.groupCode}</Text>
               </View>
             </View>
+
             <View style={styles.modalEnd}>
               <Pressable onPress={() => setModalVisible(!modalVisible)}>
                 <View style={styles.btn}>
-                  <Text style={styles.strongText}>설정하기</Text>
+                  <Text style={styles.strongText}>닫기</Text>
                 </View>
               </Pressable>
             </View>
+
           </View>
         </View>
       </Modal>
 
       <Pressable onPress={() => setModalVisible(true)}>
-        <View style={styles.studentContentContainer}>
+        <View>
           <View>
-            <InitialProfileImage />
-          </View>
-          <View>
-            <View style={styles.textcontainer}>
-              <Text style={styles.strongText}>학생 이름</Text>
-            </View>
-            <View style={styles.textcontainer}>
-              <Text style={styles.nickname}>닉네임</Text>
-            </View>
+            <GroupCode />
           </View>
         </View>
       </Pressable>
     </View>
+      </>
+      )}
+    </View>
+    
   );
 }
 
@@ -74,7 +90,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: '68%',
-    height: 220,
+    height: 130,
     backgroundColor: 'white',
     borderRadius: 20,
     flexDirection: 'column',
@@ -99,12 +115,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalBody: {
-    flex: 2,
+    flex: 0.8,
     width: '100%',
     alignItems: 'flex-start',
+    justifyContent: 'center',
   },
   modalEnd: {
-    flex: 0.8,
+    flex: 0.9,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -124,39 +141,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
   },
-  btnText: {
+  modalTitleText: {
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
   },
   container: {
-    margin: 10,
-    width: 350,
-    height: 70,
-    backgroundColor: '#F9FAC8',
-    borderRadius: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  studentContentContainer: {
-    margin: 15,
-    width: 350,
-    height: 70,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  textcontainer: {
-    marginHorizontal: 10,
   },
   strongText: {
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
-  },
-  nickname: {
-    fontSize: 12,
-    color: '#909090',
   },
   content: {
     marginLeft: 10,
