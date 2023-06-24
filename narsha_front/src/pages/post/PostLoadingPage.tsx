@@ -38,9 +38,17 @@ dot:{
 const PostLoadingPage = ({route, navigation}) => {
   let [ loading, setLoading ] = useState(true);
   
-  useEffect(()=>{
-    let timer = setTimeout(()=>{ setLoading(false) }, 2000);
-  });
+  // timer
+	const timeout = setTimeout(() => {
+      navigation.navigate("WritePage", { resPhoto: route.params });
+    }, 2000);
+
+	useEffect(() => {
+		timeout;
+		return () => {
+			clearTimeout(timeout);
+		};
+	}); 
 
   return (
       <View style={styles.container}>
@@ -58,7 +66,9 @@ const PostLoadingPage = ({route, navigation}) => {
         </View>
       <Text>PostLoadingPage</Text>
       </>
-      ) : (navigation.navigate("WritePage", {resPhoto: route.params}))
+      ) : (
+        navigation.navigate("WritePage", {resPhoto: route.params})
+      )
       }
     </View>
   );

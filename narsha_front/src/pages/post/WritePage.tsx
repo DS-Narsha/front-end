@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import {StyleSheet, View, Text, FlatList, TouchableOpacity, ImageBackground} from 'react-native';
+import {StyleSheet, View, Text, FlatList, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import SendBtn from '../../assets/send-btn.svg'
 import NextPhoto from '../../assets/next-photo.svg'
@@ -119,7 +119,8 @@ selPhoto:{
 const WritePage = ({route, navigation}) => {
   const resPhoto = route.params['resPhoto']['photos']
   let currentPhoto = useRef(resPhoto[0])
-  let [selPhoto, useSelPhoto] = useState(resPhoto[0])
+  const [selPhoto, useSelPhoto] = useState(resPhoto[0])
+  const [content, onChangeContent] = useState("");
 
   const _RenderItem = useCallback(({ item, index }: any) => {
     return (
@@ -168,7 +169,12 @@ const WritePage = ({route, navigation}) => {
         <View style={styles.uploadContentBox}>
           <View style={styles.writingBox}>
             <View style={styles.profile}></View>
-            <View style={styles.content}></View>
+            <TextInput placeholder="어떤 글을 작성할건가요?"
+                   value={content}
+                   textAlignVertical="top"
+                   multiline={true}
+                   onChangeText={onChangeContent}
+                  style={styles.content} />
           </View>
           {resPhoto ? (
         <FlatList
@@ -189,7 +195,6 @@ const WritePage = ({route, navigation}) => {
       ) : (<Text>이미지가 없습니다.</Text>)}
         </View>
       </View>
-      <Text>WritePage</Text>
     </View>
   );
 };
