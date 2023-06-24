@@ -21,7 +21,8 @@ progress:{
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  marginHorizontal: 70
+  marginLeft: 70,
+  marginRight: 54
 },
 progressbox:{
   paddingHorizontal: 16,
@@ -109,7 +110,7 @@ export default function SelectImage({navigation}) {
   const selectHandler = (uri: string) => {
     if (selectInputs.current.includes(uri)) {
       selectInputs.current = selectInputs.current.filter((el) => el !== uri);
-      setCurrentPhoto(selectInputs.current[selectInputs.current.length -1])
+      setCurrentPhoto(selectInputs.current[selectInputs.current.length - 1])
     }
     else {
       selectInputs.current.push(uri)
@@ -174,7 +175,7 @@ return (
         </View>
         <ArrowRight onPress={() => navigation.navigate("PostPage")} />
       </View>
-      <Text>이미지를 선택해주세요.</Text>
+      <Text>이미지를 선택해볼까요?</Text>
     </View>
     {/* height */}
     <View style={{height: 20}} />
@@ -183,7 +184,7 @@ return (
       <ImageBackground source={currentPhoto ? {uri: currentPhoto} : require("../../assets/images.jpeg")}
       imageStyle={{borderRadius: 10}}
       style={styles.pickImg}>
-        {!currentPhoto && <Text style={styles.currentPickImg}>이미지를 선택해볼까요?</Text>}
+        {!currentPhoto && <Text style={styles.currentPickImg}>이미지를 선택해주세요.</Text>}
       </ImageBackground>
     </View>
       {photos ? (
