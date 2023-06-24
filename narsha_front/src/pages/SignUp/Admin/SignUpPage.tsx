@@ -24,7 +24,7 @@ const SignUpPage = ({navigation}) => {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.reset({routes: [{name: 'Main'}]})}>
+        onPress={() => navigation.reset({routes: [{name: 'MainNavigator'}]})}>
         <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
     </View>

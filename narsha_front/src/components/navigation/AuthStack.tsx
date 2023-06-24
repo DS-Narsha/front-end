@@ -29,7 +29,7 @@ export default function AuthStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Main"
+          name="MainNavigator"
           component={MainNavigator}
           options={{headerShown: false}}
         />
