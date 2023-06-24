@@ -38,7 +38,9 @@ export default function MyPage({navigation}) {
           <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
             {data.nikname}
           </Text>
-          <Text style={{fontSize: 12, padding: 1}}>{data.birth}</Text>
+          <Text style={{fontSize: 12, padding: 1}}>
+            {data.birth}
+          </Text>
           <Text style={{fontSize: 13, padding: 2}}>
             {data.intro}
           </Text>

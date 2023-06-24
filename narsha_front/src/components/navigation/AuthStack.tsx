@@ -6,7 +6,6 @@ import SelectGroupPage from '../../pages/signup/login/SelectGroupPage';
 import GroupPage from '../../pages/signup/admin/GroupPage';
 import SignUpPage from '../../pages/signup/admin/SignUpPage';
 import InputGroupPage from '../../pages/signup/user/InputGroupPage';
-import UserSignUpPage from '../../pages/signup/user/UserSignUpPage';
 import StartPage from '../../pages/StartPage';
 import InputUserInfoPage from '../../pages/signup/InputUserInfoPage';
 import UserPage from '../../pages/signup/SelectUserTypePage';
