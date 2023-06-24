@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, ScrollView, Platform, FlatList, Image} from 'react-native';
-import {useCameraRoll, CameraRoll} from "@react-native-camera-roll/camera-roll";
+import {useCameraRoll} from "@react-native-camera-roll/camera-roll";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
 
@@ -173,7 +173,7 @@ return (
           <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
           <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
         </View>
-        <ArrowRight onPress={() => navigation.navigate("PostPage")} />
+        <ArrowRight onPress={() => navigation.navigate("PostLoadingPage", {photos: selectInputs.current})} />
       </View>
       <Text>이미지를 선택해볼까요?</Text>
     </View>

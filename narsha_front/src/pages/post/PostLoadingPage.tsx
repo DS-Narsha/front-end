@@ -1,7 +1,5 @@
-import React, {ReactNode} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
-import ArrowLeft from '../../assets/arrow-left.svg';
-import ArrowRight from '../../assets/arrow-right.svg';
 
 const styles = StyleSheet.create({
   container:{
@@ -36,21 +34,32 @@ dot:{
 },
 });
 
+//@ts-ignore
+const PostLoadingPage = ({route, navigation}) => {
+  let [ loading, setLoading ] = useState(true);
+  
+  useEffect(()=>{
+    let timer = setTimeout(()=>{ setLoading(false) }, 2000);
+  });
 
-const PostLoadingPage = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.top}>
-        <View style={styles.progressbox}>
-          <View style={styles.progress}>
-            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+      <View style={styles.container}>
+      { loading ? (
+        <>
+        <View style={styles.top}>
+          <View style={styles.progressbox}>
+            <View style={styles.progress}>
+              <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+              <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+              <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
+            </View>
           </View>
+          <Text>이미지에서 여러분의 정보가 있는지 확인 중..</Text>
         </View>
-        <Text>이미지에서 여러분의 정보가 있는지 확인 중..</Text>
-      </View>
       <Text>PostLoadingPage</Text>
+      </>
+      ) : (navigation.navigate("WritePage", {resPhoto: route.params}))
+      }
     </View>
   );
 };

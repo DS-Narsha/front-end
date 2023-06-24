@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import {StyleSheet, View, Text, FlatList, TouchableOpacity, ImageBackground} from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import SendBtn from '../../assets/send-btn.svg'
 import NextPhoto from '../../assets/next-photo.svg'
@@ -89,18 +89,54 @@ img: {
   borderRadius: 10,
   width: 55,
   height: 55,
-  marginHorizontal: 5
+  margin: 5,
+  resizeMode: 'cover',
 },
 selectPhotoBox:{
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center'
+},
+selPhotoText:{
+  fontSize: 10,
+  fontWeight: 'bold',
+  color: '#000000'
+},
+selPhoto:{
+  opacity: 0.7,
+  justifyContent: 'center',
+  alignItems:'center',
+  shadowOffset: {
+    width: 0,
+    height: 5,
+  },
+  elevation: 5,
 }
 });
 
 //@ts-ignore
-const WritePage = ({navigation}) => {
+const WritePage = ({route, navigation}) => {
+  const resPhoto = route.params['resPhoto']['photos']
+  let currentPhoto = useRef(resPhoto[0])
+  let [selPhoto, useSelPhoto] = useState(resPhoto[0])
+
+  const _RenderItem = useCallback(({ item, index }: any) => {
+    return (
+      <TouchableOpacity onPress={() =>{
+        currentPhoto.current = item
+        useSelPhoto(item)
+      }}>
+        <ImageBackground
+          source={{uri: item}}
+          style={[styles.img, (currentPhoto.current === item) && styles.selPhoto]}
+          imageStyle={{borderRadius: 10}}>
+          {currentPhoto.current === item && <Text style={styles.selPhotoText}>선택</Text>}
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* top */}
@@ -121,7 +157,10 @@ const WritePage = ({navigation}) => {
         <View style={styles.selectPhotoBox}>
           <PrevPhoto />
           <View style={{alignItems: 'center', marginTop: 20}}>
-            <View style={styles.pickImg} />
+            <ImageBackground 
+            source={{uri: currentPhoto.current}} 
+            style={styles.pickImg}
+            imageStyle={{borderRadius: 10}} />
           </View>
           <NextPhoto />
         </View>
@@ -131,20 +170,23 @@ const WritePage = ({navigation}) => {
             <View style={styles.profile}></View>
             <View style={styles.content}></View>
           </View>
-          <View style={styles.gridView}>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-          </View>
-          <View style={styles.gridView}>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-            <View style={styles.img}></View>
-          </View>
+          {resPhoto ? (
+        <FlatList
+          data={resPhoto}
+          renderItem={_RenderItem}
+          key={'#'}
+          scrollEnabled={false}
+          keyExtractor={(item, index) => '#' + index.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 100,
+            flexGrow: 1,
+            justifyContent: 'space-around',
+            alignSelf:'center'
+          }}
+          numColumns={5}
+        />
+      ) : (<Text>이미지가 없습니다.</Text>)}
         </View>
       </View>
       <Text>WritePage</Text>
