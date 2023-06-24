@@ -1,11 +1,51 @@
-import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Alert, TextInput} from 'react-native';
 import MyTextInput from '../../../components/MyTextInput';
-import AppLogo from '../../../assets/app-logo.svg';
+import AppLogo from '../../../assets/app-logo.svg'
 import CustomButton from '../../../components/CustomButton';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 //@ts-ignore
 const LoginPage = ({navigation}) => {
+
+  const[userId, setUserId] = useState('');
+  const[password, setPassword] = useState('');
+  const queryClient = useQueryClient();
+
+  const loginMutation = useMutation(async () => {
+    const response = await fetch(`http://localhost:8080/api/user/login`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId,
+        password,
+      }),
+    })
+
+    const data = await response.json();
+    return data;
+
+  })
+
+  const handleLogin = async () => {
+    try {
+      const data = await loginMutation.mutateAsync();
+      
+      if(data.res === 3) {
+        // 로그인 성공시 캐시에 로그인 성공을 저장
+        queryClient.setQueryData(['isLoggedIn'], true);
+        navigation.reset({ routes: [{ name: 'MainNavigator' }] });
+      } else {
+        Alert.alert('로그인 실패', data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert('오류', '로그인 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.logo}>
@@ -13,8 +53,16 @@ const LoginPage = ({navigation}) => {
         <Text style={styles.logoText}>로그인</Text>
       </View>
       <View style={styles.formArea}>
-        <MyTextInput placeholder="아이디" />
-        <MyTextInput placeholder="비밀번호" />
+        <TextInput 
+        placeholder="아이디"
+        value={userId}
+        onChangeText={(text: React.SetStateAction<string>) => setUserId(text)} />
+        <TextInput 
+        placeholder="비밀번호"
+        value={password}
+        onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
+        secureTextEntry
+        />
       </View>
       <View style={styles.textArea}>
         <Text>App이름 회원이 아니신가요?</Text>
@@ -27,7 +75,7 @@ const LoginPage = ({navigation}) => {
       </View>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.reset({routes: [{name: 'MainNavigator'}]})}>
+        onPress={handleLogin}>
         <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
     </View>
@@ -43,7 +91,7 @@ const styles = StyleSheet.create({
   logo: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 50,
   },
   logoText: {
     fontSize: 26,

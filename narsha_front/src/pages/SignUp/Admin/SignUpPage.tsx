@@ -4,10 +4,13 @@ import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 import CopyGroup from '../../../assets/copy-group.svg';
 
-// 관리자_회원가입 완료 페이지
+// 회원가입 완료 페이지_관리자 + 사용자 
 
 //@ts-ignore
-const SignUpPage = ({navigation}) => {
+const SignUpPage = ({navigation, route}) => {
+
+  const { userType } = route.params;
+
   return (
     <View style={styles.container}>
       <View style={styles.logo}>
@@ -15,12 +18,16 @@ const SignUpPage = ({navigation}) => {
       </View>
       <View style={styles.textArea}>
         <Text style={styles.title}>가입을 완료했습니다!</Text>
-        <Text style={styles.text1}>그룹 코드는</Text>
-        <View style={styles.CodeContainer}>
-          <Text style={styles.text2}>그룹 코드</Text>
-          <CopyGroup />
-        </View>
-        <Text style={styles.text1}>입니다!</Text>
+        {userType === 'teacher' && (
+        <>
+          <Text style={styles.textTitle}>그룹 코드는</Text>
+          <View style={styles.CodeContainer}>
+            <Text style={styles.textBody}>그룹 코드</Text>
+            <CopyGroup />
+          </View>
+          <Text style={styles.textTitle}>입니다!</Text>
+        </>
+        )}
       </View>
       <TouchableOpacity
         style={styles.button}
@@ -53,12 +60,12 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     color: '#000000',
   },
-  text1: {
+  textTitle: {
     fontSize: 16,
     marginBottom: 8,
     color: '#000000',
   },
-  text2: {
+  textBody: {
     fontSize: 12,
     marginBottom: 8,
     paddingRight: 4,
