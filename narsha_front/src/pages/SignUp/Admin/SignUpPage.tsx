@@ -1,16 +1,64 @@
-import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  StyleSheet,
+  Text, 
+  View, 
+  TouchableOpacity, 
+  Alert,
+  Platform,
+  ToastAndroid
+ } from 'react-native';
 import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 import CopyGroup from '../../../assets/copy-group.svg';
+import { useMutation } from "@tanstack/react-query";
+import Clipboard from '@react-native-clipboard/clipboard'; 
+
 
 // 회원가입 완료 페이지_관리자 + 사용자 
 
 //@ts-ignore
 const SignUpPage = ({navigation, route}) => {
 
-  const { userType } = route.params;
+  const { userType, userGroupId } = route.params;
+  const [groupCode, setGroupCode] = useState('');
+  
+  const signUpMutation = useMutation(async () => {
+    const response = await fetch(`http://localhost:8080/api/user-group/group-code?user-groupId=${userGroupId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
+    const data = await response.text();
+    return data;
+  });
+
+  useEffect(() => {
+    const fetchGroupCode = async () => {
+      try {
+        const data = await signUpMutation.mutateAsync();
+        setGroupCode(data);
+      } catch (error) {
+        console.log(error);
+        Alert.alert('오류', '그룹 생성 중 오류가 발생했습니다.');
+      }
+    };
+
+    fetchGroupCode();
+  }, []);
+
+  const handleCopyCode = () => {
+    if (Platform.OS === 'android') {
+      // 안드로이드
+      ToastAndroid.show('그룹 코드가 복사되었습니다.', ToastAndroid.SHORT);
+    } else {
+      // iOS
+      Clipboard.setString(groupCode);
+      Alert.alert('알림', '그룹 코드가 복사되었습니다.');
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.logo}>
@@ -22,8 +70,10 @@ const SignUpPage = ({navigation, route}) => {
         <>
           <Text style={styles.textTitle}>그룹 코드는</Text>
           <View style={styles.CodeContainer}>
-            <Text style={styles.textBody}>그룹 코드</Text>
+            <Text style={styles.textBody}>{groupCode}</Text>
+            <TouchableOpacity onPress={handleCopyCode}>
             <CopyGroup />
+            </TouchableOpacity>
           </View>
           <Text style={styles.textTitle}>입니다!</Text>
         </>
@@ -66,9 +116,9 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   textBody: {
-    fontSize: 12,
+    fontSize: 16,
     marginBottom: 8,
-    paddingRight: 4,
+    paddingRight: 8,
     color: '#909090',
   },
   CodeContainer: {
