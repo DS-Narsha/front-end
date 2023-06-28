@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, ScrollView, Platform, FlatList, Image} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, Platform, FlatList} from 'react-native';
 import {useCameraRoll} from "@react-native-camera-roll/camera-roll";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
@@ -75,6 +75,7 @@ export default function SelectImage({navigation}) {
   const [pageSize, setPageSize] = useState(24);
   let selectInputs = useRef<string[]>([]); // select photos, send next page
   const [currentPhoto, setCurrentPhoto] = useState("")
+  const [state, setState] = useState("")
 
   useEffect(() => {
     permissionFunc(); // permission code
@@ -89,7 +90,6 @@ export default function SelectImage({navigation}) {
       <TouchableOpacity onPress={() => {
           selectHandler(item.node.image.uri)
         }}>
-          
         <ImageBackground
           source={{ uri: item.node.image.uri }}
           style={[styles.img, selectInputs.current.includes(item.node.image.uri) && styles.selPhoto]}
@@ -173,7 +173,12 @@ return (
           <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
           <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
         </View>
-        <ArrowRight onPress={() => navigation.navigate("PostLoadingPage", {photos: selectInputs.current})} />
+        { selectInputs.current.length < 1 ? (
+          <ArrowRight style={{color:'#C0C0C0'}} />
+        ) : (
+          <ArrowRight style={{color:'#61A257'}} onPress={() => navigation.navigate("PostLoadingPage", {photos: selectInputs.current})} />
+        )}
+        
       </View>
       <Text>이미지를 선택해볼까요?</Text>
     </View>
