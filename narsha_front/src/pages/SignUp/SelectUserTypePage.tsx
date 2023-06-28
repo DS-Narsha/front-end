@@ -12,12 +12,18 @@ import TeacherSvg from '../../assets/teacher.svg';
 import StudentSvg from '../../assets/student.svg';
 
 // 선생님/학생 사용자 타입을 선택하는 페이지
-// 모달창 구현해야 함
+
 
 //@ts-ignore
 const UserPage = ({navigation}) => {
   const [modalTVisible, setModalTVisible] = useState(false);
   const [modalSVisible, setModalSVisible] = useState(false);
+
+// InputUserInfoPage 이동 시 타입까지 전달
+const navigateToUserInfo = (userType: any) => {
+  navigation.navigate('InputUserInfoPage', {userType});
+};
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.pop()}>
@@ -25,13 +31,13 @@ const UserPage = ({navigation}) => {
       </TouchableOpacity>
       <View style={styles.content}>
         <View style={styles.roundBtnContainer}>
-          <Text style={styles.round1}></Text>
-          <Text style={styles.round2}></Text>
-          <Text style={styles.round2}></Text>
+          <Text style={styles.roundGreen}></Text>
+          <Text style={styles.roundGray}></Text>
+          <Text style={styles.roundGray}></Text>
         </View>
         <View style={styles.textArea}>
-          <Text style={styles.text1}>회원가입</Text>
-          <Text style={styles.text2}>사용자를 선택하세요.</Text>
+          <Text style={styles.textTitle}>회원가입</Text>
+          <Text style={styles.textBody}>사용자를 선택하세요.</Text>
         </View>
         {/* 모달창 */}
         <Modal
@@ -55,7 +61,7 @@ const UserPage = ({navigation}) => {
                 style={[styles.button]}
                 onPress={() => {
                   setModalTVisible(!modalTVisible);
-                  navigation.navigate('InputUserInfoPage');
+                  navigateToUserInfo('teacher');
                 }}>
                 <Text style={styles.textStyle}>회원가입</Text>
               </TouchableOpacity>
@@ -88,7 +94,7 @@ const UserPage = ({navigation}) => {
                 style={[styles.button]}
                 onPress={() => {
                   setModalSVisible(!modalSVisible);
-                  navigation.navigate('InputUserInfoPage');
+                  navigateToUserInfo('student');
                 }}>
                 <Text style={styles.textStyle}>회원가입</Text>
               </TouchableOpacity>
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     marginTop: 15,
   },
-  round1: {
+  roundGreen: {
     backgroundColor: '#98DC63',
     borderRadius: 50,
     width: 18,
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 25,
   },
-  round2: {
+  roundGray: {
     backgroundColor: '#D9D9D9',
     borderRadius: 50,
     width: 18,
@@ -152,13 +158,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text1: {
+  textTitle: {
     fontSize: 28,
     color: '#35562F',
     fontWeight: 'bold',
     marginBottom: 10,
   },
-  text2: {
+  textBody: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 110,
@@ -170,6 +176,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 40,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   btnText: {
     fontSize: 24,
@@ -182,6 +193,11 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   centeredView: {
     flex: 1,
