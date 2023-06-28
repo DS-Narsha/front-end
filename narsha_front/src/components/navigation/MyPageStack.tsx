@@ -1,10 +1,11 @@
-import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Button, View} from 'react-native';
+import {View} from 'react-native';
+import { useEffect } from 'react';
 import MyPage from '../../pages/mypage/MyPage';
 import EditProfile from '../../pages/mypage/EditProfilePage';
 import FriendList from '../../pages/mypage/FriendListPage';
-import InfoList from '../../pages/NoticeListPage';
+import NoticeList from '../../pages/NoticeListPage';
 import TeacherMenu from '../../pages/TeacherMenuPage';
 import TimeSelectPage from '../../pages/TimeSelectPage';
 import StudentListPage from '../../pages/StudentListPage';
@@ -15,9 +16,35 @@ import Write from '../../assets/write.svg';
 import Setting from '../../assets/teacher-setting.svg';
 
 const Stack = createStackNavigator();
-export default function MainNavigatorStack() {
+const tabBarStyle = {
+  borderTopLeftRadius: 30,
+  borderTopRightRadius: 30,
+  position: 'absolute',
+  overflow: 'hidden',
+  height: 70,
+  left: 0,
+  bottom: 0,
+  right: 0,
+  paddingBottom: 8,
+}
+//@ts-ignore
+export default function MyPageStack({route, navigation}) {
+  useEffect(()=> {
+    // hide navigator
+    const routeName = getFocusedRouteNameFromRoute(route);
+    switch(routeName){
+      case "EditProfile": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "FriendList": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "BadgeList": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "StudentListPage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "TimeSelectPage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "NoticeWritePage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "NoticeList": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      default: navigation.setOptions({tabBarStyle: tabBarStyle});
+    }
+  }, [navigation, route])
+
   return (
-    <NavigationContainer independent={true}>
       <Stack.Navigator
         initialRouteName="MyPage"
         screenOptions={{
@@ -69,8 +96,8 @@ export default function MainNavigatorStack() {
           options={{title: '뱃지 목록'}}
         />
         <Stack.Screen
-          name="InfoList"
-          component={InfoList}
+          name="NoticeList"
+          component={NoticeList}
           options={({navigation}) => ({
             title: '공지 목록',
             headerRight: () => {
@@ -107,6 +134,5 @@ export default function MainNavigatorStack() {
           options={{title: '공지 작성 페이지'}}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 }
