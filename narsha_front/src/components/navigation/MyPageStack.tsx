@@ -10,6 +10,7 @@ import TeacherMenu from '../../pages/TeacherMenuPage';
 import TimeSelectPage from '../../pages/TimeSelectPage';
 import StudentListPage from '../../pages/StudentListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
+import PostDetailPage from '../../pages/PostDetailPage';
 import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
 import Write from '../../assets/write.svg';
@@ -132,6 +133,11 @@ export default function MyPageStack({route, navigation}) {
           name="NoticeWritePage"
           component={NoticeWritePage}
           options={{title: '공지 작성 페이지'}}
+        />
+        <Stack.Screen
+          name="PostDetailPage"
+          component={PostDetailPage}
+          options={{title: '포스트 상세 페이지'}}
         />
       </Stack.Navigator>
   );
