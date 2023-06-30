@@ -14,8 +14,6 @@ export default function TimeSelectPage({navigation}: any) {
     const now = new Date()
     {StartTime.startTime.getTime() < now.getTime() && now.getTime()<EndTime.endTime.getTime()?
       SetTime.setUse(false):SetTime.setUse(true)}
-    console.log(StartTime.startTime)
-    console.log(EndTime.endTime)
   }
   
   return (

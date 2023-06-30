@@ -11,7 +11,6 @@ import {
 import { TimeCheckContext } from './src/components/TimeCheckContext';
 import { StartTimeContext } from './src/components/StartTimeContext';
 import { EndTimeContext } from './src/components/EndTimeContext';
-import AsyncStorage from '@react-native-community/async-storage';
 
 
 const isLoggedIn = false;
