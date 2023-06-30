@@ -13,6 +13,7 @@ import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
 import Write from '../../assets/write.svg';
 import Setting from '../../assets/teacher-setting.svg';
+import RockPage from '../../pages/RockPage';
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
@@ -106,6 +107,12 @@ export default function MainNavigatorStack() {
           component={NoticeWritePage}
           options={{title: '공지 작성 페이지'}}
         />
+        <Stack.Screen 
+          name="RockPage" 
+          component={RockPage}
+          options={{title: '비활성화 페이지'}} />
+
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

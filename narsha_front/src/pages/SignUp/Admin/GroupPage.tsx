@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
-import CustomButton from "../../../components//CustomButton";
+import CustomButton from "../../../components/CustomButton";
 import { useMutation } from "@tanstack/react-query";
 
 // 관리자_그룹 만들기 페이지
