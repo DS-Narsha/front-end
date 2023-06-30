@@ -10,17 +10,6 @@ export default function TimeSelectPage({navigation}: any) {
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
 
-  // const [startTime, setStartTime] = useState(new Date());
-  // const [endTime, setEndTime] = useState(new Date());
-
-  // const SetStart = (time: any) => {
-  //   setStartTime(time);
-  // }
-
-  // const SetEnd = (time: any) => {
-  //   setEndTime(time);
-  // }
-
   const CheckTime = () => {
     const now = new Date()
     {StartTime.startTime.getTime() < now.getTime() && now.getTime()<EndTime.endTime.getTime()?
