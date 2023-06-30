@@ -106,6 +106,8 @@ export default function MainNavigatorStack() {
           component={NoticeWritePage}
           options={{title: '공지 작성 페이지'}}
         />
+
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
