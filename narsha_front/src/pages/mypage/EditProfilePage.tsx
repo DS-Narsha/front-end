@@ -120,13 +120,13 @@ export default function EditProfile({navigation}) {
         <>
         <View style={styles.photo}>
           <Image 
-            source = {{uri : "https://img1.daumcdn.net/thumb/C176x176/?fname=https://blog.kakaocdn.net/dn/bhrekR/btqzQtNHiXU/G6qSoOJdxcsfcri8lRGc9K/img.png"}}
-            style={{width: 115, height: 115}} />
+            source = {{uri : data.profileImage}}
+            style={{width: 115, height: 115, borderRadius: 20}} />
         </View>
         <TextInput
           editable={false}
           style={styles.text}
-          placeholder={"@" + data.userGroup.user.userId}
+          placeholder={"@" + data.userGroupId.userId.userId}
         />
         <TextInput
           style={styles.text}

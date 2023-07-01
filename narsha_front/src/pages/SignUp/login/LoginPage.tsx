@@ -32,8 +32,8 @@ const LoginPage = ({navigation}) => {
   const handleLogin = async () => {
     try {
       const data = await loginMutation.mutateAsync();
-      
-      if(data.res === 3) {
+
+      if(data.status === 200) {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
         navigation.reset({ routes: [{ name: 'MainNavigator' }] });

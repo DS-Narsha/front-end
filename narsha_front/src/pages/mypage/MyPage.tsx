@@ -34,7 +34,11 @@ export default function MyPage({navigation}) {
       {!isLoading && (
       <>
         <View style={styles.profileContainer}>
-          <View style={styles.profile} />
+          <View style={styles.profileImageContianer}>
+            <Image 
+              source = {{uri : data.profileImage}}
+              style={styles.profile}/>
+          </View>
           <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
             {data.nikname}
           </Text>
@@ -166,7 +170,6 @@ export default function MyPage({navigation}) {
 
 const styles = StyleSheet.create({
   profile: {
-    backgroundColor: '#D9D9D9',
     width: 90,
     height: 90,
     borderRadius: 20,
@@ -175,9 +178,18 @@ const styles = StyleSheet.create({
       height: 3,
     },
     shadowRadius: 10,
-    elevation: 5,
+  },
+  profileImageContianer:{
+    backgroundColor: '#D9D9D9',
     marginTop: 20,
     marginBottom: 10,
+    borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 10,
+    elevation: 5,
   },
   container: {
     flex: 1,
