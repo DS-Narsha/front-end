@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Alert, TextInput} from 'react-native';
-import MyTextInput from '../../../components/MyTextInput';
 import AppLogo from '../../../assets/app-logo.svg'
-import CustomButton from '../../../components/CustomButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 //@ts-ignore
@@ -37,7 +35,12 @@ const LoginPage = ({navigation}) => {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
         navigation.reset({ routes: [{ name: 'MainNavigator' }] });
-      } else {
+      } else if(data.res === 2) {
+        Alert.alert('로그인 실패', data.message);
+      } else if(data.res === 1) {
+        Alert.alert('로그인 실패', data.message);
+      }else {
+        console.log(data.message);
         Alert.alert('로그인 실패', data.message);
       }
     } catch (error) {
@@ -53,16 +56,22 @@ const LoginPage = ({navigation}) => {
         <Text style={styles.logoText}>로그인</Text>
       </View>
       <View style={styles.formArea}>
+        <View style={styles.inputContainer}>
         <TextInput 
-        placeholder="아이디"
-        value={userId}
-        onChangeText={(text: React.SetStateAction<string>) => setUserId(text)} />
-        <TextInput 
-        placeholder="비밀번호"
-        value={password}
-        onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
-        secureTextEntry
-        />
+          style={styles.inputText} 
+          placeholder="아이디"
+          value={userId}
+          onChangeText={(text: React.SetStateAction<string>) => setUserId(text)} />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput 
+          style={styles.inputText} 
+          placeholder="비밀번호"
+          value={password}
+          onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
+          secureTextEntry
+          />
+        </View>
       </View>
       <View style={styles.textArea}>
         <Text>App이름 회원이 아니신가요?</Text>
@@ -107,6 +116,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 130,
+  },
+  inputContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#C0C0C0',
+    width: '100%',
+    height: 48,
+    marginBottom: 45,
+  },
+  inputText: {
+    fontSize: 14,
+    marginLeft: 10,
   },
   button: {
     backgroundColor: '#AADF98',
