@@ -5,12 +5,13 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Alert
+  Alert,
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import BackSvg from '../../assets/back.svg';
-import MyTextInput from '../../components/MyTextInput';
-import CustomButton from '../../components/CustomButton';
 
 // 이름, 닉네임, 아이디, 비밀번호와 같은 정보 입력하는 페이지
 // 아이디 중복확인 부분 아직 구현 안 함
@@ -68,12 +69,18 @@ const InputUserInfoPage = ({navigation, route}) => {
     }
   };
 
+  const keyboardBehavior =
+    Platform.OS === 'ios' ? 'padding' : Platform.OS === 'android' ? 'height' : 'height';
+
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={keyboardBehavior}
+    style={styles.container}>
       <TouchableOpacity onPress={() => navigation.pop()}>
         <BackSvg />
       </TouchableOpacity>
-      <View style={styles.content}>
+      <ScrollView 
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}>
         <View style={styles.roundBtnContainer}>
           <Text style={styles.roundGreen}></Text>
           <Text style={styles.roundGreen}></Text>
@@ -113,8 +120,8 @@ const InputUserInfoPage = ({navigation, route}) => {
             <Text style={styles.buttonText}>다음</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

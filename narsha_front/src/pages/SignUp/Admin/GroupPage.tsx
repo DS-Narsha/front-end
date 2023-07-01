@@ -4,7 +4,8 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Alert
+    Alert,
+    TextInput,
 } from 'react-native';
 import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
@@ -24,14 +25,14 @@ const GroupPage = ({navigation, route}) => {
     const[groupClass, setGroupClass] = useState('');
 
     const groupMutation = useMutation(async () => {
-        const response = await fetch(`http://localhost:8080/api/user/login`,{
+        const response = await fetch(`http://localhost:8080/api/group/create`,{
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             groupName,
-            userId: {res},
+            userId: res,
             school: schoolName,
             grade,
             group_class: groupClass
@@ -48,8 +49,9 @@ const GroupPage = ({navigation, route}) => {
           const data = await groupMutation.mutateAsync();
           
           if(data.message === "그룹 생성 성공") {
-            navigation.navigate('SignUp', { userType: 'teacher' });
+            navigation.navigate('SignUp', { userType: 'teacher', userGroupId: data['user-groupId'] });
           } else {
+            console.log(data.message);
             Alert.alert('그룹 생성 실패', data.message);
           }
         } catch (error) {
@@ -77,17 +79,37 @@ const GroupPage = ({navigation, route}) => {
             </View>
             <View style={styles.formArea}>
                 <Text style={styles.formText}>학교명</Text>
-                <MyTextInput />
+                <View style={styles.inputContainer}>
+                <TextInput
+                style={styles.inputText}  
+                value={schoolName}
+                onChangeText={(text: React.SetStateAction<string>) => setSchoolName(text)} />
+                </View>
                 <Text style={styles.formText}>그룹 이름</Text>
-                <MyTextInput />
+                <View style={styles.inputContainer}>
+                <TextInput 
+                style={styles.inputText} 
+                value={groupName}
+                onChangeText={(text: React.SetStateAction<string>) => setGroupName(text)} />
+                </View>
                 <Text style={styles.classTitle}>학년/반</Text>
                 <View style={styles.classForm}>
                     <Text style={styles.classText}>학년</Text>
-                    <MyTextInput />
+                    <View style={styles.inputContainer}>
+                    <TextInput 
+                    style={styles.inputText} 
+                    value={grade}
+                    onChangeText={(text: React.SetStateAction<string>) => setGrade(text)} />
+                    </View>
                 </View>
                 <View style={styles.classForm}>
                     <Text style={styles.classText}>  반  </Text>
-                    <MyTextInput />
+                    <View style={styles.inputContainer}>
+                    <TextInput 
+                    style={styles.inputText} 
+                    value={groupClass}
+                    onChangeText={(text: React.SetStateAction<string>) => setGroupClass(text)} />
+                    </View>
                 </View>
             </View>
             <View>
@@ -166,6 +188,19 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingTop:10
     },
+    inputContainer: {
+        backgroundColor: '#ffffff',
+        borderRadius: 20,
+        borderWidth: 2,
+        borderColor: '#C0C0C0',
+        width: '100%',
+        height: 48,
+        marginBottom: 22,
+      },
+      inputText: {
+        fontSize: 14,
+        marginLeft: 10,
+      },
     nextButton: {
         backgroundColor: '#AADF98',
         borderRadius: 30,

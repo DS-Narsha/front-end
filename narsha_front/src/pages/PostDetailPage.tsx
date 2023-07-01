@@ -12,16 +12,9 @@ import DetailPost from '../components/post/DetailPost';
 import Arrow from '../assets/arrow-left.svg';
 import Line from '../assets/Line.svg';
 import CommentInput from '../components/CommentInput';
+import { useQuery } from '@tanstack/react-query';
 
 const styles = StyleSheet.create({
-  top: {
-    flexDirection: 'row',
-    height: 63,
-    width: 400,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    backgroundColor: '#E3F1A9',
-  },
   cmtUserImg: {
     width: 30,
     height: 30,
@@ -30,18 +23,35 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function PostDetail() {
+//@ts-ignore
+export default function PostDetail({route, navigation}) {
+    const postId = route.params.postId
+    // get post detail
+    const getPostDetail = async () =>{
+      try{
+        const res = await fetch(`http://localhost:8080/api/post/detaill?postId=${postId}&groupCode=${"l0uYU6P$LP"}$LP`,{
+          method:"GET",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+       })
+       const json = await res.json();
+       return json;
+      } catch(err){
+        console.log(err);
+      }
+    }
+
+    // query
+    const profileQuery = useQuery({
+      queryKey: ["post-detail"], 
+      queryFn: getPostDetail
+    })
+  
+
   return (
     <View>
-      <View style={styles.top}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
-          <Arrow style={{margin: 20}} />
-        </TouchableOpacity>
-        <Text style={{margin: 20, marginLeft: 110, fontSize: 18}}>게시물</Text>
-      </View>
-
       <DetailPost />
-
       <View style={{margin: 10, marginLeft: 35}}>
         <Line />
         <Text style={{marginTop: 15, color: '#61A257'}}>

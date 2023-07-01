@@ -48,7 +48,7 @@ export default function GroupCodeModal() {
             <View style={styles.modalBody}>
               <View style={styles.modalText}>
                 <Text style={styles.strongText}>그룹 코드: </Text>
-                <Text style={styles.content}>{data.userGroup.group.groupCode}</Text>
+                <Text style={styles.content}>{data.userGroupId.groupCode.groupCode}</Text>
               </View>
             </View>
 
