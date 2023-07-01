@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   pickImg: {
-    height: 350,
-    width: 350,
+    height: 300,
+    width: 300,
     borderRadius: 10,
     marginTop: 20,
     marginBottom: 20,
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
+
 
 export default function DetailPost() {
   return (

@@ -1,15 +1,36 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import SelectImage from '../../pages/post/SelectImagePage';
 import PostPage from '../../pages/post/PostPage'
 import PostLoadingPage from '../../pages/post/PostLoadingPage';
 import WritePage from '../../pages/post/WritePage';
+import { useEffect } from 'react';
 
 const Stack = createStackNavigator();
-export default function MainNavigatorStack() {
+const tabBarStyle = {
+  borderTopLeftRadius: 30,
+  borderTopRightRadius: 30,
+  position: 'absolute',
+  overflow: 'hidden',
+  height: 70,
+  left: 0,
+  bottom: 0,
+  right: 0,
+  paddingBottom: 8,
+}
+//@ts-ignore
+export default function PostStack({ navigation, route }) {
+  useEffect(()=> {
+    // hide navigator
+    const routeName = getFocusedRouteNameFromRoute(route);
+    switch(routeName){
+      case "PostLoadingPage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "WritePage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      default: navigation.setOptions({tabBarStyle: tabBarStyle}); break;
+    }
+  }, [navigation, route])
+  
   return (
-    <NavigationContainer independent={true}>
       <Stack.Navigator
         initialRouteName="SelectImage"
         screenOptions={{
@@ -25,6 +46,5 @@ export default function MainNavigatorStack() {
         <Stack.Screen name="PostLoadingPage" component={PostLoadingPage} />
         <Stack.Screen name="WritePage" component={WritePage} />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 }

@@ -13,7 +13,7 @@ export default function TeacherMenu({navigation}: any) {
     <View style={styles.container}>
       <View style={styles.firstRowContainer}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('InfoList')}>
+          onPress={() => navigation.navigate('NoticeList')}>
           <View style={{padding: 15}}>
             <Notification />
           </View>
