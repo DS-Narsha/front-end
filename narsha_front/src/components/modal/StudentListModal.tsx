@@ -36,7 +36,7 @@ export default function StudentListModal() {
             <View style={styles.modalEnd}>
               <Pressable onPress={() => setModalVisible(!modalVisible)}>
                 <View style={styles.btn}>
-                  <Text style={styles.strongText}>설정하기</Text>
+                  <Text style={styles.strongText}>확인</Text>
                 </View>
               </Pressable>
             </View>
