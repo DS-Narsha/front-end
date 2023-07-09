@@ -29,24 +29,27 @@ export default function EditProfile({navigation}) {
   const updateProfile = async () => {
     try{ 
       let formData = new FormData(); // from-data object
+      formData.append("image", {
+        uri: profileImg.uri,
+        name: profileImg.fileName,
+        type: profileImg.type,
+      })
       formData.append("content", JSON.stringify({          
         userId: "narsha2222",
         birth: textBirthday,
         nikname:textNickname,
         intro:textIntro
-      })) 
-      formData.append("image", profileImg)
+      }))
 
       const res = await fetch(`http://localhost:8080/api/user/update`, {
         method:"PUT",
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-data'
         },
         body: formData,
       })
       console.log(formData);
       const json = await res.json();
-      console.log(json);
       return json;
     } catch(err){
       console.log(err);
@@ -57,8 +60,7 @@ export default function EditProfile({navigation}) {
     // get old data
     const oldData = await queryClient.getQueryData(['profile-detail'])
     // setting datas at UI, 특정 속성 수정
-    console.log(profileImg);
-    queryClient.setQueryData(['profile-detail', "profileImage"], profileImg);
+    queryClient.setQueryData(['profile-detail', "profileImage"], profileImg.uri);
     queryClient.setQueryData(['profile-detail', "nikname"], textNickname);
     queryClient.setQueryData(['profile-detail', "birth"], textBirthday);
     queryClient.setQueryData(['profile-detail', "intro"], textIntro);
@@ -132,14 +134,14 @@ export default function EditProfile({navigation}) {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const result = await launchCamera(options);
-      setProfileImage(result.assets[0].uri);
+      setProfileImage(result.assets[0]);
       setModalVisible(!modalVisible);
     }
   }
   
   const openGallery = async () => {
     const result = await launchImageLibrary(options);
-    setProfileImage(result.assets[0].uri);
+    setProfileImage(result.assets[0]);
     setModalVisible(!modalVisible);
   }
 
@@ -187,7 +189,7 @@ export default function EditProfile({navigation}) {
         <Pressable onPress={() => setModalVisible(true)}>
           <View style={styles.photo}>
             <Image 
-              source = {{uri : profileImg}}
+              source = {{uri : data.profileImage}}
               style={{width: 115, height: 115, borderRadius: 20}} />
           </View>
         </Pressable>
