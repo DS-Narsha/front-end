@@ -1,20 +1,68 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     StyleSheet, 
     Text,
     View,
     TouchableOpacity,
     TextInput,
-    Modal
+    Modal,
+    Alert
 } from 'react-native';
 import BackSvg from "../../assets/back.svg";
 import CommentSendSvg from "../../assets/comment-send.svg"
+import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import Loading from './Loading';
+
 // 댓글 목록 페이지 
 // 댓글목록 타이틀 텍스트 부분 => 텍스트만 가운데 정렬하는 방법 찾기
 
+type Comment = {
+    userId: {
+      userId: string;
+    };
+    content: string;
+    createAt: string;
+};
+  
+
+//@ts-ignore
 const CommentListPage = () => {
     const [modalVisible, setModalVisible] = useState(false);
-    
+
+    const fetchComments = async () => {
+        try {
+          const response = await fetch("http://localhost:8080/api/comment/list?postId=2");
+          const data = await response.json();
+          if (data.status === 200) {
+            return data.data;
+          } else {
+            throw new Error(data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching comments:", error);
+          throw error;
+        }
+    };
+
+    const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
+
+    if (isLoading) {
+        return (
+          <View style={styles.container}>
+            <Text>로딩 중...</Text>
+          </View>
+        );
+    }
+
+    if (error) {
+        return (
+        <View style={styles.container}>
+            <Text>댓글을 불러오는 중 오류가 발생했습니다</Text>
+        </View>
+        );
+    }
+      
     return (
         <View style={styles.container}>
             <View style={styles.title}>
@@ -24,43 +72,18 @@ const CommentListPage = () => {
                 <Text style={styles.titleText}>댓글 목록</Text>
             </View>
             <View style={styles.commentContainer}>
-                <View style={styles.commentItem}>
-                    <Text style={styles.commentImage}> </Text>
-                    <View style={styles.commentTextBox}>
-                        <Text style={styles.commentID}>abc_love</Text>
-                        <Text style={styles.commentText}>좋아요 누르고 갑니다</Text>
-                        <Text style={styles.commentDay}>2023-05-20</Text>
-                    </View>
-                </View>
 
-                <View style={styles.commentItem}>
-                    <Text style={styles.commentImage}> </Text>
-                    <View style={styles.commentTextBox}>
-                        <Text style={styles.commentID}>abc_love</Text>
-                        <Text style={styles.commentText}>좋아요 누르고 갑니다</Text>
-                        <Text style={styles.commentDay}>2023-05-20</Text>
+                {comments.map((comment: Comment, index: number) => (
+                    <View style={styles.commentItem} key={index}>
+                        <Text style={styles.commentImage}> </Text>
+                        <View style={styles.commentTextBox}>
+                            <Text style={styles.commentID}>{comment.userId.userId}</Text>
+                            <Text style={styles.commentText}>{comment.content}</Text>
+                            <Text style={styles.commentDay}>{comment.createAt}</Text>
+                        </View>
                     </View>
-                </View>
-
-                <View style={styles.commentItem}>
-                    <Text style={styles.commentImage}> </Text>
-                    <View style={styles.commentTextBox}>
-                        <Text style={styles.commentID}>abc_love</Text>
-                        <Text style={styles.commentText}>좋아요 누르고 갑니다</Text>
-                        <Text style={styles.commentDay}>2023-05-20</Text>
-                    </View>
-                </View>
-
-                <View style={styles.commentItem}>
-                    <Text style={styles.commentImage}> </Text>
-                    <View style={styles.commentTextBox}>
-                        <Text style={styles.commentID}>abc_love</Text>
-                        <Text style={styles.commentText}>좋아요 누르고 갑니다</Text>
-                        <Text style={styles.commentDay}>2023-05-20</Text>
-                    </View>
-                </View>
-
-                
+                ))} 
+              
             </View>
             {/* 모달창 */}
             <Modal 

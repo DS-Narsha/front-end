@@ -14,7 +14,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import BackSvg from '../../assets/back.svg';
 
 // 이름, 닉네임, 아이디, 비밀번호와 같은 정보 입력하는 페이지
-// 아이디 중복확인 부분 아직 구현 안 함
+// 뒤로가기 못하게
 
 //@ts-ignore
 const InputUserInfoPage = ({navigation, route}) => {
@@ -25,6 +25,8 @@ const InputUserInfoPage = ({navigation, route}) => {
   const[username, setUsername] = useState('');
   const[userId, setUserId] = useState('');
   const[password, setPassword] = useState('');
+  const [isIdAvailable, setIsIdAvailable] = useState(true); // 중복 여부 상태
+
   const queryClient = useQueryClient();
 
   const registerMutation = useMutation(async () => {
@@ -47,25 +49,55 @@ const InputUserInfoPage = ({navigation, route}) => {
   })
 
   const handleRegister = async () => {
-    try {
-      const data = await registerMutation.mutateAsync();
-      
-      if(data.message === "회원가입 완료") {
-        // 회원가입 성공시 캐시에 로그인 성공을 저장
-        queryClient.setQueryData(['isLoggedIn'], true);
-        // userType에 따라 그룹 생성 / 입력 페이지로 이동
-        if (userType === 'teacher') {
-          navigation.navigate('Group', {res: data.res});
-        } else if (userType === 'student') {
-          navigation.navigate('InputGroup', {res: data.res});
+    if (username && userId && password) {
+      if (isIdAvailable) {
+        try {
+          const data = await registerMutation.mutateAsync();
+
+          if (data.status === 200) {
+            // 회원가입 성공시 캐시에 로그인 성공을 저장
+            queryClient.setQueryData(['isLoggedIn'], true);
+            // userType에 따라 그룹 생성 / 입력 페이지로 이동
+            if (userType === 'teacher') {
+              navigation.navigate('Group', { res: data.data });
+            } else if (userType === 'student') {
+              navigation.navigate('InputGroup', { res: data.data });
+            }
+          } else {
+            console.log(data.message);
+            Alert.alert('회원가입 실패', data.message);
+          }
+        } catch (error) {
+          console.log(error);
+          Alert.alert('오류', '회원가입 중 오류가 발생했습니다.');
         }
       } else {
-        console.log(data.message);
-        Alert.alert('회원가입 실패', data.message);
+        Alert.alert('중복된 아이디', '아이디를 다시 입력해주세요');
       }
+    } else {
+      Alert.alert('누락된 정보', '모든 정보를 입력해주세요');
+    }
+  };
+
+  const handleCheckAvailability = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/user/check-userId?userId=${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+      const data = await response.json();
+
+      if (data.status === 200) {
+        setIsIdAvailable(true);
+        } else {
+        setIsIdAvailable(false);
+        }
     } catch (error) {
       console.log(error);
-      Alert.alert('오류', '회원가입 중 오류가 발생했습니다.');
+      Alert.alert('오류', '중복 확인 중 오류가 발생했습니다.');
     }
   };
 
@@ -75,12 +107,12 @@ const InputUserInfoPage = ({navigation, route}) => {
   return (
     <KeyboardAvoidingView behavior={keyboardBehavior}
     style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.pop()}>
-        <BackSvg />
-      </TouchableOpacity>
       <ScrollView 
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}>
+      <TouchableOpacity onPress={() => navigation.pop()}>
+        <BackSvg />
+      </TouchableOpacity>
         <View style={styles.roundBtnContainer}>
           <Text style={styles.roundGreen}></Text>
           <Text style={styles.roundGreen}></Text>
@@ -98,14 +130,21 @@ const InputUserInfoPage = ({navigation, route}) => {
             onChangeText={(text: React.SetStateAction<string>) => setUsername(text)} />
           </View>
           <Text style={styles.formText}>아이디</Text>
-          <View style={styles.inputContainer}>
+          <View style={styles.inputContainerID}>
             <TextInput 
             style={styles.inputText} 
-            placeholder="중복확인"
             value={userId}
             onChangeText={(text: React.SetStateAction<string>) => setUserId(text)} />
-            <Text style={styles.warningText}>*이미 존재하는 아이디입니다.</Text>
+            <TouchableOpacity style={styles.checkButton} onPress={handleCheckAvailability}>
+              <Text style={styles.checkButtonText}>중복 확인</Text>
+            </TouchableOpacity>
           </View>
+          {!isIdAvailable && (
+            <Text style={styles.warningText}>* 이미 존재하는 아이디입니다.</Text>
+          )}
+          {isIdAvailable && (
+            <Text style={styles.passText}>* 사용 가능한 아이디입니다.</Text>
+          )}
           <Text style={styles.formText}>비밀번호</Text>
           <View style={styles.inputContainer}>
             <TextInput 
@@ -170,7 +209,7 @@ const styles = StyleSheet.create({
   formArea: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 50,
+    marginBottom: 55,
   },
   formText: {
     fontSize: 16,
@@ -186,16 +225,53 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 48,
     marginBottom: 45,
+
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputContainerID: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#C0C0C0',
+    width: '100%',
+    height: 48,
+    marginBottom: 6,
+
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   inputText: {
     fontSize: 14,
     marginLeft: 10,
   },
+  checkButton: {
+    position: 'absolute',
+    top: 7,
+    right: 3,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    
+  },
+  checkButtonText: {
+    fontSize: 13,
+    color: '#000000',
+  },
   warningText: {
-    marginLeft: 15,
+    marginRight: 140,
     marginTop: 2,
     color: '#FF0000',
     fontSize: 12,
+    marginBottom: 45
+  },
+  passText: {
+    marginRight: 140,
+    marginTop: 2,
+    color: '#0000FF',
+    fontSize: 12,
+    marginBottom: 45
   },
   nextButton: {
     backgroundColor: '#AADF98',
@@ -208,7 +284,6 @@ const styles = StyleSheet.create({
       height: 3,
     },
     elevation: 5,
-    marginTop: 10
   },
   buttonText: {
     fontSize: 18,

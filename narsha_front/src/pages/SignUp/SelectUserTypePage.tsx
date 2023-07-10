@@ -19,7 +19,7 @@ const UserPage = ({navigation}) => {
   const [modalTVisible, setModalTVisible] = useState(false);
   const [modalSVisible, setModalSVisible] = useState(false);
 
-// InputUserInfoPage 이동 시 타입까지 전달
+// InputUserInfoPage 이동 시 userType(사용자 타입)까지 전달
 const navigateToUserInfo = (userType: any) => {
   navigation.navigate('InputUserInfoPage', {userType});
 };
