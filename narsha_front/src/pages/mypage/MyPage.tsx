@@ -14,7 +14,7 @@ export default function MyPage({navigation}) {
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${narsha1111}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -30,10 +30,10 @@ export default function MyPage({navigation}) {
     }
   }
 
-  // get post list
+  // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?userGroupId=${2}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"iC8rq7Y8os"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ export default function MyPage({navigation}) {
               }}>
               프로필 수정
             </Text>
-            <View style={{paddingTop: 20, }}>
+            <View style={{paddingTop: 3, }}>
               <PencilIcon />
             </View>
           </TouchableOpacity>
@@ -241,6 +241,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'cover',
-    marginHorizontal: 5
+    marginHorizontal: 5,
+    backgroundColor: "#ffeeff"
   },
 });

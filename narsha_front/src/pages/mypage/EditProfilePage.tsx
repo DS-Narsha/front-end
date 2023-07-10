@@ -1,10 +1,11 @@
 import React, {useRef, useState} from 'react';
-import {Button, Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Alert, Button, Image, Modal, PermissionsAndroid, Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useQuery, useMutation, useQueryClient  } from '@tanstack/react-query';
-import ProfilePhoto from '../../assets/profilePhoto.svg';
 import EditButton from '../../assets/editButton.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 
 //@ts-ignore
 export default function EditProfile({navigation}) {
@@ -12,7 +13,7 @@ export default function EditProfile({navigation}) {
   const queryClient = useQueryClient();
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${narsha1111}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -29,20 +30,23 @@ export default function EditProfile({navigation}) {
     try{ 
       let formData = new FormData(); // from-data object
       formData.append("content", JSON.stringify({          
-        userGroupId: 1,
-        // profileImg: profileImage,
+        userId: "narsha2222",
         birth: textBirthday,
         nikname:textNickname,
         intro:textIntro
-      })) // image 속성은 imagePicker 구현 후 추가
+      })) 
+      formData.append("image", profileImg)
 
       const res = await fetch(`http://localhost:8080/api/user/update`, {
         method:"PUT",
         headers: {
+          'Content-Type': 'multipart/form-data',
         },
         body: formData,
       })
+      console.log(formData);
       const json = await res.json();
+      console.log(json);
       return json;
     } catch(err){
       console.log(err);
@@ -53,7 +57,8 @@ export default function EditProfile({navigation}) {
     // get old data
     const oldData = await queryClient.getQueryData(['profile-detail'])
     // setting datas at UI, 특정 속성 수정
-    // queryClient.setQueryData(['profile-detail', "profileImg"], profileImage);
+    console.log(profileImg);
+    queryClient.setQueryData(['profile-detail', "profileImage"], profileImg);
     queryClient.setQueryData(['profile-detail', "nikname"], textNickname);
     queryClient.setQueryData(['profile-detail', "birth"], textBirthday);
     queryClient.setQueryData(['profile-detail', "intro"], textIntro);
@@ -80,7 +85,7 @@ export default function EditProfile({navigation}) {
     }
   })
 
-  // const [profileImage, onChangeProfileImage] = useState(data.profileImg)
+  const [profileImg, setProfileImage] = useState(data.profileImage);
   const [textBirthday, onChangeTextBirthday] = useState(data.birth);
   const [textNickname, onChangeTextNickname] = useState(data.nikname);
   const [textIntro, onChangeTextIntro] = useState(data.intro);
@@ -107,26 +112,91 @@ export default function EditProfile({navigation}) {
     setDatePickerVisibility(false);
   };
 
-
   const handleConfirm = (date: any) => {
-    // console.warn("A date has been picked: ", date);
     onChangeTextBirthday(FormatDate(date));
     hideDatePicker();
   };
+
+  //이미지 선택
+  const [modalVisible, setModalVisible] = useState(false);
+  
+  const options ={
+    mediaType : 'photo', 
+    cameraType : 'back',
+    saveToPhotos : true,
+  }
+
+  const openCamera = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const result = await launchCamera(options);
+      setProfileImage(result.assets[0].uri);
+      setModalVisible(!modalVisible);
+    }
+  }
+  
+  const openGallery = async () => {
+    const result = await launchImageLibrary(options);
+    setProfileImage(result.assets[0].uri);
+    setModalVisible(!modalVisible);
+  }
 
   return (
     <View style={styles.container}>
       {!isLoading && (
         <>
-        <View style={styles.photo}>
-          <Image 
-            source = {{uri : data.profileImage}}
-            style={{width: 115, height: 115, borderRadius: 20}} />
-        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+          setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {/* <View style={styles.modalHead}>
+                <Text style={styles.btnText}>프로필 수정</Text>
+              </View> */}
+              <View style={styles.modalBody}>
+                <Pressable
+                onPress={openCamera}>
+                  <View style={styles.modalText}>
+                    <Text style={styles.strongText}>카메라</Text>
+                  </View>
+                </Pressable>
+                <Pressable
+                onPress={openGallery}>
+                  <View style={styles.modalText}>
+                    <Text style={styles.strongText}>갤러리</Text>
+                  </View>
+                </Pressable>
+              </View>
+              <View style={styles.modalEnd}>
+                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <View style={styles.btn}>
+                    <Text style={styles.strongText}>취소</Text>
+                  </View>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Pressable onPress={() => setModalVisible(true)}>
+          <View style={styles.photo}>
+            <Image 
+              source = {{uri : profileImg}}
+              style={{width: 115, height: 115, borderRadius: 20}} />
+          </View>
+        </Pressable>
+
+        
         <TextInput
           editable={false}
           style={styles.text}
-          placeholder={"@" + data.userGroupId.userId.userId}
+          placeholder={"@" + data.userId}
         />
         <TextInput
           style={styles.text}
@@ -188,9 +258,98 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   photo: {
-    marginBottom: 20,
+    marginBottom: 40,
+    backgroundColor: '#D9D9D9',
+    borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 10,
+    elevation: 5,
   },
   edit: {
     marginTop: 70,
+  },
+
+  //모달
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+  },
+  modalView: {
+    margin: 20,
+    width: '68%',
+    height: 130,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHead: {
+    flex: 0.8,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: '#AADF98',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalBody: {
+    flex: 2,
+    width: '100%',
+    alignItems: 'center',//'flex-start',
+  },
+  modalEnd: {
+    flex: 0.8,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  modalText: {
+    flexDirection: 'row',
+    // marginLeft: 20,
+    marginTop: 20,
+  },
+  btn: {
+    backgroundColor: '#AADF98',
+    height: 30,
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+  },
+  btnText: {
+    color: '#000000',
+    fontSize: 15,
+    fontWeight: '200',
+  },
+  modalContainer: {
+    margin: 10,
+    width: 350,
+    height: 70,
+    backgroundColor: '#F9FAC8',
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  strongText: {
+    fontSize: 14,
+    fontWeight: '200',
+    color: '#000000',
   },
 });
