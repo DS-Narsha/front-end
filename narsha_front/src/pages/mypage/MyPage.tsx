@@ -29,7 +29,7 @@ export default function MyPage({navigation}) {
   // get post list
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?userId=${"narsha3333"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?userGroupId=1`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

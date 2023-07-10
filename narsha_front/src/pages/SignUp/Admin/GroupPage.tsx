@@ -6,6 +6,9 @@ import {
     TouchableOpacity,
     Alert,
     TextInput,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
 } from 'react-native';
 import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
@@ -45,9 +48,10 @@ const GroupPage = ({navigation, route}) => {
     })
 
     const handleGroup = async () => {
+      if (schoolName && groupName && grade && groupClass) {
         try {
           const data = await groupMutation.mutateAsync();
-          
+          console.log(res);
           if(data.message === "그룹 생성 성공") {
             navigation.navigate('SignUp', { userType: 'teacher', userGroupId: data['user-groupId'] });
           } else {
@@ -58,15 +62,22 @@ const GroupPage = ({navigation, route}) => {
           console.log(error);
           Alert.alert('오류', '그룹 생성 중 오류가 발생했습니다.');
         }
-      };
+      } else {
+        Alert.alert('누락된 정보', '모든 정보를 입력해주세요');
+      }
+    };
+
+    const keyboardBehavior =
+    Platform.OS === 'ios' ? 'padding' : Platform.OS === 'android' ? 'height' : 'height';
 
 
     return (
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
-            <BackSvg />
-        </TouchableOpacity>
-        <View style={styles.content}>
+      <KeyboardAvoidingView 
+      behavior={keyboardBehavior}
+      style={styles.container}>
+        <ScrollView 
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}>
             <View style={styles.roundBtnContainer}>
                 <Text style={styles.roundGreen}></Text>
                 <Text style={styles.roundGreen}></Text>
@@ -117,8 +128,8 @@ const GroupPage = ({navigation, route}) => {
                     <Text style={styles.buttonText}>다음</Text>
                 </TouchableOpacity>
             </View>
-        </View>
-      </View>          
+          </ScrollView>
+      </KeyboardAvoidingView>        
     )
 }
 
@@ -136,7 +147,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         marginBottom: 30,
-        marginTop: 15
+        marginTop: 30
     },
     roundGreen: {
         backgroundColor: "#98DC63",
@@ -159,7 +170,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: "#35562F",
         fontWeight: "bold",
-        marginBottom: 50 
+        marginBottom: 60 
     },
     formArea: {
         justifyContent: "center",

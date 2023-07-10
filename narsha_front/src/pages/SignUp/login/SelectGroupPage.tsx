@@ -1,10 +1,46 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Modal} from 'react-native';
 import GroupButton from '../../../components/GroupButton';
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-const SelectGroupPage = () => {
+//@ts-ignore
+const SelectGroupPage = ({navigation, route}) => {
+
+  const { userId } = route.params;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [groupList, setGroupList] = useState<{ groupCode: { groupName: string } }[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<{ groupCode: { groupName: string } } | null>(null);
+
+  const fetchGroupList = async () => {
+    const response = await fetch(`http://localhost:8080/api/user-group/join-group-list?userId=${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+    setGroupList(data);
+  };
+
+  useEffect(() => {
+    fetchGroupList();
+  }, []);
+
+  const handleGroupClick = (group: { groupCode: { groupName: string } }) => {
+    setSelectedGroup(group);
+  };
+
+  const handleSelectClick = () => {
+    if (selectedGroup) {
+      console.log('Selected Group:', selectedGroup.groupCode.groupName);
+      // 여기에서 선택된 그룹을 사용하거나 저장하는 로직을 추가할 수 있습니다.
+      navigation.navigate('MainNavigator', { selectedGroup });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.titleArea}>
@@ -32,7 +68,9 @@ const SelectGroupPage = () => {
             <View style={styles.modalBtnArea}>
               <TouchableOpacity
                 style={[styles.button]}
-                onPress={() => setModalVisible(!modalVisible)}>
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  handleSelectClick();}}>
                 <Text style={styles.textStyle}>확인</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -77,11 +115,18 @@ const SelectGroupPage = () => {
       </Modal>
 
       <View style={styles.groupArea}>
-        <GroupButton title="그룹명" />
-        <GroupButton title="그룹명" />
-        <GroupButton title="그룹명" />
-        <GroupButton title="그룹명" />
-        <GroupButton title="그룹명" />
+      {groupList && groupList.map((group, index) => (
+        <TouchableOpacity
+        key={index}
+        onPress={() => handleGroupClick(group)}
+        style={[
+          styles.groupButton,
+          selectedGroup?.groupCode.groupName === group.groupCode.groupName && styles.selectedGroupButton,
+        ]}
+      >
+        <GroupButton title={group.groupCode.groupName} />
+      </TouchableOpacity>
+      ))}
       </View>
 
       <View style={styles.btnArea}>
@@ -137,6 +182,16 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 8,
     paddingRight: 8,
+  },
+  groupButton: {
+    height: 100,
+    marginBottom: 8,
+    borderRadius: 30,
+    borderWidth: 5,
+    borderColor: 'transparent',
+  },
+  selectedGroupButton: {
+    borderColor: '#AADF98',
   },
   btnArea: {
     flexDirection: 'row',

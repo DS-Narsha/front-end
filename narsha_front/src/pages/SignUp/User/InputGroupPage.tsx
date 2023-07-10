@@ -21,7 +21,7 @@ const InputGroupPage = ( {navigation, route} ) => {
     const[groupCode, setGroupCode] = useState('')
 
     const groupMutation = useMutation(async () => {
-        const response = await fetch(`http://localhost:8080/api/user-group/join`,{
+        const response = await fetch(`http://localhost:8080/api/user/join`,{
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ const InputGroupPage = ( {navigation, route} ) => {
         try {
           const data = await groupMutation.mutateAsync();
           
-          if(data.res === true) {
+          if(data.status === 200) {
             navigation.navigate('SignUp', { userType: 'student' }); // userType 값을 함께 전달
           } else {
             console.log(data.message);
@@ -55,9 +55,6 @@ const InputGroupPage = ( {navigation, route} ) => {
 
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
-            <BackSvg />
-        </TouchableOpacity>
         <View style={styles.content}>
             <View style={styles.roundBtnContainer}>
                 <Text style={styles.roundGreen}></Text>
@@ -107,7 +104,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flexDirection: "row",
         marginBottom: 30,
-        marginTop: 15
+        marginTop: 35
     },
     roundGreen: {
         backgroundColor: "#98DC63",
@@ -160,6 +157,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#AADF98',
         borderRadius: 30,
         height: 50,
+        marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
         shadowOffset: {

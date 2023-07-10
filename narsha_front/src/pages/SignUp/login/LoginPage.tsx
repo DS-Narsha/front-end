@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Alert, TextInput} from 'react-native';
 import AppLogo from '../../../assets/app-logo.svg'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import BackSvg from '../../../assets/back.svg';
 
 //@ts-ignore
 const LoginPage = ({navigation}) => {
@@ -10,6 +11,7 @@ const LoginPage = ({navigation}) => {
   const[password, setPassword] = useState('');
   const queryClient = useQueryClient();
 
+  // DB에 저장된 유효한 사용자인지 확인하기 위한 정보 넘기기
   const loginMutation = useMutation(async () => {
     const response = await fetch(`http://localhost:8080/api/user/login`,{
       method: 'POST',
@@ -34,7 +36,7 @@ const LoginPage = ({navigation}) => {
       if(data.status === 200) {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
-        navigation.reset({ routes: [{ name: 'MainNavigator' }] });
+        navigation.navigate('LikePage', {userId: data.data.userId});
       } else if(data.res === 2) {
         Alert.alert('로그인 실패', data.message);
       } else if(data.res === 1) {
@@ -51,6 +53,9 @@ const LoginPage = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.pop()}>
+        <BackSvg />
+      </TouchableOpacity>
       <View style={styles.logo}>
         <AppLogo />
         <Text style={styles.logoText}>로그인</Text>
@@ -115,7 +120,7 @@ const styles = StyleSheet.create({
   textArea: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 130,
+    marginBottom: 110,
   },
   inputContainer: {
     backgroundColor: '#ffffff',
@@ -124,7 +129,7 @@ const styles = StyleSheet.create({
     borderColor: '#C0C0C0',
     width: '100%',
     height: 48,
-    marginBottom: 45,
+    marginBottom: 30,
   },
   inputText: {
     fontSize: 14,

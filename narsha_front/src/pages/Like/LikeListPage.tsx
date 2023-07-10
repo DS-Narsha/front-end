@@ -8,10 +8,50 @@ import {
 } from 'react-native';
 import BackSvg from "../../assets/back.svg";
 import CommentSendSvg from "../../assets/comment-send.svg"
-// 댓글 목록 페이지 
-// 댓글목록 타이틀 텍스트 부분 => 텍스트만 가운데 정렬하는 방법 찾기
+import { useQuery } from "@tanstack/react-query";
 
+type Like = {
+    userId: {
+      userId: string;
+    };
+};
+
+//@ts-ignore
 const LikeListPage = () => {
+
+    const fetchComments = async () => {
+        try {
+          const response = await fetch("http://localhost:8080/api/like/list?postId=2");
+          const data = await response.json();
+          if (data.status === 200) {
+            return data.data;
+          } else {
+            throw new Error(data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching comments:", error);
+          throw error;
+        }
+    };
+
+    const { data: likes, error, isLoading } = useQuery(["likes"], fetchComments);
+
+    if (isLoading) {
+        return (
+          <View style={styles.container}>
+            <Text>로딩 중...</Text>
+          </View>
+        );
+    }
+
+    if (error) {
+        return (
+        <View style={styles.container}>
+            <Text>좋아요 목록을 불러오는 중 오류가 발생했습니다</Text>
+        </View>
+        );
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.title}>
@@ -21,41 +61,15 @@ const LikeListPage = () => {
                 <Text style={styles.titleText}>게시글 좋아요 목록</Text>
             </View>
             <View style={styles.likeContainer}>
-                <View style={styles.likeItem}>
-                    <Text style={styles.likeImage}> </Text>
-                    <View style={styles.likeTextBox}>
-                        <Text style={styles.likeID}>USER_ID</Text>
-                        <Text style={styles.likeName}>user_name</Text>
+                {likes.map((like: Like, index: number) => (
+                    <View style={styles.likeItem} key={index}>
+                        <Text style={styles.likeImage}> </Text>
+                        <View style={styles.likeTextBox}>
+                            <Text style={styles.likeID}>{like.userId.userId}</Text>
+                            {/* <Text style={styles.likeName}>user_name</Text> */}
+                        </View>
                     </View>
-                </View>
-
-                <View style={styles.likeItem}>
-                    <Text style={styles.likeImage}> </Text>
-                    <View style={styles.likeTextBox}>
-                        <Text style={styles.likeID}>USER_ID</Text>
-                        <Text style={styles.likeName}>user_name</Text>
-                    </View>
-                </View>
-
-                <View style={styles.likeItem}>
-                    <Text style={styles.likeImage}> </Text>
-                    <View style={styles.likeTextBox}>
-                        <Text style={styles.likeID}>USER_ID</Text>
-                        <Text style={styles.likeName}>user_name</Text>
-                    </View>
-                </View>
-
-
-                <View style={styles.likeItem}>
-                    <Text style={styles.likeImage}> </Text>
-                    <View style={styles.likeTextBox}>
-                        <Text style={styles.likeID}>USER_ID</Text>
-                        <Text style={styles.likeName}>user_name</Text>
-                    </View>
-                </View>
-
-                
-
+                ))}
                 
             </View>
 

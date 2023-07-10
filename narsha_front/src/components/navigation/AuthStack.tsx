@@ -11,6 +11,9 @@ import InputUserInfoPage from '../../pages/signup/InputUserInfoPage';
 import UserPage from '../../pages/signup/SelectUserTypePage';
 import MainNavigator from '../../components/navigation/MainNavigator';
 
+import CommentPage from '../../pages/Comment/CommentListPage';
+import LikeListPage from '../../pages/Like/LikeListPage';
+
 const Stack = createStackNavigator();
 
 export default function AuthStack() {
@@ -60,6 +63,16 @@ export default function AuthStack() {
         <Stack.Screen
           name="UserType"
           component={UserPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CommentPage"
+          component={CommentPage}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="LikePage"
+          component={LikeListPage}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

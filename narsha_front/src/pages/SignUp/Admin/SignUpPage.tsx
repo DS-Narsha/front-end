@@ -24,7 +24,7 @@ const SignUpPage = ({navigation, route}) => {
   const [groupCode, setGroupCode] = useState('');
   
   const signUpMutation = useMutation(async () => {
-    const response = await fetch(`http://localhost:8080/api/user-group/group-code?user-groupId=${userGroupId}`, {
+    const response = await fetch(`http://localhost:8080/api/user-group/group-code?userId=${userGroupId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -35,6 +35,7 @@ const SignUpPage = ({navigation, route}) => {
     return data;
   });
 
+  // 페이지 렌더링될 떄마다 유효한 그룹 코드 존재할 시 화면에 띄어줌
   useEffect(() => {
     const fetchGroupCode = async () => {
       try {
@@ -49,6 +50,7 @@ const SignUpPage = ({navigation, route}) => {
     fetchGroupCode();
   }, []);
 
+  // 클립보드에 그룹코드 복사
   const handleCopyCode = () => {
     if (Platform.OS === 'android') {
       // 안드로이드
@@ -80,8 +82,8 @@ const SignUpPage = ({navigation, route}) => {
         )}
       </View>
       <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.reset({routes: [{name: 'MainNavigator'}]})}>
+        style={[styles.button, userType === 'student' && { marginTop: 90 }]}
+        onPress={() => navigation.reset({routes: [{name: 'MainNavigator'}]})}>   
         <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
     </View>
