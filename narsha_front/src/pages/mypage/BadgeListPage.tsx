@@ -12,6 +12,38 @@ import Arrow from '../../assets/arrow-left.svg';
 import images from '../../assets/images.jpeg';
 import SingleBadge from '../../components/SingleBadge';
 
+export default function BadgeList({navigation}) {
+  return (
+    <View>
+      <View style={styles.ds_container}>
+        <Image style={styles.ds_image} source={DS} />
+        <Text
+          style={
+            styles.ds_text
+          }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요?
+여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
+      </View>
+
+      <View style={styles.gridView}>
+        <SingleBadge />
+        <SingleBadge />
+        <SingleBadge />
+      </View>
+
+      <View style={styles.gridView}>
+        <SingleBadge />
+        <SingleBadge />
+        <SingleBadge />
+      </View>
+
+      <View style={styles.gridView}>
+        <SingleBadge />
+        <SingleBadge />
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
@@ -48,35 +80,3 @@ const styles = StyleSheet.create({
     margin: 15,
   },
 });
-
-export default function BadgeList({navigation}) {
-  return (
-    <View>
-      <View style={styles.ds_container}>
-        <Image style={styles.ds_image} source={DS} />
-        <Text
-          style={
-            styles.ds_text
-          }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요?
-여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
-      </View>
-
-      <View style={styles.gridView}>
-        <SingleBadge />
-        <SingleBadge />
-        <SingleBadge />
-      </View>
-
-      <View style={styles.gridView}>
-        <SingleBadge />
-        <SingleBadge />
-        <SingleBadge />
-      </View>
-
-      <View style={styles.gridView}>
-        <SingleBadge />
-        <SingleBadge />
-      </View>
-    </View>
-  );
-}

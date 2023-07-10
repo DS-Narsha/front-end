@@ -5,6 +5,7 @@ import FriendList from '../../assets/friend-list.svg';
 import BadgeList from '../../assets/badge-list.svg';
 import { useQuery } from '@tanstack/react-query';
 import Config from "react-native-config";
+import PostDetail from '../PostDetailPage';
 
 //@ts-ignore
 export default function MyPage({navigation}) {
@@ -13,14 +14,17 @@ export default function MyPage({navigation}) {
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/profile/detail?profileId=${1}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${narsha1111}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
         },
      })
+     
      const json = await res.json();
+     
      return json;
+     
     } catch(err){
       console.log(err);
     }
@@ -29,7 +33,7 @@ export default function MyPage({navigation}) {
   // get post list
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?userId=${"narsha3333"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?userGroupId=${2}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -76,17 +80,17 @@ export default function MyPage({navigation}) {
         <View style={styles.profileContainer}>
           <View style={styles.profileImageContianer}>
             <Image 
-              source = {{uri : profileQuery.data.profileImage}}
+              source = {{uri : profileQuery.profileImage}}
               style={styles.profile}/>
           </View>
           <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
-            {profileQuery.data.nikname}
+            {profileQuery.nikname}
           </Text>
           <Text style={{fontSize: 12, padding: 1}}>
-            {profileQuery.data.birth}
+            {profileQuery.birth}
           </Text>
           <Text style={{fontSize: 13, padding: 2}}>
-            {profileQuery.data.intro}
+            {profileQuery.intro}
           </Text>
           <TouchableOpacity
             style={{flexDirection: 'row', marginTop: 5}}
@@ -135,6 +139,12 @@ export default function MyPage({navigation}) {
           <TouchableOpacity onPress={() => navigation.navigate('BadgeList')}>
             <View style={styles.btn}>
               <BadgeList />
+            </View>
+          </TouchableOpacity>
+          
+          <TouchableOpacity onPress={() => navigation.navigate('PostDetailPage')}>
+            <View style={styles.btn}>
+              <PostDetail />
             </View>
           </TouchableOpacity>
         </View>

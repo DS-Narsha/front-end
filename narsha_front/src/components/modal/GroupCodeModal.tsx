@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function GroupCodeModal() {
   const getGroupCode = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/profile/detail?profileId=${1}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${narsha1111}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

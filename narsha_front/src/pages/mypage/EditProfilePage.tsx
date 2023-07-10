@@ -12,7 +12,7 @@ export default function EditProfile({navigation}) {
   const queryClient = useQueryClient();
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/profile/detail?profileId=${1}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${narsha1111}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export default function EditProfile({navigation}) {
         intro:textIntro
       })) // image 속성은 imagePicker 구현 후 추가
 
-      const res = await fetch(`http://localhost:8080/api/profile/update`, {
+      const res = await fetch(`http://localhost:8080/api/user/update`, {
         method:"PUT",
         headers: {
         },
