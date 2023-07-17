@@ -1,13 +1,36 @@
-import React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import React , { useEffect, useState } from 'react';
+import {StyleSheet, View, Text, Image, FlatList} from 'react-native';
 import DS from '../../assets/DS.png';
 import Arrow from '../../assets/arrow-left.svg';
 import SingleFriend from '../../components/SingleFriend';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ScrollView} from 'react-native-gesture-handler';
+import userImg from '../../assets/user-image.png';
+import { useQuery } from '@tanstack/react-query';
 
 //@ts-ignore
 export default function FriendList({navigation}) {
+      // get friends list
+      const getFriendsList = async () =>{
+        try{
+          const res = await fetch(`http://localhost:8080/api/user/friends-list?groupCode=${"auRm9NUVNX"}`,{
+            method:"GET",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+         })
+         const json = await res.json();
+         return json;
+        } catch(err){
+          console.log(err);
+        }
+      }
+
+      const FriendsQuery = useQuery({
+        queryKey: ["friends-list"], 
+        queryFn: getFriendsList
+      })
+
   return (
     <View>
       <View style={styles.ds_container}>
@@ -19,20 +42,35 @@ export default function FriendList({navigation}) {
 친구들의 게시글을 구경하러 가볼까요?`}</Text>
       </View>
       
-      <ScrollView>
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-        <SingleFriend />
-      </ScrollView>
+      <View>
+      {!FriendsQuery.isLoading && (
+        <>
+        {FriendsQuery.data ? (
+          <View>
+            <FlatList
+                data={FriendsQuery.data.data}
+                renderItem={({ item }) => {
+                  const { userId, nikname, profileImage } = item;
+                    return (
+                      <TouchableOpacity style={styles.container}>
+                        <Image 
+                          source={profileImage? {uri : profileImage}: userImg}
+                          style={styles.image} 
+                        />
+                        <View style={styles.item}>
+                          <Text style={styles.user_id}>{userId}</Text>
+                          <Text style={styles.user_name}>{nikname}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    )
+                }}
+            />
+          </View>
+        ):
+        <View></View>}
+        </>
+        )}
+      </View>
       
     </View>
   );
@@ -66,5 +104,29 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     color: '#61A257',
+  },
+  container: {
+    padding: 15,
+    marginTop: 10,
+    marginHorizontal: 8,
+    flexDirection: 'row',
+  },
+  item: {
+    margin: 2,
+  },
+  image: {
+    width: 60,
+    height: 60,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  user_id: {
+    margin: 3,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  user_name: {
+    margin: 3,
+    fontSize: 14,
   },
 });

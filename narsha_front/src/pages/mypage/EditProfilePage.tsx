@@ -13,7 +13,7 @@ export default function EditProfile({navigation}) {
   const queryClient = useQueryClient();
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha1111"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function EditProfile({navigation}) {
         type: profileImg.type,
       })
       formData.append("content", JSON.stringify({          
-        userId: "narsha2222",
+        userId: "narsha1111",
         birth: textBirthday,
         nikname:textNickname,
         intro:textIntro

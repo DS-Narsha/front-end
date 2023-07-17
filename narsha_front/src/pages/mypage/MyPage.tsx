@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import PencilIcon from '../../assets/pencil-icon.svg';
 import FriendList from '../../assets/friend-list.svg';
@@ -14,7 +14,7 @@ export default function MyPage({navigation}) {
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha1111"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export default function MyPage({navigation}) {
   // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"iC8rq7Y8os"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"EF0gxrGbMZ"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -56,8 +56,7 @@ export default function MyPage({navigation}) {
           source={{ uri: imageArray[0] }}
           style={[styles.img]}
           imageStyle={{borderRadius: 10}}
-        >
-        </ImageBackground>
+        />
       </TouchableOpacity>
     );
   }, []);
@@ -71,7 +70,6 @@ export default function MyPage({navigation}) {
     queryKey: ["posting-list"], 
     queryFn: getPostingList
   })
-
   
   return (
     <View style={styles.container}>
@@ -80,17 +78,17 @@ export default function MyPage({navigation}) {
         <View style={styles.profileContainer}>
           <View style={styles.profileImageContianer}>
             <Image 
-              source = {{uri : profileQuery.profileImage}}
+              source = {{uri : profileQuery.data.profileImage}}
               style={styles.profile}/>
           </View>
           <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
-            {profileQuery.nikname}
+            {profileQuery.data.nikname}
           </Text>
           <Text style={{fontSize: 12, padding: 1}}>
-            {profileQuery.birth}
+            {profileQuery.data.birth}
           </Text>
           <Text style={{fontSize: 13, padding: 2}}>
-            {profileQuery.intro}
+            {profileQuery.data.intro}
           </Text>
           <TouchableOpacity
             style={{flexDirection: 'row', marginTop: 5}}
