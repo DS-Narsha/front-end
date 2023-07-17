@@ -37,7 +37,7 @@ const LoginPage = ({navigation}) => {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
         queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType });
-        navigation.navigate('CommentPage', {userId: data.data.userId, userType: data.data.userType});
+        navigation.navigate('MainNavigator', {userId: data.data.userId, userType: data.data.userType});
       } else if(data.res === 2) {
         Alert.alert('로그인 실패', data.message);
       } else if(data.res === 1) {
