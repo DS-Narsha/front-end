@@ -20,18 +20,18 @@ import Clipboard from '@react-native-clipboard/clipboard';
 //@ts-ignore
 const SignUpPage = ({navigation, route}) => {
 
-  const { userType, userGroupId } = route.params;
+  const { userType, userId } = route.params;
   const [groupCode, setGroupCode] = useState('');
   
   const signUpMutation = useMutation(async () => {
-    const response = await fetch(`http://localhost:8080/api/user-group/group-code?userId=${userGroupId}`, {
+    const response = await fetch(`http://localhost:8080/api/group/group-code?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    const data = await response.text();
+    const data = await response.json();
     return data;
   });
 
@@ -40,7 +40,13 @@ const SignUpPage = ({navigation, route}) => {
     const fetchGroupCode = async () => {
       try {
         const data = await signUpMutation.mutateAsync();
-        setGroupCode(data);
+        if(data.status === 200) {
+          setGroupCode(data.data);
+        } else {
+          console.log(data.message);
+          Alert.alert('그룹 코드 가져오기 실패', data.message);
+        }
+        
       } catch (error) {
         console.log(error);
         Alert.alert('오류', '그룹 생성 중 오류가 발생했습니다.');

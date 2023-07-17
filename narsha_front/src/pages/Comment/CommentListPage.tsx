@@ -6,33 +6,72 @@ import {
     TouchableOpacity,
     TextInput,
     Modal,
-    Alert
+    Alert,
+    Image,
+    Platform,
+    KeyboardAvoidingView,
+    ScrollView
 } from 'react-native';
 import BackSvg from "../../assets/back.svg";
 import CommentSendSvg from "../../assets/comment-send.svg"
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import Loading from './Loading';
 
 // 댓글 목록 페이지 
-// 댓글목록 타이틀 텍스트 부분 => 텍스트만 가운데 정렬하는 방법 찾기
 
 type Comment = {
     userId: {
       userId: string;
+      profileImage: string;
     };
     content: string;
     createAt: string;
 };
-  
+
+type UserData = {
+    userId: string;
+    userType: string;
+};
 
 //@ts-ignore
 const CommentListPage = () => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [profileImage, setProfileImage] = useState('');
+    const queryClient = useQueryClient();
 
+    // queryClient에서 userId와 userType을 가져오는 로직
+    const { data: userData } = useQuery(['user'], () => {
+        return queryClient.getQueryData(['user']);
+    }) as { data: UserData };
+
+    // 사용자 프로필 불러오기
+    const fetchUserProfile = async (userId: string) => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/user/detail?userId=${userId}`
+          );
+          const data = await response.json();
+          if (response.ok) {
+            setProfileImage(data.profileImage);
+          } else {
+            throw new Error(data.message);
+          }
+        } catch (error) {
+          console.error("사용자 프로필을 가져오는 중 오류가 발생했습니다:", error);
+        }
+      };
+    
+      useEffect(() => {
+        if (userData && userData.userId) {
+          fetchUserProfile(userData.userId);
+        }
+      }, [userData]);
+
+    // 포스트에 해당되는 댓글 목록 불러오기        
     const fetchComments = async () => {
         try {
-          const response = await fetch("http://localhost:8080/api/comment/list?postId=2");
+          const response = await fetch("http://localhost:8080/api/comment/list?postId=1");
           const data = await response.json();
           if (data.status === 200) {
             return data.data;
@@ -62,29 +101,47 @@ const CommentListPage = () => {
         </View>
         );
     }
+    
+    const keyboardBehavior =
+    Platform.OS === 'ios' ? 'position' : Platform.OS === 'android' ? 'height' : 'height';
+
       
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+        style={styles.container}
+        >   
             <View style={styles.title}>
                 <TouchableOpacity>
                     <BackSvg />
                 </TouchableOpacity>
                 <Text style={styles.titleText}>댓글 목록</Text>
             </View>
-            <View style={styles.commentContainer}>
 
-                {comments.map((comment: Comment, index: number) => (
-                    <View style={styles.commentItem} key={index}>
-                        <Text style={styles.commentImage}> </Text>
-                        <View style={styles.commentTextBox}>
-                            <Text style={styles.commentID}>{comment.userId.userId}</Text>
-                            <Text style={styles.commentText}>{comment.content}</Text>
-                            <Text style={styles.commentDay}>{comment.createAt}</Text>
+                <View style={styles.commentContainer}>
+                    <ScrollView 
+                    contentContainerStyle={styles.scrollViewContainer}
+                    showsVerticalScrollIndicator={false}> 
+                    {comments.map((comment: Comment, index: number) => (
+                        <View style={styles.commentItem} key={index}>
+                            {comment.userId.profileImage ? (
+                                <Image
+                                source={{ uri: comment.userId.profileImage }}
+                                style={styles.commentImage}
+                                />
+                            ) : (
+                                <Text style={styles.commentImage}> </Text>
+                            )}
+                            
+                            <View style={styles.commentTextBox}>
+                                <Text style={styles.commentID}>{comment.userId.userId}</Text>
+                                <Text style={styles.commentText}>{comment.content}</Text>
+                                <Text style={styles.commentDay}>{comment.createAt.replace("T", " ").slice(0, 16)}</Text>
+                            </View>
                         </View>
-                    </View>
-                ))} 
-              
-            </View>
+                    ))} 
+                    </ScrollView>
+                </View >
+
             {/* 모달창 */}
             <Modal 
             animationType="slide"
@@ -122,9 +179,16 @@ const CommentListPage = () => {
                 </View>
                 </View>
             </Modal>
-
+        
             <View style={styles.bottomContainer}>
+                {profileImage ? (
+                <Image
+                    source={{ uri: profileImage }}
+                    style={styles.commentImage}
+                />
+                ) : (
                 <Text style={styles.commentImage}></Text>
+                )}
                 <View style={styles.bottomInputText}>
                     <TextInput placeholder="   @아이디로 글 남기기"/>
                 </View>
@@ -132,14 +196,18 @@ const CommentListPage = () => {
                     <CommentSendSvg />
                 </TouchableOpacity>
             </View>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        flex: 1,
+        padding: 20,    
+    },
+    scrollViewContainer: {
+        flexGrow: 1,
     },
     title: {
         flexDirection: "row",

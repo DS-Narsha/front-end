@@ -18,7 +18,11 @@ import PostStack from './PostStack'
 
 const Tab = createBottomTabNavigator();
 
-const MainNavigator = () => {
+//@ts-ignore
+const MainNavigator = ({route}) => {
+
+  const { userId, userType } = route.params;
+
   return (
     <Tab.Navigator
       initialRouteName="Main"
@@ -58,7 +62,12 @@ const MainNavigator = () => {
       <Tab.Screen
         name="Main"
         component={MainStack}
-        options={{unmountOnBlur: true, headerShown: false}}
+        options={({ route }) => ({
+          unmountOnBlur: true,
+          headerShown: false,
+          userId: userId,
+          userType: userType,
+        })}
       />
       <Tab.Screen
         name="AchievePage"
