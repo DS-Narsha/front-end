@@ -11,7 +11,7 @@ import {
 import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 import CopyGroup from '../../../assets/copy-group.svg';
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Clipboard from '@react-native-clipboard/clipboard'; 
 
 
@@ -22,6 +22,7 @@ const SignUpPage = ({navigation, route}) => {
 
   const { userType, userId } = route.params;
   const [groupCode, setGroupCode] = useState('');
+  const queryClient = useQueryClient();
   
   const signUpMutation = useMutation(async () => {
     const response = await fetch(`http://localhost:8080/api/group/group-code?userId=${userId}`, {
@@ -42,6 +43,7 @@ const SignUpPage = ({navigation, route}) => {
         const data = await signUpMutation.mutateAsync();
         if(data.status === 200) {
           setGroupCode(data.data);
+          queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType });
         } else {
           console.log(data.message);
           Alert.alert('그룹 코드 가져오기 실패', data.message);
