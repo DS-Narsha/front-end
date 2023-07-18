@@ -10,6 +10,8 @@ import StartPage from '../../pages/StartPage';
 import InputUserInfoPage from '../../pages/signup/InputUserInfoPage';
 import UserPage from '../../pages/signup/SelectUserTypePage';
 import MainNavigator from '../../components/navigation/MainNavigator';
+import CommentPage from '../../pages/comment/CommentListPage';
+import LikeListPage from '../../pages/like/LikeListPage';
 
 import CommentPage from '../../pages/Comment/CommentListPage';
 import LikeListPage from '../../pages/Like/LikeListPage';
@@ -36,7 +38,7 @@ export default function AuthStack() {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="SelectGroup"
+          name="SelectGroup"  
           component={SelectGroupPage}
           options={{headerShown: false}}
         />

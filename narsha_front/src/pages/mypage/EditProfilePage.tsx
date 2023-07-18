@@ -1,19 +1,21 @@
-import React, {useRef, useState} from 'react';
-import {Alert, Button, Image, Modal, PermissionsAndroid, Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Alert, Button, ImageBackground, Modal, PermissionsAndroid, Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useQuery, useMutation, useQueryClient  } from '@tanstack/react-query';
 import EditButton from '../../assets/editButton.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-picker';
+import CameraIcon from '../../assets/ic-camera.svg'
 
 //@ts-ignore
 export default function EditProfile({navigation}) {
+
   // queryClient
   const queryClient = useQueryClient();
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha5555"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -29,13 +31,14 @@ export default function EditProfile({navigation}) {
   const updateProfile = async () => {
     try{ 
       let formData = new FormData(); // from-data object
+      console.log(profileImgUri)
       formData.append("image", {
-        uri: profileImg.uri,
+        uri: profileImgUri,
         name: profileImg.fileName,
         type: profileImg.type,
       })
       formData.append("content", JSON.stringify({          
-        userId: "narsha2222",
+        userId: "narsha5555",
         birth: textBirthday,
         nikname:textNickname,
         intro:textIntro
@@ -61,10 +64,10 @@ export default function EditProfile({navigation}) {
     // get old data
     const oldData = await queryClient.getQueryData(['profile-detail'])
     // setting datas at UI, 특정 속성 수정
-    queryClient.setQueryData(['profile-detail', "profileImage"], profileImg.uri);
-    queryClient.setQueryData(['profile-detail', "nikname"], textNickname);
-    queryClient.setQueryData(['profile-detail', "birth"], textBirthday);
-    queryClient.setQueryData(['profile-detail', "intro"], textIntro);
+    queryClient.setQueryData(['profile-detail', "data", "profileImage"], profileImgUri);
+    queryClient.setQueryData(['profile-detail', "data", "nikname"], textNickname);
+    queryClient.setQueryData(['profile-detail', "data", "birth"], textBirthday);
+    queryClient.setQueryData(['profile-detail', "data", "intro"], textIntro);
     // if error -> rollback
     return () => queryClient.setQueryData(['profile-detail'], oldData);
   }
@@ -88,10 +91,11 @@ export default function EditProfile({navigation}) {
     }
   })
 
-  const [profileImg, setProfileImage] = useState(data.profileImage);
-  const [textBirthday, onChangeTextBirthday] = useState(data.birth);
-  const [textNickname, onChangeTextNickname] = useState(data.nikname);
-  const [textIntro, onChangeTextIntro] = useState(data.intro);
+  const [profileImgUri, setProfileImageUri] = useState(data.data.profileImage); // image uri
+  const [profileImg, setProfileImg] = useState(""); // image object
+  const [textBirthday, onChangeTextBirthday] = useState(data.data.birth);
+  const [textNickname, onChangeTextNickname] = useState(data.data.nikname);
+  const [textIntro, onChangeTextIntro] = useState(data.data.intro);
 
 //달력 모달 설정
   const FormatDate = (day: any) => {
@@ -135,14 +139,16 @@ export default function EditProfile({navigation}) {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const result = await launchCamera(options);
-      setProfileImage(result.assets[0]);
+      setProfileImg(result.assets[0]); // save image
+      setProfileImageUri(result.assets[0].uri); // save uri
       setModalVisible(!modalVisible);
     }
   }
   
   const openGallery = async () => {
     const result = await launchImageLibrary(options);
-    setProfileImage(result.assets[0]);
+    setProfileImageUri(result.assets[0].uri); // save uri
+    setProfileImg(result.assets[0]); // save image
     setModalVisible(!modalVisible);
   }
 
@@ -189,9 +195,13 @@ export default function EditProfile({navigation}) {
 
         <Pressable onPress={() => setModalVisible(true)}>
           <View style={styles.photo}>
-            <Image 
-              source = {{uri : data.profileImage}}
-              style={{width: 115, height: 115, borderRadius: 20}} />
+            <ImageBackground 
+              source = {{uri : profileImgUri}}
+              imageStyle={{borderRadius: 20}}
+              style={[{width: 115, height: 115, borderRadius: 20}, styles.editPhoto]}>
+                <CameraIcon />
+              </ImageBackground>
+            
           </View>
         </Pressable>
 
@@ -199,7 +209,7 @@ export default function EditProfile({navigation}) {
         <TextInput
           editable={false}
           style={styles.text}
-          placeholder={"@" + data.userId}
+          placeholder={"@" + data.data.userId}
         />
         <TextInput
           style={styles.text}
@@ -229,10 +239,9 @@ export default function EditProfile({navigation}) {
           value={textIntro}
           onChangeText={onChangeTextIntro}
         />
-        <TouchableOpacity onPress={() => {
-          mutate()
-          navigation.navigate('MyPage')}
-          }>
+        <TouchableOpacity onPress={() => { 
+          mutate(), navigation.navigate('MyPage')
+          }}>
           <View style={styles.edit}>
             <EditButton />
           </View>
@@ -273,6 +282,11 @@ const styles = StyleSheet.create({
   },
   edit: {
     marginTop: 70,
+  },
+  editPhoto:{
+    opacity: 0.9,
+    justifyContent: 'center',
+    alignItems:'center'
   },
 
   //모달
@@ -355,4 +369,4 @@ const styles = StyleSheet.create({
     fontWeight: '200',
     color: '#000000',
   },
-});
+})

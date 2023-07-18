@@ -14,7 +14,7 @@ export default function MyPage({navigation}) {
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha5555"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -22,6 +22,10 @@ export default function MyPage({navigation}) {
      })
      
      const json = await res.json();
+<<<<<<< HEAD
+=======
+     console.log("json:" + json);
+>>>>>>> ysy
      
      return json;
      
@@ -33,7 +37,7 @@ export default function MyPage({navigation}) {
   // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"iC8rq7Y8os"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"TBu3VNrBdm"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -80,6 +84,7 @@ export default function MyPage({navigation}) {
         <View style={styles.profileContainer}>
           <View style={styles.profileImageContianer}>
             <Image 
+<<<<<<< HEAD
               source = {{uri : profileQuery.profileImage}}
               style={styles.profile}/>
           </View>
@@ -91,6 +96,19 @@ export default function MyPage({navigation}) {
           </Text>
           <Text style={{fontSize: 13, padding: 2}}>
             {profileQuery.intro}
+=======
+              source = {{uri : profileQuery.data.data.profileImage}}
+              style={styles.profile}/>
+          </View>
+          <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
+            {profileQuery.data.data.nikname === null ? "닉네임을 작성해주세요." : profileQuery.data.data.nikname}
+          </Text>
+          <Text style={{fontSize: 12, padding: 1}}>
+            {profileQuery.data.data.birth === null ? "생일을 아직 등록하지 않았어요." : profileQuery.data.data.birth}
+          </Text>
+          <Text style={{fontSize: 13, padding: 2}}>
+            {profileQuery.data.data.intro === null ? "소개글을 아직 쓰지 않았어요." : profileQuery.data.data.intro }
+>>>>>>> ysy
           </Text>
           <TouchableOpacity
             style={{flexDirection: 'row', marginTop: 5}}
