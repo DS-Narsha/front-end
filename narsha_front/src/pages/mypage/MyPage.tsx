@@ -47,17 +47,16 @@ export default function MyPage({navigation}) {
   }
 
   const _RenderItem = useCallback(({ item }: any) => {
-    const imageArray = item.imageArray.substring(1,item.imageArray.length-2).split(', ')
+    const imageArray = item.imageArray.substring(1,item.imageArray.length-1).split(', ')
     return (
       <TouchableOpacity onPress={() => {
           navigation.navigate("PostDetailPage", {"detail": item})
-        }}>
+        }}
+        style={styles.imgShadow}>
         <ImageBackground
           source={{ uri: imageArray[0] }}
           style={[styles.img]}
-          imageStyle={{borderRadius: 10}}
-        >
-        </ImageBackground>
+          imageStyle={{borderRadius: 10}} />
       </TouchableOpacity>
     );
   }, []);
@@ -108,10 +107,10 @@ export default function MyPage({navigation}) {
             </View>
           </TouchableOpacity>
         </View>
-        {postQuery.data ? (
+        {postQuery.data.data ? (
         <View style={{marginTop: 20}}>
         <FlatList
-          data={postQuery.data}
+          data={postQuery.data.data}
           renderItem={_RenderItem}
           key={'#'}
           keyExtractor={(item, index) => '#' + index.toString()}
@@ -122,9 +121,11 @@ export default function MyPage({navigation}) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: 100,
+            marginHorizontal: 30,
             flexGrow: 0.5,
-            justifyContent: 'space-around',
-            alignSelf:'center'
+            justifyContent: 'flex-start',
+            alignSelf:'flex-start',
+            backgroundColor: '#FFFFFF'
           }}
           numColumns={3}
         />
@@ -139,12 +140,6 @@ export default function MyPage({navigation}) {
           <TouchableOpacity onPress={() => navigation.navigate('BadgeList')}>
             <View style={styles.btn}>
               <BadgeList />
-            </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={() => navigation.navigate('PostDetailPage')}>
-            <View style={styles.btn}>
-              <PostDetail />
             </View>
           </TouchableOpacity>
         </View>
@@ -180,6 +175,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
   },
   profileContainer: {
     backgroundColor: '#FCFDE1',
@@ -241,7 +237,18 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'cover',
-    marginHorizontal: 5,
-    backgroundColor: "#ffeeff"
+    // margin:5,
   },
+  imgShadow: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin:5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 10,
+    elevation: 2,
+  }
 });

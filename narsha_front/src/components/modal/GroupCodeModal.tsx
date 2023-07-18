@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function GroupCodeModal() {
   const getGroupCode = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${narsha1111}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha1111"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export default function GroupCodeModal() {
             <View style={styles.modalBody}>
               <View style={styles.modalText}>
                 <Text style={styles.strongText}>그룹 코드: </Text>
-                <Text style={styles.content}>{data.userGroupId.groupCode.groupCode}</Text>
+                <Text style={styles.content}>{data.data.groupCode.groupCode}</Text>
               </View>
             </View>
 

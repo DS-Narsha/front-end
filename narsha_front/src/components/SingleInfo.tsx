@@ -3,8 +3,9 @@ import {StyleSheet, View, Text, TouchableOpacity, Pressable, Modal} from 'react-
 import InfoIcon from '../assets/info-icon.svg';
 import {ScrollView} from 'react-native-gesture-handler';
 
-export default function SingleInfo() {
+export default function SingleInfo({ item }: any) {
   const [modalVisible, setModalVisible] = useState(false);
+  const createAt = item.createAt.substring(0,item.createAt.length-16).split(', ')
 
   return (
     <View>
@@ -18,14 +19,14 @@ export default function SingleInfo() {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <View style={styles.modalHead}>
-                        <Text style={{fontWeight:'bold'}}>{`2023.06.21`}</Text>
+                        <Text style={{fontWeight:'bold'}}>{createAt}</Text>
                         </View>
 
                         <View style={styles.modalBody}>
-                            <Text style={styles.titleBodyText}>공지 제목</Text>
+                            <Text style={styles.titleBodyText}>{item.noticeTitle}</Text>
                             <ScrollView>
                             <Text style={styles.bodyText}>
-                              {`훈민정음 해례본은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. 훈민정음 해례본은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}
+                              {item.noticeContent}
                               </Text>
                             </ScrollView>
                         </View>
@@ -46,15 +47,14 @@ export default function SingleInfo() {
             <View style={styles.topItem}>
               <InfoIcon />
               <View>
-                <Text style={styles.titleText}>공지 제목</Text>
-                <Text style={styles.dateText}>작성 날짜</Text>
+                <Text style={styles.titleText}>{item.noticeTitle}</Text>
+                <Text style={styles.dateText}>{createAt}</Text>
               </View>
             </View>
             <Text
               style={styles.bottomItem}
               numberOfLines={2}
-              ellipsizeMode="tail">{`훈민정음 해례본은 세종이 직접 서문을 쓰고 정인지 같은 신하들에게 글자에 대한 설명을 적게 한 것입니다. 이 책이 1940년에 안동에서 발견될 때까지 우리는 한글의 창제 원리에 대해 전혀 모르고 있었습니다. 
-          그러다 이 책이 발견됨으로 해서 한글이 얼마나 과학적인 원리로 만들어졌는지 알게 되었답니다. `}</Text>
+              ellipsizeMode="tail">{item.noticeContent}</Text>
           </Pressable>
     </View>
   );
@@ -63,6 +63,7 @@ export default function SingleInfo() {
 
 const styles = StyleSheet.create({
   container: {
+    width: 350,
     padding: 22,
     marginTop: 13,
     marginLeft: 23,

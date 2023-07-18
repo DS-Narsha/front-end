@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Alert, TextInput} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Alert, TextInput, Modal, Pressable} from 'react-native';
 import SingleTextInput from '../components/SingleTextInput';
 import MultiTextInput from '../components/MultiTextInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ScrollView } from 'react-native-gesture-handler';
 
 // 공지 작성 페이지
 
@@ -18,10 +19,10 @@ export default function NoticeWritePage({navigation}: any) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          groupCode: "InzSpQxr1Z",
+          groupCode: "hs#x6zPtx6",
           noticeTitle: textTitle,
           noticeContent: textContent,
-          writer: "narsha2222"
+          writer: "narsha1111"
         }),
       })
       const data = await res.json();
@@ -38,7 +39,8 @@ export default function NoticeWritePage({navigation}: any) {
       queryClient.setQueryData(["noticeTitle"], textTitle);
       queryClient.setQueryData(["noticeContent"], textContent);
       
-      if(data.success === true) {
+      if(data.status === 200) {
+        setModalVisible(!modalVisible)
         navigation.navigate('NoticeList');
       } else {
         console.log(data.message);
@@ -53,40 +55,86 @@ export default function NoticeWritePage({navigation}: any) {
   const [textTitle, setTextTitle] = useState("");
   const [textContent, setTextContent] = useState("");
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.writingNoticeContainer}>
-        <View style={styles.titlecontainer}>
-          <Text style={styles.title}>공지 제목</Text>
-        </View>
-        <View style={styles.textinput}>
-          <View style={styles.titleTextContainer}>
-            <TextInput 
-              style={styles.titleInputText}
-              value={textTitle}
-              onChangeText={setTextTitle}/>
-          </View>
-        </View>
-        <View style={styles.titlecontainer}>
-          <Text style={styles.title}>공지 내용</Text>
-        </View>
-        <View style={styles.textinput}>
+  const [modalVisible, setModalVisible] = useState(false);
 
-          <View style={styles.contentTextContainer}>
-            <TextInput 
-              style={styles.contentInputText}
-              multiline={true}
-              value={textContent}
-              onChangeText={setTextContent} />
+  return (
+    <View style={{backgroundColor: '#FCFDE1'}}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={true}>
+        <View style={styles.container}>
+          <View style={styles.writingNoticeContainer}>
+            <View style={styles.titlecontainer}>
+              <Text style={styles.title}>공지 제목</Text>
+            </View>
+            <View style={styles.textinput}>
+              <View style={styles.titleTextContainer}>
+                <TextInput 
+                  style={styles.titleInputText}
+                  value={textTitle}
+                  onChangeText={setTextTitle}/>
+              </View>
+            </View>
+            <View style={styles.titlecontainer}>
+              <Text style={styles.title}>공지 내용</Text>
+            </View>
+            <View style={styles.textinput}>
+              <View style={styles.contentTextContainer}>
+                <TextInput 
+                  style={styles.contentInputText}
+                  multiline={true}
+                  value={textContent}
+                  onChangeText={setTextContent} />
+              </View>
+            </View>
           </View>
-          
-        </View>
-      </View>
-      <TouchableOpacity onPress={uploadNotice}>
+
+          <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+          setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.modalHead}>
+                <Text style={styles.btnText}>알림</Text>
+              </View>
+              <View style={styles.modalBody}>
+                <View style={styles.modalText}>
+                  <Text style={styles.strongText}>공지는 등록 후 삭제가 불가능 합니다.</Text>
+                  <Text style={styles.strongText}>정말로 공지를 등록하시겠습니까?</Text>
+                </View>
+              </View>
+              <View style={styles.modalEnd}>
+                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <View style={styles.btn}>
+                    <Text style={styles.strongText}>취소</Text>
+                  </View>
+                </Pressable>
+                <Pressable onPress={uploadNotice}>
+                  <View style={styles.btn}>
+                    <Text style={styles.strongText}>공지 올리기</Text>
+                  </View>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        <Pressable onPress={() => setModalVisible(true)}>
         <View style={styles.updatebtn}>
-          <Text style={styles.btntitle}>공지 올리기</Text>
+              <Text style={styles.btntitle}>공지 올리기</Text>
+            </View>
+        </Pressable>
+
+          {/* <TouchableOpacity onPress={uploadNotice}>
+            
+          </TouchableOpacity> */}
+
         </View>
-      </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -99,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   writingNoticeContainer: {
-    marginTop: 55,
+    marginTop: 45,
   },
   textinput: {
     width: 350,
@@ -120,7 +168,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
-    marginTop: 40,
+    marginTop: 20,
+    marginBottom:20,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -147,7 +196,7 @@ const styles = StyleSheet.create({
   contentTextContainer: {
     backgroundColor: "#ffffff",
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 30,
     elevation: 5,
   },
   contentInputText: {
@@ -156,5 +205,83 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 10,
     textAlignVertical: 'top',
+  },
+  content: {
+    padding: 30,
+  },
+
+  //모달
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+  },
+  modalView: {
+    margin: 20,
+    width: '68%',
+    height: 160,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHead: {
+    flex: 0.8,
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: '#AADF98',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalBody: {
+    flex: 1.5,
+    width: '100%',
+    alignItems: 'center',//'flex-start',
+  },
+  modalEnd: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  modalText: {
+    alignItems: 'center',
+    // flexDirection: 'row',
+    // marginLeft: 20,
+    marginTop: 20,
+  },
+  strongText: {
+    fontSize: 14,
+    fontWeight: '200',
+    color: '#000000',
+  },
+  btnText: {
+    color: '#000000',
+    fontSize: 15,
+    fontWeight: '200',
+  },
+  btn: {
+    backgroundColor: '#AADF98',
+    height: 30,
+    width: 100,
+    margin: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
   },
 });
