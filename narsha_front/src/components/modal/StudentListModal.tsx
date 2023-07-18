@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import {Alert, Modal, StyleSheet, Text, Pressable, View, ImageBackground} from 'react-native';
 import InitialProfileImage from '../../assets/initial-profile-image.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-export default function StudentListModal() {
+export default function StudentListModal({ item }: any) {
   const [modalVisible, setModalVisible] = useState(false);
+  const profileImage = item.profileImage.substring(0,item.profileImage.length).split(', ')
+
   return (
     <View style={styles.container}>
       <Modal
@@ -17,20 +19,20 @@ export default function StudentListModal() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.modalHead}>
-              <Text style={styles.btnText}>학생 이름</Text>
+              <Text style={styles.btnText}>{item.userName}</Text>
             </View>
             <View style={styles.modalBody}>
               <View style={styles.modalText}>
                 <Text style={styles.strongText}>아이디</Text>
-                <Text style={styles.content}>내용</Text>
+                <Text style={styles.content}>{item.userId}</Text>
               </View>
               <View style={styles.modalText}>
                 <Text style={styles.strongText}>비밀번호</Text>
-                <Text style={styles.content}>내용</Text>
+                <Text style={styles.content}>{item.password}</Text>
               </View>
               <View style={styles.modalText}>
                 <Text style={styles.strongText}>생일</Text>
-                <Text style={styles.content}>내용</Text>
+                <Text style={styles.content}>{item.birth}</Text>
               </View>
             </View>
             <View style={styles.modalEnd}>
@@ -47,14 +49,17 @@ export default function StudentListModal() {
       <Pressable onPress={() => setModalVisible(true)}>
         <View style={styles.studentContentContainer}>
           <View>
-            <InitialProfileImage />
+            <ImageBackground
+              source={{ uri: profileImage[0] }}
+              style={[styles.img]}
+              imageStyle={{ borderRadius: 10 }} />
           </View>
           <View>
             <View style={styles.textcontainer}>
-              <Text style={styles.strongText}>학생 이름</Text>
+              <Text style={styles.strongText}>{item.userName}</Text>
             </View>
             <View style={styles.textcontainer}>
-              <Text style={styles.nickname}>닉네임</Text>
+              <Text style={styles.nickname}>{item.nikname}</Text>
             </View>
           </View>
         </View>
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: '#000000',
     fontSize: 15,
-    fontWeight: '200',
+    fontWeight: '300',
   },
   container: {
     margin: 10,
@@ -139,7 +144,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   studentContentContainer: {
-    margin: 15,
+    margin: 10,
     width: 350,
     height: 70,
     flexDirection: 'row',
@@ -151,7 +156,7 @@ const styles = StyleSheet.create({
   },
   strongText: {
     fontSize: 14,
-    fontWeight: '200',
+    fontWeight: '300',
     color: '#000000',
   },
   nickname: {
@@ -162,5 +167,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 14,
     color: '#909090',
+  },
+  img: {
+    width: 50,
+    height: 50,
+    resizeMode: 'cover',
   },
 });

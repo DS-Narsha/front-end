@@ -13,7 +13,7 @@ export default function EditProfile({navigation}) {
   const queryClient = useQueryClient();
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha2222"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha1111"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function EditProfile({navigation}) {
         type: profileImg.type,
       })
       formData.append("content", JSON.stringify({          
-        userId: "narsha2222",
+        userId: "narsha1111",
         birth: textBirthday,
         nikname:textNickname,
         intro:textIntro
@@ -88,10 +88,11 @@ export default function EditProfile({navigation}) {
     }
   })
 
-  const [profileImg, setProfileImage] = useState(data.profileImage);
-  const [textBirthday, onChangeTextBirthday] = useState(data.birth);
-  const [textNickname, onChangeTextNickname] = useState(data.nikname);
-  const [textIntro, onChangeTextIntro] = useState(data.intro);
+  const [profileImg, setProfileImage] = useState(data.data.profileImage);
+  const [temptProfileImg, setTemptProfileImage] = useState(data.data.profileImage);
+  const [textBirthday, onChangeTextBirthday] = useState(data.data.birth);
+  const [textNickname, onChangeTextNickname] = useState(data.data.nikname);
+  const [textIntro, onChangeTextIntro] = useState(data.data.intro);
 
 //달력 모달 설정
   const FormatDate = (day: any) => {
@@ -136,6 +137,7 @@ export default function EditProfile({navigation}) {
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const result = await launchCamera(options);
       setProfileImage(result.assets[0]);
+      setTemptProfileImage(result.assets[0].uri);
       setModalVisible(!modalVisible);
     }
   }
@@ -143,6 +145,7 @@ export default function EditProfile({navigation}) {
   const openGallery = async () => {
     const result = await launchImageLibrary(options);
     setProfileImage(result.assets[0]);
+    setTemptProfileImage(result.assets[0].uri);
     setModalVisible(!modalVisible);
   }
 
@@ -190,7 +193,7 @@ export default function EditProfile({navigation}) {
         <Pressable onPress={() => setModalVisible(true)}>
           <View style={styles.photo}>
             <Image 
-              source = {{uri : data.profileImage}}
+              source = {{uri : temptProfileImg}}
               style={{width: 115, height: 115, borderRadius: 20}} />
           </View>
         </Pressable>
@@ -199,7 +202,7 @@ export default function EditProfile({navigation}) {
         <TextInput
           editable={false}
           style={styles.text}
-          placeholder={"@" + data.userId}
+          placeholder={"@" + data.data.userId}
         />
         <TextInput
           style={styles.text}
