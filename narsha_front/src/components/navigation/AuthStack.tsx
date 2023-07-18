@@ -13,9 +13,6 @@ import MainNavigator from '../../components/navigation/MainNavigator';
 import CommentPage from '../../pages/comment/CommentListPage';
 import LikeListPage from '../../pages/like/LikeListPage';
 
-import CommentPage from '../../pages/Comment/CommentListPage';
-import LikeListPage from '../../pages/Like/LikeListPage';
-
 const Stack = createStackNavigator();
 
 export default function AuthStack() {

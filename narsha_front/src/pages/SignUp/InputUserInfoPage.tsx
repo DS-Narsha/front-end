@@ -25,7 +25,7 @@ const InputUserInfoPage = ({navigation, route}) => {
   const[username, setUsername] = useState('');
   const[userId, setUserId] = useState('');
   const[password, setPassword] = useState('');
-  const [isIdAvailable, setIsIdAvailable] = useState(true); // 중복 여부 상태
+  const [isIdAvailable, setIsIdAvailable] = useState(false); // 중복 여부 상태
 
   const queryClient = useQueryClient();
 

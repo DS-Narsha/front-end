@@ -51,9 +51,10 @@ const GroupPage = ({navigation, route}) => {
       if (schoolName && groupName && grade && groupClass) {
         try {
           const data = await groupMutation.mutateAsync();
-          console.log(res);
-          if(data.message === "그룹 생성 성공") {
-            navigation.navigate('SignUp', { userType: 'teacher', userGroupId: data['user-groupId'] });
+          if(data.status === 200) {
+            const userId = data.data;
+            console.log(userId);
+            navigation.navigate('SignUp', { userType: 'teacher', userId });
           } else {
             console.log(data.message);
             Alert.alert('그룹 생성 실패', data.message);

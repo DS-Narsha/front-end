@@ -5,6 +5,7 @@ import {
     View,
     TouchableOpacity,
     TextInput,
+    Image,
 } from 'react-native';
 import BackSvg from "../../assets/back.svg";
 import CommentSendSvg from "../../assets/comment-send.svg"
@@ -13,6 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 type Like = {
     userId: {
       userId: string;
+      userName: string;
+      profileImage: string;
     };
 };
 
@@ -21,7 +24,7 @@ const LikeListPage = () => {
 
     const fetchComments = async () => {
         try {
-          const response = await fetch("http://localhost:8080/api/like/list?postId=2");
+          const response = await fetch("http://localhost:8080/api/like/list?postId=1");
           const data = await response.json();
           if (data.status === 200) {
             return data.data;
@@ -63,10 +66,18 @@ const LikeListPage = () => {
             <View style={styles.likeContainer}>
                 {likes.map((like: Like, index: number) => (
                     <View style={styles.likeItem} key={index}>
+
+                    {like.userId.profileImage ? (
+                        <Image
+                        source={{ uri: like.userId.profileImage }}
+                        style={styles.likeImage}
+                        />
+                    ) : (
                         <Text style={styles.likeImage}> </Text>
+                    )}
                         <View style={styles.likeTextBox}>
                             <Text style={styles.likeID}>{like.userId.userId}</Text>
-                            {/* <Text style={styles.likeName}>user_name</Text> */}
+                            <Text style={styles.likeName}>{like.userId.userName}</Text>
                         </View>
                     </View>
                 ))}

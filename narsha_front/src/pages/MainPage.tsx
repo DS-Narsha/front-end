@@ -8,7 +8,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 
 //@ts-ignore
-const MainScreen = ({navigation}) => {
+const MainScreen = ({navigation, route}) => {
+
+  const userId = route.params?.userId;
+  const userType = route.params?.userType;
 
   return (
       <View>
