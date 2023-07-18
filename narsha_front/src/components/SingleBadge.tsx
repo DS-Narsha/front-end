@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import images from '../assets/images.jpeg';
 
-export default function SingleBadge() {
+const SingleBadge = props => {
     const [modalVisible, setModalVisible] = useState(false);
     return (
         <View>
@@ -25,7 +25,7 @@ export default function SingleBadge() {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <View style={styles.modalHead}>
-                        <Text style={styles.btnText}>업적 이름</Text>
+                        <Text style={styles.btnText}>{props.name}</Text>
                         </View>
 
                         <View style={styles.modalBody}>
@@ -46,7 +46,7 @@ export default function SingleBadge() {
 
             <Pressable onPress={() => setModalVisible(true)}>
                 <Image source={images} style={styles.img} />
-                <Text style={styles.text}>뱃지 이름</Text>
+                <Text style={{ textAlign:'center', fontSize:14, color:props.success?"black":"#909090"}}>{props.name}</Text>
             </Pressable>
         </View>
     );
@@ -144,3 +144,5 @@ const styles = StyleSheet.create({
         color: '#000000',
     },
 });
+
+export default SingleBadge;

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import PencilIcon from '../../assets/pencil-icon.svg';
 import FriendList from '../../assets/friend-list.svg';
@@ -70,7 +70,6 @@ export default function MyPage({navigation}) {
     queryKey: ["posting-list"], 
     queryFn: getPostingList
   })
-
   
   return (
     <View style={styles.container}>
