@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, Platform, FlatList} from 'react-native';
+import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, Platform, FlatList, Dimensions} from 'react-native';
 import {useCameraRoll} from "@react-native-camera-roll/camera-roll";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
+import Toast from 'react-native-easy-toast';
 
 const styles = StyleSheet.create({
 container:{
@@ -66,6 +67,9 @@ dot:{
   currentPickImg:{
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  notice:{
+    backgroundColor: "#000000"
   }
 });
 
@@ -76,6 +80,17 @@ export default function SelectImage({navigation}) {
   let selectInputs = useRef<string[]>([]); // select photos, send next page
   const [currentPhoto, setCurrentPhoto] = useState("")
   const [state, setState] = useState("")
+
+  // Toast ref
+  const toastRef = useRef();
+
+  // window size
+  const { width, height } = Dimensions.get("window")
+
+  // floating toast func
+  const showToast = useCallback(() => {
+    toastRef.current.show('사진은 최대 10장까지 올릴 수 있어요.');
+  }, []);
 
   useEffect(() => {
     permissionFunc(); // permission code
@@ -112,7 +127,8 @@ export default function SelectImage({navigation}) {
       selectInputs.current = selectInputs.current.filter((el) => el !== uri);
       setCurrentPhoto(selectInputs.current[selectInputs.current.length - 1])
     }
-    else {
+    else if(selectInputs.current.length < 10) { // maximum 10 photo
+      if(selectInputs.current.length >= 9)  showToast(); // when 10 photo full
       selectInputs.current.push(uri)
       setCurrentPhoto(uri)
     }
@@ -204,15 +220,22 @@ return (
           }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
+            marginHorizontal: 30,
             paddingBottom: 100,
             flexGrow: 1,
-            justifyContent: 'space-around',
-            alignSelf:'center'
+            justifyContent: 'flex-start',
+            alignSelf:'flex-start',
           }}
           numColumns={3}
         />
       ) : (<Text>이미지가 없습니다.</Text>)}
     </View>
+    <Toast ref={toastRef}
+             positionValue={height * 0.5}
+             fadeInDuration={500}
+             fadeOutDuration={1500}
+             style={{backgroundColor:'rgba(0, 0, 0, 0.4)'}}
+      />
   </View>
 )
 
