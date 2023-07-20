@@ -120,7 +120,7 @@ const WritePage = ({route, navigation}) => {
             <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
             <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
           </View>
-          <TouchableOpacity onPress={() => mutate()}>
+          <TouchableOpacity onPress={() => (mutate(), navigation.reset({routes: [{name: 'Main'}]}))}>
             <SendBtn/>
           </TouchableOpacity>
         </View>
