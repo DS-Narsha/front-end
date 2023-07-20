@@ -4,6 +4,181 @@ import ArrowLeft from '../../assets/arrow-left.svg';
 import SendBtn from '../../assets/send-btn.svg';
 import NextPhoto from '../../assets/next-photo.svg';
 import PrevPhoto from '../../assets/prev-photo.svg';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+type Comment = {
+  userId: {
+    userId: string;
+    profileImage: string;
+  };
+  content: string;
+  createAt: string;
+};
+
+type UserData = {
+  userId: string;
+  userType: string;
+};
+
+//@ts-ignore
+const WritePage = ({route, navigation}) => {
+  const resPhoto = route.params['resPhoto']['photos']
+  let currentPhoto = useRef(resPhoto[0])
+  const [selPhoto, useSelPhoto] = useState(resPhoto[0])
+  const [content, onChangeContent] = useState("");
+  const queryClient = useQueryClient();
+
+  // render item
+  const _RenderItem = useCallback(({ item, index }: any) => {
+    return (
+      <TouchableOpacity onPress={() =>{
+        currentPhoto.current = item
+        useSelPhoto(item)
+      }}>
+        <ImageBackground
+          source={{uri: item}}
+          style={[styles.img, (currentPhoto.current === item) && styles.selPhoto]}
+          imageStyle={{borderRadius: 10}}>
+          {currentPhoto.current === item && <Text style={styles.selPhotoText}>선택</Text>}
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  }, []);
+
+  // const { data: userData } = useQuery(['user'], () => {
+  //     return queryClient.getQueryData(['user']);
+  // }) as { data: UserData };
+
+    // uploading post
+    const uploadPost = async () =>{
+      try{ 
+        let formData = new FormData(); // from-data object
+        for(let i in resPhoto){
+          formData.append("images",  resPhoto.length && {
+            uri: resPhoto[i],
+            name: resPhoto[i],
+            type: "image/jpg"
+          })
+        }
+        formData.append("info", JSON.stringify({          
+          groupCode: "TBu3VNrBdm",
+          writer: "narsha1111",
+          content: content
+        }))
+        formData.append("fileType", "png")
+        console.log(formData);
+        const res = await fetch(`http://localhost:8080/api/post/upload`, {
+          method:"POST",
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          body: formData,
+        })
+        
+        const json = await res.json();
+        console.log(json);
+        return json;
+      } catch(err){
+        console.log(err);
+      }
+    }
+
+    // onMutate
+    const mutatePost = async () => {
+      // get old data
+      const oldData = await queryClient.getQueryData(['posting-list'])
+      // setting datas at UI, 특정 속성 수정
+      queryClient.setQueryData(['posting-list', "data", "user", "userId"], "narsha5555");
+      queryClient.setQueryData(['posting-list', "data", "content"], content);
+      queryClient.setQueryData(['posting-list', "data", "imageArray"], resPhoto);
+      // if error -> rollback
+      return () => queryClient.setQueryData(['posting-list'], oldData);
+    }
+
+    // useMutation: post
+    const {mutate} = useMutation(['profile-update'], {
+      mutationFn: () => uploadPost(),
+      onMutate: mutatePost,
+      onError: (error, variable, rollback) => {
+        if (rollback) rollback();
+        else console.log(error);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(['profile-detail']);
+      }
+    })
+
+  return (
+    <View style={styles.container}>
+      {/* top */}
+      <View style={styles.top}>
+        <View style={styles.progressbox}>
+          <ArrowLeft/>
+          <View style={styles.progress}>
+            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
+          </View>
+          <TouchableOpacity onPress={() => mutate()}>
+            <SendBtn/>
+          </TouchableOpacity>
+        </View>
+        <Text>글을 작성해볼까요?</Text>
+      </View>
+      {/* content */}
+      <View style={styles.contentContainer}>
+        <View style={styles.selectPhotoBox}>
+          <PrevPhoto />
+          <View style={{alignItems: 'center', marginTop: 20}}>
+            <ImageBackground 
+            source={{uri: currentPhoto.current}} 
+            style={styles.pickImg}
+            imageStyle={{borderRadius: 10}} />
+          </View>
+          <NextPhoto />
+        </View>
+        {/*posting container*/}
+        <ScrollView style={styles.uploadContentBox} showsVerticalScrollIndicator={false}>
+          <View style={{marginTop: 20}}>
+          {/*select image list box*/}
+            <Text style={styles.uploadContentTitle}>내가 선택한 이미지</Text>
+            {resPhoto ? (
+            <FlatList
+              data={resPhoto}
+              renderItem={_RenderItem}
+              key={'#'}
+              scrollEnabled={false}
+              keyExtractor={(item, index) => '#' + index.toString()}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                marginHorizontal: 30,
+                flexGrow: 1,
+                justifyContent: 'flex-start',
+                alignSelf:'flex-start',
+              }}
+              numColumns={5}
+            />
+          ) : (<Text>이미지가 없습니다.</Text>)}
+          {/* height */}
+            <View style={{height: 30}}></View>
+          {/* writing box*/}
+            <Text style={styles.uploadContentTitle}>글 작성하기</Text>
+            <View style={styles.writingBox}>
+              <View style={styles.profile}></View>
+              <TextInput placeholder="어떤 글을 작성할건가요?"
+                  value={content}
+                  textAlignVertical="top"
+                  multiline={true}
+                  onChangeText={onChangeContent}
+                  style={styles.content} />
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container:{
@@ -51,7 +226,8 @@ contentContainer:{
 uploadContentBox:{
   flex: 1,
   backgroundColor: '#ffffff',
-  borderRadius: 20,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
   shadowOffset: {
     width: 5,
     height: -10,
@@ -62,8 +238,7 @@ writingBox:{
   display: 'flex',
   flexDirection: 'row',
   paddingHorizontal: 18,
-  marginTop: 25,
-  marginBottom: 10
+  marginBottom: 10,
 },
 profile: {
   width: 45,
@@ -112,92 +287,16 @@ selPhoto:{
     height: 5,
   },
   elevation: 5,
+},
+uploadContentTitle: {
+  fontSize: 16,
+  color: "#61A257",
+  marginBottom: 10,
+  marginHorizontal: 15,
+  fontWeight: "700"
 }
+
 });
-
-//@ts-ignore
-const WritePage = ({route, navigation}) => {
-  const resPhoto = route.params['resPhoto']['photos']
-  let currentPhoto = useRef(resPhoto[0])
-  const [selPhoto, useSelPhoto] = useState(resPhoto[0])
-  const [content, onChangeContent] = useState("");
-
-  const _RenderItem = useCallback(({ item, index }: any) => {
-    return (
-      <TouchableOpacity onPress={() =>{
-        currentPhoto.current = item
-        useSelPhoto(item)
-      }}>
-        <ImageBackground
-          source={{uri: item}}
-          style={[styles.img, (currentPhoto.current === item) && styles.selPhoto]}
-          imageStyle={{borderRadius: 10}}>
-          {currentPhoto.current === item && <Text style={styles.selPhotoText}>선택</Text>}
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      {/* top */}
-      <View style={styles.top}>
-        <View style={styles.progressbox}>
-          <ArrowLeft/>
-          <View style={styles.progress}>
-            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-            <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-          </View>
-          <SendBtn />
-        </View>
-        <Text>글을 작성해볼까요?</Text>
-      </View>
-      {/* content */}
-      <View style={styles.contentContainer}>
-        <View style={styles.selectPhotoBox}>
-          <PrevPhoto />
-          <View style={{alignItems: 'center', marginTop: 20}}>
-            <ImageBackground 
-            source={{uri: currentPhoto.current}} 
-            style={styles.pickImg}
-            imageStyle={{borderRadius: 10}} />
-          </View>
-          <NextPhoto />
-        </View>
-        {/* writing*/}
-        <View style={styles.uploadContentBox}>
-          <View style={styles.writingBox}>
-            <View style={styles.profile}></View>
-            <TextInput placeholder="어떤 글을 작성할건가요?"
-                   value={content}
-                   textAlignVertical="top"
-                   multiline={true}
-                   onChangeText={onChangeContent}
-                  style={styles.content} />
-          </View>
-          {resPhoto ? (
-        <FlatList
-          data={resPhoto}
-          renderItem={_RenderItem}
-          key={'#'}
-          scrollEnabled={false}
-          keyExtractor={(item, index) => '#' + index.toString()}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 100,
-            flexGrow: 1,
-            justifyContent: 'space-around',
-            alignSelf:'center'
-          }}
-          numColumns={5}
-        />
-      ) : (<Text>이미지가 없습니다.</Text>)}
-        </View>
-      </View>
-    </View>
-  );
-};
 
 
 
