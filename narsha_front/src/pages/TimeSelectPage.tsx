@@ -6,23 +6,25 @@ import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
 
 export default function TimeSelectPage({navigation}: any) {
-  const SetTime = useContext(TimeCheckContext);
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
 
+  const [sTime, setSTime] = useState(new Date());
+  const [eTime, setETime] = useState(new Date());
+
   const CheckTime = () => {
     const now = new Date()
-    {StartTime.startTime.getTime() < now.getTime() && now.getTime()<EndTime.endTime.getTime()?
-      SetTime.setUse(false):SetTime.setUse(true)}
+    StartTime.setStartTime(sTime)
+    EndTime.setEndTime(eTime)
   }
   
   return (
       <View style={styles.container}>
         <View style={styles.container2}>
           <View style={styles.textContainer1}><Text style={styles.text}>학생들의 앱 사용시간을</Text></View>
-          <View><TimePicker SetStart={StartTime.setStartTime} bool={true}/></View>
+          <View><TimePicker SetStart={setSTime} bool={true}/></View>
           <View style={styles.textContainer2}><Text style={styles.text}>부터</Text></View>
-          <View><TimePicker SetEnd={EndTime.setEndTime} bool={false} /></View>
+          <View><TimePicker SetEnd={setETime} bool={false} /></View>
           <View style={styles.textContainer2}><Text style={styles.text}>까지</Text></View>
         </View>
         <TouchableOpacity onPress={() => {CheckTime(); navigation.navigate('MyPage') }}>

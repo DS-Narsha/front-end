@@ -22,7 +22,7 @@ export default function PostDetail({route, navigation}) {
     // get post detail
     const getPostDetail = async () =>{
       try{
-        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${6}&groupCode=${"auRm9NUVNX"}&userId=${"narsha1111"}`,{
+        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${1}&groupCode=${"qkt1wKVnDt"}&userId=${"narsha1111"}`,{
           method:"GET",
           headers: {
             'Content-Type': 'application/json',

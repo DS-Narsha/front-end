@@ -14,7 +14,7 @@ export default function MyPage({navigation}) {
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha5555"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha1111"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ export default function MyPage({navigation}) {
   // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"TBu3VNrBdm"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"qkt1wKVnDt"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

@@ -20,7 +20,6 @@ const isLoggedIn = false;
 const queryClient = new QueryClient()
 
 export default function App() {
-  const [timeCheck, setTimeCheck] = useState(true);
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
 
@@ -30,28 +29,26 @@ export default function App() {
 
   useEffect(()=>{
     const now = new Date()
-    {startTime.getTime()< now.getTime() && now.getTime()<endTime.getTime()? 
+    {startTime.getTime()> now.getTime() && now.getTime()<endTime.getTime()? 
       SplashScreen.show() :SplashScreen.hide()}
   });
 
   return (
-    <TimeCheckContext.Provider value={{use:timeCheck, setUse:setTimeCheck}}>
-      <StartTimeContext.Provider value={{startTime:startTime, setStartTime:setStartTime}}>
-      <EndTimeContext.Provider value={{endTime:endTime, setEndTime:setEndTime}}>
-        <View style={styles.container}>
-            <QueryClientProvider client={queryClient}>
-              <KeyboardAvoidingView
-              behavior={Platform.select({ios: 'padding', android: undefined})}
-              style={styles.avoid}>
-                <NavigationContainer>
-                  {isLoggedIn ? <MainNavigator /> : <AuthStack />}
-                </NavigationContainer>
-              </KeyboardAvoidingView>
-            </QueryClientProvider>
-        </View>
-      </EndTimeContext.Provider>
-      </StartTimeContext.Provider>
-    </TimeCheckContext.Provider>
+    <StartTimeContext.Provider value={{startTime:startTime, setStartTime:setStartTime}}>
+    <EndTimeContext.Provider value={{endTime:endTime, setEndTime:setEndTime}}>
+      <View style={styles.container}>
+          <QueryClientProvider client={queryClient}>
+            <KeyboardAvoidingView
+            behavior={Platform.select({ios: 'padding', android: undefined})}
+            style={styles.avoid}>
+              <NavigationContainer>
+                {isLoggedIn ? <MainNavigator /> : <AuthStack />}
+              </NavigationContainer>
+            </KeyboardAvoidingView>
+          </QueryClientProvider>
+      </View>
+    </EndTimeContext.Provider>
+    </StartTimeContext.Provider>
     
   );
 }

@@ -15,7 +15,7 @@ export default function StudentListPage({navigation}: any) {
   //getStudentList
   const getStudentList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${"hs%23x6zPtx6"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${"qkt1wKVnDt"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
