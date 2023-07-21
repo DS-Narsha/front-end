@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Button, FlatList} from 'react-native';
 import NoticeModal from '../components/modal/NoticeModal';
 import MainPost from '../components/post/MainPost';
@@ -31,6 +31,7 @@ const MainScreen = ({navigation}) => {
     queryFn: getPostingList
   })
 
+
   return (
       <View>
         <NoticeModal navigation={navigation} />
@@ -43,11 +44,18 @@ const MainScreen = ({navigation}) => {
                         data={postQuery.data.data}
                         renderItem={({ item }) => {
                           const { content, imageArray, user } = item;
-                            return (
-                              <MainPost content={content} imageArray={imageArray} user={user}/>
+
+                          // imageArray를 문자열 배열로 만듦
+                          const str = imageArray.slice(1,-1)
+                          const arr = str.split(', ')
+                          for(let i=0; i<arr.length;i++){
+                            arr[i]=arr[i].toString()
+                          }
+
+                          return (
+                              <MainPost content={content} imageArray={arr} user={user}/>
                             )
                         }}
-
                     />
                   </View>
                 ):

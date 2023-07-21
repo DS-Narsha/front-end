@@ -13,34 +13,36 @@ import Heart from '../../assets/heart.svg';
 import Chat from '../../assets/chat.svg';
 import Swiper from 'react-native-web-swiper';
 
+
 const MainPost = (props) => {
 
+  
   return (
     <View>
       {props.user && (
       <View style={{margin: 20, marginTop: 10}}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={{flexDirection: 'row', marginBottom:15}}>
         <Image source = {props.user.profileImage? {uri : props.user.profileImage}: userImg} style={styles.userImg} />
         <Text style={{fontWeight: '600', fontSize: 18}}>{props.user.userId}</Text>
       </View>
       
-      {/* <Swiper
-        loop
-        containerStyle={{width:300, height:300}}>
-          {props.imageArray.map((item) =>
-            <View>
-               <Image 
-                source = {{uri:item}}
-                style={styles.pickImg} 
-                />
-            </View>
-          )}
-      </Swiper> */}
-
-      <Image 
-        source = {images}
-        style={styles.pickImg} 
-      />
+      <View style={styles.pickImg}>
+        <Swiper
+          loop
+          controlsEnabled={false}
+          containerStyle={{width:350, height:350}}
+         >
+            {props.imageArray.map((item) =>
+              <View>
+                <Image
+                  key={item}
+                  source = {{uri:item}}
+                  style={styles.pickImg} 
+                  />
+              </View>
+            )}
+        </Swiper>
+      </View>
 
       <View style={{flexDirection: 'row'}}>
         <Heart style={{marginLeft: 10}} />
@@ -80,7 +82,6 @@ const styles = StyleSheet.create({
     height: 350,
     width: 350,
     borderRadius: 10,
-    marginTop: 20,
     marginBottom: 20,
   },
   cmtUserImg: {

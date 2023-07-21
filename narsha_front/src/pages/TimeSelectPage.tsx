@@ -1,7 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import TimePicker from '../components/TimePicker';
-import { TimeCheckContext } from '../components/TimeCheckContext';
 import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
 

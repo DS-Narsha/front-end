@@ -13,6 +13,7 @@ import Heart from '../assets/heart.svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import { TextInput } from 'react-native-gesture-handler';
+import Swiper from 'react-native-web-swiper';
 
 
 
@@ -41,6 +42,13 @@ export default function PostDetail({route, navigation}) {
       queryFn: getPostDetail
     })
   
+    
+    const str = postQuery.data? postQuery.data.data.imageArray.slice(1,-1):""
+    const arr = str.split(', ')
+    for(let i=0; i<arr.length;i++){
+      arr[i]=arr[i].toString()
+    }
+
 
   return (
     <View>
@@ -59,10 +67,21 @@ export default function PostDetail({route, navigation}) {
         </View>
           
         <View style={styles.imgContainer}>
-          <Image 
-            source = {images} 
-            style={styles.pickImg} 
-          />
+        <Swiper
+          loop
+          controlsEnabled={false}
+          containerStyle={{width:350, height:350}}
+         >
+            {arr.map((item) =>
+              <View>
+                <Image
+                  key={item}
+                  source = {{uri:item}}
+                  style={styles.pickImg} 
+                  />
+              </View>
+            )}
+        </Swiper>
         </View>
 
         <View style={styles.txtContainer}>
@@ -139,7 +158,7 @@ export default function PostDetail({route, navigation}) {
       </ScrollView>
       
         <View style={styles.inputBody}>
-              <Image source={userImg} style={styles.cmtUserImg3} />
+              <Image source = {{uri : postQuery.data.data.writer.profileImage}} style={styles.cmtUserImg3} />
               <TextInput style={styles.input} placeholder='@아이디 로 글 남기기' />
               <SEND style={{top:5}}/>
         </View>
@@ -161,7 +180,8 @@ const styles = StyleSheet.create({
     display:'flex',
     height:'auto',
     alignItems:'center',
-    marginBottom:-15
+    marginBottom:-15,
+    marginLeft:50
   },
   contentContainer:{
     marginLeft: 35,
