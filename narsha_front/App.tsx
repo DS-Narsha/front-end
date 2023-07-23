@@ -11,6 +11,7 @@ import {
 import { TimeCheckContext } from './src/components/TimeCheckContext';
 import { StartTimeContext } from './src/components/StartTimeContext';
 import { EndTimeContext } from './src/components/EndTimeContext';
+import PostDetail from './src/pages/PostDetailPage';
 
 
 const isLoggedIn = false;

@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import PencilIcon from '../../assets/pencil-icon.svg';
 import FriendList from '../../assets/friend-list.svg';
 import BadgeList from '../../assets/badge-list.svg';
 import { useQuery } from '@tanstack/react-query';
 import Config from "react-native-config";
+import PostDetail from '../PostDetailPage';
 
 //@ts-ignore
 export default function MyPage({navigation}) {
@@ -13,23 +14,26 @@ export default function MyPage({navigation}) {
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/profile/detail?profileId=${1}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha5555"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
         },
      })
+     
      const json = await res.json();
+     
      return json;
+     
     } catch(err){
       console.log(err);
     }
   }
 
-  // get post list
+  // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?userGroupId=1`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"TBu3VNrBdm"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -43,17 +47,16 @@ export default function MyPage({navigation}) {
   }
 
   const _RenderItem = useCallback(({ item }: any) => {
-    const imageArray = item.imageArray.substring(1,item.imageArray.length-2).split(', ')
+    const imageArray = item.imageArray.substring(1,item.imageArray.length-1).split(', ')
     return (
       <TouchableOpacity onPress={() => {
           navigation.navigate("PostDetailPage", {"detail": item})
-        }}>
+        }}
+        style={styles.imgShadow}>
         <ImageBackground
           source={{ uri: imageArray[0] }}
           style={[styles.img]}
-          imageStyle={{borderRadius: 10}}
-        >
-        </ImageBackground>
+          imageStyle={{borderRadius: 10}} />
       </TouchableOpacity>
     );
   }, []);
@@ -67,7 +70,6 @@ export default function MyPage({navigation}) {
     queryKey: ["posting-list"], 
     queryFn: getPostingList
   })
-
   
   return (
     <View style={styles.container}>
@@ -76,17 +78,17 @@ export default function MyPage({navigation}) {
         <View style={styles.profileContainer}>
           <View style={styles.profileImageContianer}>
             <Image 
-              source = {{uri : profileQuery.data.profileImage}}
+              source = {{uri : profileQuery.data.data.profileImage}}
               style={styles.profile}/>
           </View>
           <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
-            {profileQuery.data.nikname}
+            {profileQuery.data.data.nikname === null ? "닉네임을 작성해주세요." : profileQuery.data.data.nikname}
           </Text>
           <Text style={{fontSize: 12, padding: 1}}>
-            {profileQuery.data.birth}
+            {profileQuery.data.data.birth === null ? "생일을 아직 등록하지 않았어요." : profileQuery.data.data.birth}
           </Text>
           <Text style={{fontSize: 13, padding: 2}}>
-            {profileQuery.data.intro}
+            {profileQuery.data.data.intro === null ? "소개글을 아직 쓰지 않았어요." : profileQuery.data.data.intro }
           </Text>
           <TouchableOpacity
             style={{flexDirection: 'row', marginTop: 5}}
@@ -99,15 +101,15 @@ export default function MyPage({navigation}) {
               }}>
               프로필 수정
             </Text>
-            <View style={{paddingTop: 20, }}>
+            <View style={{paddingTop: 3, }}>
               <PencilIcon />
             </View>
           </TouchableOpacity>
         </View>
-        {postQuery.data ? (
+        {postQuery.data.data ? (
         <View style={{marginTop: 20}}>
         <FlatList
-          data={postQuery.data}
+          data={postQuery.data.data}
           renderItem={_RenderItem}
           key={'#'}
           keyExtractor={(item, index) => '#' + index.toString()}
@@ -118,9 +120,11 @@ export default function MyPage({navigation}) {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingBottom: 100,
+            marginHorizontal: 30,
             flexGrow: 0.5,
-            justifyContent: 'space-around',
-            alignSelf:'center'
+            justifyContent: 'flex-start',
+            alignSelf:'flex-start',
+            backgroundColor: '#FFFFFF'
           }}
           numColumns={3}
         />
@@ -170,6 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
   },
   profileContainer: {
     backgroundColor: '#FCFDE1',
@@ -231,6 +236,18 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'cover',
-    marginHorizontal: 5
+    // margin:5,
   },
+  imgShadow: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    margin:5,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 10,
+    elevation: 2,
+  }
 });

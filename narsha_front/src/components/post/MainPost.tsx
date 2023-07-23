@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -11,6 +11,62 @@ import userImg from '../../assets/user-image.png';
 import images from '../../assets/images.jpeg';
 import Heart from '../../assets/heart.svg';
 import Chat from '../../assets/chat.svg';
+import Swiper from 'react-native-web-swiper';
+
+const MainPost = (props) => {
+
+  return (
+    <View>
+      {props.user && (
+      <View style={{margin: 20, marginTop: 10}}>
+      <View style={{flexDirection: 'row'}}>
+        <Image source = {props.user.profileImage? {uri : props.user.profileImage}: userImg} style={styles.userImg} />
+        <Text style={{fontWeight: '600', fontSize: 18}}>{props.user.userId}</Text>
+      </View>
+      
+      {/* <Swiper
+        loop
+        containerStyle={{width:300, height:300}}>
+          {props.imageArray.map((item) =>
+            <View>
+               <Image 
+                source = {{uri:item}}
+                style={styles.pickImg} 
+                />
+            </View>
+          )}
+      </Swiper> */}
+
+      <Image 
+        source = {images}
+        style={styles.pickImg} 
+      />
+
+      <View style={{flexDirection: 'row'}}>
+        <Heart style={{marginLeft: 10}} />
+        <Chat style={{marginLeft: 20}} />
+      </View>
+      <Text style={{fontSize: 13, color: '#909090', marginTop: 5, margin: 10}}>
+        Narsha님 외 56명이 좋아합니다
+      </Text>
+
+      <Text style={{fontSize: 16,  marginTop: 5, margin: 10}}>
+        {props.content}
+      </Text>
+
+      <View style={{flexDirection: 'row', marginTop: 15}}>
+        <Image source={userImg} style={styles.cmtUserImg} />
+        <View style={{marginTop: -5}}>
+          <Text style={{fontWeight: 'bold', fontSize: 15}}>comment_User</Text>
+          <Text>댓글 내용</Text>
+        </View>
+      </View>
+    </View>
+    )}
+    </View>
+  );
+}
+
 
 const styles = StyleSheet.create({
   userImg: {
@@ -36,30 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function MainPost() {
-  return (
-    <View style={{margin: 20, marginTop: 10}}>
-      <View style={{flexDirection: 'row'}}>
-        <Image source={userImg} style={styles.userImg} />
-        <Text style={{fontWeight: '600', fontSize: 18}}>userName</Text>
-      </View>
-      <Image source={images} style={styles.pickImg} />
-
-      <View style={{flexDirection: 'row'}}>
-        <Heart style={{marginLeft: 10}} />
-        <Chat style={{marginLeft: 20}} />
-      </View>
-      <Text style={{fontSize: 13, color: '#909090', marginTop: 5, margin: 10}}>
-        Narsha님 외 56명이 좋아합니다
-      </Text>
-
-      <View style={{flexDirection: 'row', marginTop: 15}}>
-        <Image source={userImg} style={styles.cmtUserImg} />
-        <View style={{marginTop: -5}}>
-          <Text style={{fontWeight: 'bold', fontSize: 15}}>comment_User</Text>
-          <Text>댓글 내용</Text>
-        </View>
-      </View>
-    </View>
-  );
-}
+export default MainPost;

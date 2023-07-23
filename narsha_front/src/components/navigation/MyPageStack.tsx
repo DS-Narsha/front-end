@@ -41,6 +41,7 @@ export default function MyPageStack({route, navigation}) {
       case "TimeSelectPage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
       case "NoticeWritePage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
       case "NoticeList": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
+      case "PostDetailPage": navigation.setOptions({tabBarStyle: {display: 'none'}}); break;
       default: navigation.setOptions({tabBarStyle: tabBarStyle});
     }
   }, [navigation, route])

@@ -1,13 +1,47 @@
-import React from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import {StyleSheet, View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
 import DS from '../assets/DS.png';
 import SingleInfo from '../components/SingleInfo';
 import {ScrollView} from 'react-native-gesture-handler';
+import { useQuery } from '@tanstack/react-query';
 
 // @ts-ignore
 export default function NoticeList({navigation}) {
+
+  const [pageSize, setPageSize] = useState(5);
+
+  //getNoticeList
+  const getNoticeList = async () =>{
+    try{
+      const res = await fetch(`http://localhost:8080/api/notice/list?groupCode=${"hs%23x6zPtx6"}`,{
+        method:"GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+     })
+     const json = await res.json();
+     return json;
+    } catch(err){
+      console.log(err);
+    }
+  }
+
+    //모달로 보여줄 아이템 가져오기
+    const _RenderItem = useCallback(({ item }: any) => {
+      return (
+        <SingleInfo item={item} />
+      );
+    }, []);
+  
+    const noticeQuery = useQuery({
+      queryKey: ["notice-list"], 
+      queryFn: getNoticeList
+    })
+
   return (
     <View style={styles.body}>
+      {!noticeQuery.isLoading && (
+      <>
       <View style={styles.ds_container}>
         <Image style={styles.ds_image} source={DS} />
         <Text
@@ -15,15 +49,35 @@ export default function NoticeList({navigation}) {
             styles.ds_text
           }>{`선생님이 여러분 모두에게 알리기 위한 내용들은 이 곳에 올라온답니다.`}</Text>
       </View>
-      <ScrollView>
-        <SingleInfo />
-        <SingleInfo />
-        <SingleInfo />
-        <SingleInfo />
-        <SingleInfo />
-        {/* height */}
-        <View style={{height: 200}} />
-      </ScrollView>
+      <View style={{backgroundColor: '#FCFDE1'}}>
+          {noticeQuery.data ? (
+          <View>
+          <FlatList
+          data={noticeQuery.data.data}
+          renderItem={_RenderItem}
+          // extraData={this.state}
+          key={'#'}
+          keyExtractor={(item, index) => '#' + index.toString()}
+          // 페이징 처리
+          onEndReached={() => {
+            setPageSize(pageSize + 5);
+          }}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingTop: 10,
+            paddingBottom: 500,
+            flexGrow: 0.5,
+            justifyContent: 'space-around',
+            alignSelf:'center',
+            backgroundColor: '#FCFDE1'
+          }}
+          numColumns={1}
+          />
+        </View>
+      ) : (<Text>등록된 공지가 없습니다.</Text>)}
+    </View>
+    </>
+      )}
     </View>
   );
 }

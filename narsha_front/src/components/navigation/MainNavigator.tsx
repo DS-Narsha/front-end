@@ -50,11 +50,11 @@ const MainNavigator = ({route}) => {
             return focused ? <Main_Sel /> : <Main_Desel style={{}} />; // 메인
           } else if (route.name === 'AchievePage') {
             return focused ? <Achieve_Sel /> : <Achieve_DeSel />; //업적
-          } else if (route.name === 'PostPage') {
+          } else if (route.name === 'PostStack') {
             return focused ? <Write_Sel /> : <Write_Desel />; //글쓰기
           } else if (route.name === 'AlarmPage') {
             return focused ? <Alarm_Sel /> : <Alarm_Desel />; //알림
-          } else if (route.name === 'MyPage') {
+          } else if (route.name === 'MyPageStack') {
             return focused ? <MyPage_Sel /> : <MyPage_Desel />; //마이페이지
           }
         },
@@ -75,7 +75,7 @@ const MainNavigator = ({route}) => {
         options={{unmountOnBlur: true, title: '업적 페이지'}}
       />
       <Tab.Screen
-        name="PostPage"
+        name="PostStack"
         component={PostStack}
         options={{unmountOnBlur: true, headerShown: false}}
       />
@@ -85,7 +85,7 @@ const MainNavigator = ({route}) => {
         options={{tabBarBadge: '30', unmountOnBlur: true, title: '알림 페이지'}}
       />
       <Tab.Screen
-        name="MyPage"
+        name="MyPageStack"
         component={MypageStack}
         options={{unmountOnBlur: true, headerShown: false}}
       />

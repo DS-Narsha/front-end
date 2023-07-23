@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
 import {StyleSheet, View, Text, FlatList, TouchableOpacity, ImageBackground, TextInput} from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
-import SendBtn from '../../assets/send-btn.svg'
-import NextPhoto from '../../assets/next-photo.svg'
-import PrevPhoto from '../../assets/prev-photo.svg'
+import SendBtn from '../../assets/send-btn.svg';
+import NextPhoto from '../../assets/next-photo.svg';
+import PrevPhoto from '../../assets/prev-photo.svg';
 
 const styles = StyleSheet.create({
   container:{
