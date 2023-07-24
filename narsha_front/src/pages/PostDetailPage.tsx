@@ -72,10 +72,10 @@ export default function PostDetail({route, navigation}) {
           controlsEnabled={false}
           containerStyle={{width:350, height:350}}
          >
-            {arr.map((item) =>
-              <View>
+            {arr.map((item, index) =>
+              <View key={index}>
                 <Image
-                  key={item}
+                  key={index}
                   source = {{uri:item}}
                   style={styles.pickImg} 
                   />

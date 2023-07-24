@@ -3,18 +3,39 @@ import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import TimePicker from '../components/TimePicker';
 import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// async-storage에 활성화 시간 저장하기
+export const storeData = async (key: string, value: Date) => {
+  try {
+    const stringValue = JSON.stringify(value);
+    await AsyncStorage.setItem(key, stringValue);
+  } catch (e: any) {
+    console.error(e.message);
+  }
+};
 
 export default function TimeSelectPage({navigation}: any) {
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
 
-  const [sTime, setSTime] = useState(new Date());
-  const [eTime, setETime] = useState(new Date());
+  const [sTime, setSTime] = useState(StartTime.startTime);
+  const [eTime, setETime] = useState(EndTime.endTime);
 
   const CheckTime = () => {
-    const now = new Date()
+    async function StoreTime() {
+      try{
+        await storeData("startTime", sTime)
+        await storeData("endTime", eTime)
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    StoreTime()
     StartTime.setStartTime(sTime)
     EndTime.setEndTime(eTime)
+
   }
   
   return (

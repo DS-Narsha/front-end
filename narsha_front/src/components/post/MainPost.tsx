@@ -32,10 +32,9 @@ const MainPost = (props) => {
           controlsEnabled={false}
           containerStyle={{width:350, height:350}}
          >
-            {props.imageArray.map((item) =>
-              <View>
+            {props.imageArray.map((item, index) =>
+              <View key={index}>
                 <Image
-                  key={item}
                   source = {{uri:item}}
                   style={styles.pickImg} 
                   />
