@@ -7,9 +7,22 @@ import Main from '../../pages/MainPage';
 import NoticeList from '../../pages/NoticeListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
 import Write from '../../assets/write.svg';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+type UserData = {
+  userId: string;
+  userType: string;
+};
 
 const Stack = createStackNavigator();
 export default function MainNavigatorStack() {
+  const queryClient = useQueryClient();
+
+  // queryClient에서 userId와 userType을 가져오는 로직
+  const { data: userData } = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as { data: UserData };
+
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator
@@ -42,11 +55,15 @@ export default function MainNavigatorStack() {
             headerRight: () => {
               return (
                 <View style={{marginRight: 16}}>
-                  <Write
+                  {
+                    userData.userType == "teacher"
+                    ? <Write
                     onPress={() => {
                       navigation.navigate('NoticeWritePage');
                     }}
-                  />
+                    />
+                    :null
+                  }
                 </View>
               );
             },

@@ -13,7 +13,7 @@ const MainScreen = ({navigation}) => {
   // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"auRm9NUVNX"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"hs%23x6zPtx6"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

@@ -8,14 +8,24 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-picker';
 import CameraIcon from '../../assets/ic-camera.svg'
 
+type UserData = {
+  userId: string;
+  userType: string;
+};
+
 //@ts-ignore
 export default function EditProfile({navigation}) {
-
   // queryClient
   const queryClient = useQueryClient();
+
+  // queryClient에서 userId와 userType을 가져오는 로직
+  const { data: userData } = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as { data: UserData };
+
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha5555"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${userData.userId}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

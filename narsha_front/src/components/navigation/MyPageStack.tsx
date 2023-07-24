@@ -15,6 +15,12 @@ import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
 import Write from '../../assets/write.svg';
 import Setting from '../../assets/teacher-setting.svg';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+type UserData = {
+  userId: string;
+  userType: string;
+};
 
 const Stack = createStackNavigator();
 const tabBarStyle = {
@@ -30,6 +36,13 @@ const tabBarStyle = {
 }
 //@ts-ignore
 export default function MyPageStack({route, navigation}) {
+  const queryClient = useQueryClient();
+
+  // queryClient에서 userId와 userType을 가져오는 로직
+  const { data: userData } = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as { data: UserData };
+
   useEffect(()=> {
     // hide navigator
     const routeName = getFocusedRouteNameFromRoute(route);
@@ -68,15 +81,19 @@ export default function MyPageStack({route, navigation}) {
           name="MyPage"
           component={MyPage}
           options={({navigation}) => ({
-            title: '@아이디',
+            title: `@ ${userData.userId}`,
             headerRight: () => {
               return (
                 <View style={{marginRight: 16}}>
-                  <Setting
+                  {
+                    userData.userType == "teacher"
+                    ? <Setting
                     onPress={() => {
                       navigation.navigate('TeacherMenu');
                     }}
-                  />
+                    />
+                    :null
+                  }
                 </View>
               );
             },
@@ -105,11 +122,15 @@ export default function MyPageStack({route, navigation}) {
             headerRight: () => {
               return (
                 <View style={{marginRight: 16}}>
-                  <Write
+                  {
+                    userData.userType == "teacher"
+                    ? <Write
                     onPress={() => {
                       navigation.navigate('NoticeWritePage');
                     }}
-                  />
+                    />
+                    :null
+                  }
                 </View>
               );
             },
