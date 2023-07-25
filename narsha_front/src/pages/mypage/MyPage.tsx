@@ -3,18 +3,30 @@ import {FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, Vi
 import PencilIcon from '../../assets/pencil-icon.svg';
 import FriendList from '../../assets/friend-list.svg';
 import BadgeList from '../../assets/badge-list.svg';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Config from "react-native-config";
 import PostDetail from '../PostDetailPage';
+
+
+type UserData = {
+  userId: string;
+  userType: string;
+};
 
 //@ts-ignore
 export default function MyPage({navigation}) {
   const [pageSize, setPageSize] = useState(24);
+  const queryClient = useQueryClient();
+
+  // queryClient에서 userId와 userType을 가져오는 로직
+  const { data: userData } = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as { data: UserData };
 
   // get profile
   const getProfileDetail = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha5555"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${userData.userId}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +45,7 @@ export default function MyPage({navigation}) {
   // get post listd
   const getPostingList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"TBu3VNrBdm"}`,{
+      const res = await fetch(`http://localhost:8080/api/post/user-list?groupCode=${"hs%23x6zPtx6"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',
