@@ -106,7 +106,11 @@ export default function MyPage({navigation}) {
           <View style={styles.profileContainer}>
             <View style={styles.profileImageContianer}>
               <Image
-                source={{uri: profileQuery.data.data.profileImage}}
+                source={
+                  profileQuery.data.data.profileImage !== null
+                    ? {uri: profileQuery.data.data.profileImage}
+                    : require('../../assets/graphic/basic-profile.jpg')
+                }
                 style={styles.profile}
               />
             </View>
