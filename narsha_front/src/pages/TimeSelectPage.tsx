@@ -1,28 +1,50 @@
 import React, {useState, useContext} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import TimePicker from '../components/TimePicker';
-import { TimeCheckContext } from '../components/TimeCheckContext';
 import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// async-storage에 활성화 시간 저장하기
+export const storeData = async (key: string, value: Date) => {
+  try {
+    const stringValue = JSON.stringify(value);
+    await AsyncStorage.setItem(key, stringValue);
+  } catch (e: any) {
+    console.error(e.message);
+  }
+};
 
 export default function TimeSelectPage({navigation}: any) {
-  const SetTime = useContext(TimeCheckContext);
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
 
+  const [sTime, setSTime] = useState(StartTime.startTime);
+  const [eTime, setETime] = useState(EndTime.endTime);
+
   const CheckTime = () => {
-    const now = new Date()
-    {StartTime.startTime.getTime() < now.getTime() && now.getTime()<EndTime.endTime.getTime()?
-      SetTime.setUse(false):SetTime.setUse(true)}
+    async function StoreTime() {
+      try{
+        await storeData("startTime", sTime)
+        await storeData("endTime", eTime)
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    StoreTime()
+    StartTime.setStartTime(sTime)
+    EndTime.setEndTime(eTime)
+
   }
   
   return (
       <View style={styles.container}>
         <View style={styles.container2}>
           <View style={styles.textContainer1}><Text style={styles.text}>학생들의 앱 사용시간을</Text></View>
-          <View><TimePicker SetStart={StartTime.setStartTime} bool={true}/></View>
+          <View><TimePicker SetStart={setSTime} bool={true}/></View>
           <View style={styles.textContainer2}><Text style={styles.text}>부터</Text></View>
-          <View><TimePicker SetEnd={EndTime.setEndTime} bool={false} /></View>
+          <View><TimePicker SetEnd={setETime} bool={false} /></View>
           <View style={styles.textContainer2}><Text style={styles.text}>까지</Text></View>
         </View>
         <TouchableOpacity onPress={() => {CheckTime(); navigation.navigate('MyPage') }}>

@@ -12,6 +12,9 @@ const TimePicker = props => {
   
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
+  const [startTime, setStartTime] = useState(StartTime.startTime);
+  const [endTime, setEndTime] = useState(EndTime.endTime);
+
 
   // const FormatTime = (time: any) => {
   //   let timeString =
@@ -34,8 +37,11 @@ const TimePicker = props => {
     // setSelectedDate(time);
     {
       props.bool? 
-      props.SetStart(time):
-      props.SetEnd(time)
+      (props.SetStart(time), 
+      setStartTime(time)):(
+        props.SetEnd(time),
+        setEndTime(time)
+      )
     }
     hideDatePicker();
   };
@@ -45,13 +51,13 @@ const TimePicker = props => {
         <Text onPress={showDatePicker} style={{ fontSize: 40, fontWeight: 'normal', marginTop: 60 }}>
           {
             props.bool ? 
-            (StartTime? StartTime.startTime.toLocaleTimeString() : 'No date selected') :
-            (EndTime? EndTime.endTime.toLocaleTimeString() : 'No date selected') 
+            (startTime? startTime.toLocaleTimeString() : 'No date selected') :
+            (endTime? endTime.toLocaleTimeString() : 'No date selected') 
           }
         </Text>
         {/* <Button title="Select a date" onPress={showDatePicker} /> */}
         <DateTimePickerModal
-          date={props.bool? StartTime.startTime:EndTime.endTime}
+          date={props.bool? startTime:endTime}
           isVisible={datePickerVisible}
           mode="time"
           onConfirm={handleConfirm}
