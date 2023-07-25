@@ -19,7 +19,7 @@ export default function NoticeWritePage({navigation}: any) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          groupCode: "hs#x6zPtx6",
+          groupCode: "qkt1wKVnDt",
           noticeTitle: textTitle,
           noticeContent: textContent,
           writer: "narsha1111"
