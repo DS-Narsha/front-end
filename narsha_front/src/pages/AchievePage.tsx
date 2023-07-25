@@ -4,6 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import AchieveItem from '../components/AchieveItem';
 import AchieveData from '../data/AchieveData.json';
+import {badgeSources} from '../data/BadgeSources';
 
 const AchievePage = () => {
   // get user badgeList
@@ -40,6 +41,12 @@ const AchievePage = () => {
     else return '완료';
   };
 
+  const isCompletefunc = (data: any, index: number) => {
+    const badgeArray = data.substring(1, data.length - 1).split(', ');
+    if (badgeArray[index] === 'false') return false;
+    else return true;
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -57,6 +64,11 @@ const AchievePage = () => {
               return (
                 <AchieveItem
                   key={index}
+                  badge={
+                    isCompletefunc(achieveQuery.data.data, index)
+                      ? badgeSources[index]
+                      : require('../assets/badge/badge-none.png')
+                  }
                   title={item.title}
                   content={item.content}
                   progress={stringToArray(achieveQuery.data.data, index)}
