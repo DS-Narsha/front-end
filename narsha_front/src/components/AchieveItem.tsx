@@ -12,7 +12,12 @@ const AchieveItem = ({badge, title, content, progress, hint}) => {
             <Image source={badge} style={styles.achieveBadge} />
             <Text style={styles.achieveMisson}>{title}</Text>
           </View>
-          <View style={styles.achieveCheck}>
+          <View
+            style={
+              progress === '진행 중'
+                ? progressStyle('#C0C0C0').achieveCheck
+                : progressStyle('#98DC63').achieveCheck
+            }>
             <Text style={styles.achieveCheckText}>{progress}</Text>
           </View>
         </View>
@@ -24,6 +29,25 @@ const AchieveItem = ({badge, title, content, progress, hint}) => {
     </View>
   );
 };
+
+//@ts-ignore
+const progressStyle = color =>
+  StyleSheet.create({
+    achieveCheck: {
+      backgroundColor: color,
+      borderRadius: 50,
+      width: 52,
+      height: 52,
+      justifyContent: 'center',
+      alignItems: 'center',
+      float: 'right',
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      elevation: 5,
+    },
+  });
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -64,20 +88,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 45,
     flexWrap: 'wrap',
-  },
-  achieveCheck: {
-    backgroundColor: '#C0C0C0',
-    borderRadius: 50,
-    width: 52,
-    height: 52,
-    justifyContent: 'center',
-    alignItems: 'center',
-    float: 'right',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    elevation: 5,
   },
   achieveCheckText: {
     color: '#ffffff',
