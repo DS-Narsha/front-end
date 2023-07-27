@@ -36,9 +36,12 @@ const LoginPage = ({navigation}) => {
       if(data.status === 200) {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
-        navigation.reset({
-          routes: [{ name: 'MainNavigator' }],
-        });
+        queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType });
+        // navigation.reset({
+        //   routes: [{ name: 'MainNavigator' }],
+        // });
+
+        navigation.navigate('CommentPage')
       } else if(data.res === 2) {
         Alert.alert('로그인 실패', data.message);
       } else if(data.res === 1) {

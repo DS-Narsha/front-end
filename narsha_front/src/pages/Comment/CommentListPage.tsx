@@ -64,6 +64,8 @@ const CommentListPage = () => {
     
       useEffect(() => {
         if (userData && userData.userId) {
+            console.log(userData.userId);
+            console.log(userData.userType);
           fetchUserProfile(userData.userId);
         }
       }, [userData]);
