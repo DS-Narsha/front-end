@@ -5,6 +5,85 @@ import ArrowRight from '../../assets/arrow-right.svg';
 import images from '../../assets/images.jpeg';
 import CLOSE from '../../assets/close-btn.svg';
 
+export default function RecentPost() {
+  const [modalVisible, setModalVisible] = useState(false);
+  return (
+    <View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.body}>
+          <View style={{flexDirection: 'row'}}>
+            <Text
+              style={{
+                fontSize: 17,
+                marginTop: 20,
+                marginLeft: 20,
+                fontWeight: '500',
+              }}>
+              최근에 올라온 게시물
+            </Text>
+            <Pressable onPress={() => setModalVisible(false)}>
+              <CLOSE
+                style={{
+                  marginTop: 18,
+                  marginLeft: 170,
+                  color: '#61A257',
+                }}
+              />
+            </Pressable>
+          </View>
+          <View style={styles.container}>
+            {/* <ArrowLeft style={{marginTop: 60}} /> */}
+            <View style={{flexDirection: 'column'}}>
+              <View style={styles.gridView}>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+              </View>
+              <View style={styles.gridView}>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+                <View style={styles.imgWrap}>
+                  <Image source={images} style={styles.img} />
+                </View>
+              </View>
+            </View>
+            {/* <ArrowRight style={{marginLeft: -10, marginTop: 60}} /> */}
+          </View>
+        </View>
+      </Modal>
+
+      <Pressable onPress={() => setModalVisible(true)}>
+        <View style={styles.floating}>
+          <Text>NEW</Text>
+        </View>
+      </Pressable>
+    </View>
+  );
+}
+
+
 const styles = StyleSheet.create({
   body: {
     width: '100%',
@@ -17,9 +96,14 @@ const styles = StyleSheet.create({
     left: 0,
   },
   container: {
-    flexDirection: 'row',
-    marginTop: 10,
-    margin: 20,
+    
+    // display:'flex',
+    flex:1,
+    // flexDirection: 'row',
+    // marginTop: 10,
+    // margin: 20,
+    // textAlign:'center',
+    alignItems:'center',
   },
   gridView: {
     flexDirection: 'row',
@@ -61,81 +145,3 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
 });
-
-export default function RecentPost() {
-  const [modalVisible, setModalVisible] = useState(false);
-  return (
-    <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.body}>
-          <View style={{flexDirection: 'row'}}>
-            <Text
-              style={{
-                fontSize: 17,
-                marginTop: 20,
-                marginLeft: 20,
-                fontWeight: '500',
-              }}>
-              최근에 올라온 게시물
-            </Text>
-            <Pressable onPress={() => setModalVisible(false)}>
-              <CLOSE
-                style={{
-                  marginTop: 18,
-                  marginLeft: 170,
-                  color: '#61A257',
-                }}
-              />
-            </Pressable>
-          </View>
-          <View style={styles.container}>
-            <ArrowLeft style={{marginLeft: 0, marginTop: 60}} />
-            <View style={{flexDirection: 'column', marginLeft: 10}}>
-              <View style={styles.gridView}>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-              </View>
-              <View style={styles.gridView}>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-                <View style={styles.imgWrap}>
-                  <Image source={images} style={styles.img} />
-                </View>
-              </View>
-            </View>
-            <ArrowRight style={{marginLeft: 15, marginTop: 60}} />
-          </View>
-        </View>
-      </Modal>
-
-      <Pressable onPress={() => setModalVisible(true)}>
-        <View style={styles.floating}>
-          <Text>NEW</Text>
-        </View>
-      </Pressable>
-    </View>
-  );
-}
