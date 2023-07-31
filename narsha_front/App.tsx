@@ -59,7 +59,7 @@ export default function App() {
     console.log('start:' + start);
     console.log("end:"+end);
 
-    console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+    // console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
     
 
     {startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end)?
