@@ -20,7 +20,7 @@ const MainScreen = ({navigation}) => {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-list?groupCode=${'qkt1wKVnDt'}`,
+        `http://localhost:8080/api/post/user-list?groupCode=${'uzUBho56rb'}`,
         {
           method: 'GET',
           headers: {
@@ -41,7 +41,7 @@ const MainScreen = ({navigation}) => {
   });
 
   return (
-    <View>
+    <View style={{height:"100%"}}>
       <NoticeModal navigation={navigation} />
       <View>
         {!postQuery.isLoading && (
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   absolute: {
     position: 'absolute',
     right: 10,
-    bottom: 50,
+    bottom: 70,
     paddingHorizontal: 10,
   },
 });

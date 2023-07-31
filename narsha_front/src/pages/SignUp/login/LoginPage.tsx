@@ -45,7 +45,7 @@ const LoginPage = ({navigation}) => {
           userId: data.data.userId,
           userType: data.data.userType,
         });
-        navigation.navigate('MainNavigator', {userId: data.data.userId});
+        
         navigation.reset({
           routes: [{name: 'MainNavigator'}],
         });

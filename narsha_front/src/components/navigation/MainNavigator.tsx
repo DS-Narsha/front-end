@@ -21,7 +21,6 @@ const Tab = createBottomTabNavigator();
 //@ts-ignore
 const MainNavigator = ({route}) => {
 
-  const { userId, userType } = route.params;
 
   return (
     <Tab.Navigator
@@ -65,8 +64,6 @@ const MainNavigator = ({route}) => {
         options={({ route }) => ({
           unmountOnBlur: true,
           headerShown: false,
-          userId: userId,
-          userType: userType,
         })}
       />
       <Tab.Screen
