@@ -50,17 +50,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const now = new Date();
+    const now = String(new Date().getHours()).padStart(2, "0") + String(new Date().getMinutes()).padStart(2, "0");
+    const start = String(startTime.getHours()).padStart(2, "0") + String(startTime.getMinutes()).padStart(2, "0");
+    const end = String(endTime.getHours()).padStart(2, "0") + String(endTime.getMinutes()).padStart(2, "0");
 
-    console.log('now:' + now);
-    console.log('start:' + startTime);
-    console.log('end:' + endTime);
-    console.log(
-      startTime.getTime() < now.getTime() && now.getTime() < endTime.getTime(),
-    );
+    console.log('now:'+now);
+  
+    console.log('start:' + start);
+    console.log("end:"+end);
 
-    // {startTime.getTime()< now.getTime() && now.getTime()<endTime.getTime()?
-    //   SplashScreen.show():SplashScreen.hide()}
+    // console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+    
+
+    {startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end)?
+      console.log("T"):console.log("F")}
+      // SplashScreen.hide():SplashScreen.show()}
+    
   });
 
   return (

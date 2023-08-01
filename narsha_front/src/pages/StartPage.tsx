@@ -16,9 +16,10 @@ const StartPage = ({navigation}) => {
       imageStyle={{opacity: 0.8}}>
       <View style={styles.blank} />
       <View style={styles.introContainer}>
-        <Text style={styles.introTitle}>App Name</Text>
+        <Text style={styles.introTitle}>뭉게뭉게</Text>
         <Text style={styles.introContent}>
-          안녕하세요! SNS 교육 플랫폼 AppName입니다! 설명설명~
+          안녕하세요! SNS 교육 플랫폼
+          뭉게뭉게입니다!
         </Text>
       </View>
       <View style={styles.buttonContainer}>

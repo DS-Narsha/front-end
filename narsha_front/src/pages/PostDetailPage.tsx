@@ -23,7 +23,7 @@ export default function PostDetail({route, navigation}) {
     // get post detail
     const getPostDetail = async () =>{
       try{
-        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${1}&groupCode=${"qkt1wKVnDt"}&userId=${"narsha1111"}`,{
+        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${2}&groupCode=${"uzUBho56rb"}&userId=${"narsha1111"}`,{
           method:"GET",
           headers: {
             'Content-Type': 'application/json',
@@ -42,11 +42,24 @@ export default function PostDetail({route, navigation}) {
       queryFn: getPostDetail
     })
   
-    
+    // data의 이미지 배열 나누기
     const str = postQuery.data? postQuery.data.data.imageArray.slice(1,-1):""
     const arr = str.split(', ')
     for(let i=0; i<arr.length;i++){
       arr[i]=arr[i].toString()
+    }
+
+    const dateToStr = (date) => {
+      var week = new Array('일', '월', '화', '수', '목', '금', '토');
+    
+      var localTime = date.toLocaleTimeString();
+    
+      var year = date.getFullYear();
+      var month = date.getMonth()+1;
+      var day = date.getDate();
+      var dayName = week[date.getDay()];
+    
+      return year+'년 '+month+'월 '+day+'일 '+dayName+'요일 '+localTime.substring(0,5);
     }
 
 
@@ -70,7 +83,7 @@ export default function PostDetail({route, navigation}) {
         <Swiper
           loop
           controlsEnabled={false}
-          containerStyle={{width:350, height:350}}
+          containerStyle={{width:300, height:325}}
          >
             {arr.map((item, index) =>
               <View key={index}>
@@ -97,7 +110,7 @@ export default function PostDetail({route, navigation}) {
               style={{fontSize: 15, marginTop: 0, margin: 10}}>
               {postQuery.data.data.content}
             </Text>
-            <Text style={{fontSize: 10,color: '#909090', marginTop: 0, margin: 10}}>{postQuery.data.data.createAt}</Text>
+            <Text style={{fontSize: 10,color: '#909090', marginTop: 0, margin: 10}}>{dateToStr(new Date(postQuery.data.data.createAt))}</Text>
         </View>
 
         <View style={styles.txtContainer}>
@@ -177,11 +190,13 @@ const styles = StyleSheet.create({
     marginTop:15,
   },
   imgContainer:{
-    display:'flex',
-    height:'auto',
-    alignItems:'center',
-    marginBottom:-15,
-    marginLeft:50
+    // display:'flex',
+    // height:'auto',
+    // alignItems:'center',
+    // marginBottom:-15,
+    // marginLeft:50
+    flex:1,
+    alignItems:"center"
   },
   contentContainer:{
     marginLeft: 35,

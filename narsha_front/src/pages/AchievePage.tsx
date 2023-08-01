@@ -11,7 +11,7 @@ const AchievePage = () => {
   const getBadgeList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/badge-list?userId=${'narsha1111'}`,
+        `http://localhost:8080/api/user/badge-list?userId=${'student1111'}`,
         {
           method: 'GET',
           headers: {
@@ -20,7 +20,7 @@ const AchievePage = () => {
         },
       );
       const json = await res.json();
-      //console.log(JSON.stringify(json));
+      console.log(JSON.stringify(json));
       return json;
     } catch (err) {
       console.log(err);
