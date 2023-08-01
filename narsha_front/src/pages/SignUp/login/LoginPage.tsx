@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Alert, TextInput} from 'react-native';
-import AppLogo from '../../../assets/app-logo.svg'
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+} from 'react-native';
+import AppLogo from '../../../assets/app-logo.svg';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import BackSvg from '../../../assets/back.svg';
 
 //@ts-ignore
 const LoginPage = ({navigation}) => {
-
-  const[userId, setUserId] = useState('');
-  const[password, setPassword] = useState('');
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
   const queryClient = useQueryClient();
 
   // DB에 저장된 유효한 사용자인지 확인하기 위한 정보 넘기기
   const loginMutation = useMutation(async () => {
-    const response = await fetch(`http://localhost:8080/api/user/login`,{
+    const response = await fetch(`http://localhost:8080/api/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,31 +28,30 @@ const LoginPage = ({navigation}) => {
         userId,
         password,
       }),
-    })
+    });
 
     const data = await response.json();
     return data;
-
-  })
+  });
 
   const handleLogin = async () => {
     try {
       const data = await loginMutation.mutateAsync();
 
-      if(data.status === 200) {
+      if (data.status === 200) {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
-        queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType });
-        // navigation.reset({
-        //   routes: [{ name: 'MainNavigator' }],
-        // });
+        queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType, groupCode: data.data.groupCode.groupCode });
+        navigation.reset({
+          routes: [{ name: 'MainNavigator' }],
+        });
 
-        navigation.navigate('CommentPage')
+        //navigation.navigate('CommentPage')
       } else if(data.res === 2) {
         Alert.alert('로그인 실패', data.message);
-      } else if(data.res === 1) {
+      } else if (data.res === 1) {
         Alert.alert('로그인 실패', data.message);
-      }else {
+      } else {
         console.log(data.message);
         Alert.alert('로그인 실패', data.message);
       }
@@ -67,19 +72,24 @@ const LoginPage = ({navigation}) => {
       </View>
       <View style={styles.formArea}>
         <View style={styles.inputContainer}>
-        <TextInput 
-          style={styles.inputText} 
-          placeholder="아이디"
-          value={userId}
-          onChangeText={(text: React.SetStateAction<string>) => setUserId(text)} />
+          <TextInput
+            style={styles.inputText}
+            placeholder="아이디"
+            value={userId}
+            onChangeText={(text: React.SetStateAction<string>) =>
+              setUserId(text)
+            }
+          />
         </View>
         <View style={styles.inputContainer}>
-          <TextInput 
-          style={styles.inputText} 
-          placeholder="비밀번호"
-          value={password}
-          onChangeText={(text: React.SetStateAction<string>) => setPassword(text)}
-          secureTextEntry
+          <TextInput
+            style={styles.inputText}
+            placeholder="비밀번호"
+            value={password}
+            onChangeText={(text: React.SetStateAction<string>) =>
+              setPassword(text)
+            }
+            secureTextEntry
           />
         </View>
       </View>
@@ -92,9 +102,7 @@ const LoginPage = ({navigation}) => {
           <Text>회원가입 하기</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
     </View>

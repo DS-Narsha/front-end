@@ -11,6 +11,7 @@ import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
 import CustomButton from "../../../components/CustomButton";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 // 사용자_그룹 코드 입력하는 페이지
 
 //@ts-ignore
@@ -27,7 +28,7 @@ const InputGroupPage = ( {navigation, route} ) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userId: res,
+            userId: res.userId,
             groupCode,
           }),
         })
@@ -42,7 +43,7 @@ const InputGroupPage = ( {navigation, route} ) => {
           const data = await groupMutation.mutateAsync();
           
           if(data.status === 200) {
-            navigation.navigate('SignUp', { userType: 'student' }); // userType 값을 함께 전달
+            navigation.navigate('SignUp', { userId: res.userId, userType: 'student' }); // userType 값을 함께 전달
           } else {
             console.log(data.message);
             Alert.alert('그룹 가입 실패', data.message);

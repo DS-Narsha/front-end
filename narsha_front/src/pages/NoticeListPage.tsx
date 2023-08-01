@@ -13,7 +13,7 @@ export default function NoticeList({navigation}) {
   //getNoticeList
   const getNoticeList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/notice/list?groupCode=${"hs%23x6zPtx6"}`,{
+      const res = await fetch(`http://localhost:8080/api/notice/list?groupCode=${"qkt1wKVnDt"}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

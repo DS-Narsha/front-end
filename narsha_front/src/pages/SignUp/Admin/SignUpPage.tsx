@@ -43,7 +43,7 @@ const SignUpPage = ({navigation, route}) => {
         const data = await signUpMutation.mutateAsync();
         if(data.status === 200) {
           setGroupCode(data.data);
-          queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType });
+          queryClient.setQueryData(['user'], { userId: userId, userType: userType, groupCode: data.data });
         } else {
           console.log(data.message);
           Alert.alert('그룹 코드 가져오기 실패', data.message);

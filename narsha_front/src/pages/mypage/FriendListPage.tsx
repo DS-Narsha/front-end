@@ -13,7 +13,7 @@ export default function FriendList({navigation}) {
       // get friends list
       const getFriendsList = async () =>{
         try{
-          const res = await fetch(`http://localhost:8080/api/user/friends-list?groupCode=${"auRm9NUVNX"}`,{
+          const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${"qkt1wKVnDt"}`,{
             method:"GET",
             headers: {
               'Content-Type': 'application/json',
