@@ -1,17 +1,23 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import achieveData from '../data/AchieveData.json';
 
 //@ts-ignore
-const AchieveItem = ({title, content, progress, hint}) => {
+const AchieveItem = ({badge, title, content, progress, hint}) => {
   return (
     <View>
       <View style={styles.achieveItem}>
         <View style={styles.titleContainer}>
           <View style={styles.achieveTitle}>
-            <Text style={styles.achieveBadge}></Text>
+            <Image source={badge} style={styles.achieveBadge} />
             <Text style={styles.achieveMisson}>{title}</Text>
           </View>
-          <View style={styles.achieveCheck}>
+          <View
+            style={
+              progress === '진행 중'
+                ? progressStyle('#C0C0C0').achieveCheck
+                : progressStyle('#98DC63').achieveCheck
+            }>
             <Text style={styles.achieveCheckText}>{progress}</Text>
           </View>
         </View>
@@ -23,6 +29,25 @@ const AchieveItem = ({title, content, progress, hint}) => {
     </View>
   );
 };
+
+//@ts-ignore
+const progressStyle = color =>
+  StyleSheet.create({
+    achieveCheck: {
+      backgroundColor: color,
+      borderRadius: 50,
+      width: 52,
+      height: 52,
+      justifyContent: 'center',
+      alignItems: 'center',
+      float: 'right',
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      elevation: 5,
+    },
+  });
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -53,9 +78,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   achieveBadge: {
-    backgroundColor: '#909090',
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
   },
   achieveMisson: {
     color: '#61A257',
@@ -64,20 +88,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 45,
     flexWrap: 'wrap',
-  },
-  achieveCheck: {
-    backgroundColor: '#C0C0C0',
-    borderRadius: 50,
-    width: 52,
-    height: 52,
-    justifyContent: 'center',
-    alignItems: 'center',
-    float: 'right',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    elevation: 5,
   },
   achieveCheckText: {
     color: '#ffffff',

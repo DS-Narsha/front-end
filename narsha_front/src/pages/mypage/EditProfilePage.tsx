@@ -223,7 +223,11 @@ export default function EditProfile({navigation}) {
           <Pressable onPress={() => setModalVisible(true)}>
             <View style={styles.photo}>
               <ImageBackground
-                source={{uri: profileImgUri}}
+                source={
+                  profileImgUri !== null
+                    ? {uri: profileImgUri}
+                    : require('../../assets/graphic/basic-profile.jpg')
+                }
                 imageStyle={{borderRadius: 20}}
                 style={[
                   {width: 115, height: 115, borderRadius: 20},
@@ -313,9 +317,10 @@ const styles = StyleSheet.create({
     marginTop: 70,
   },
   editPhoto: {
-    opacity: 0.9,
+    opacity: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#000000',
   },
 
   //모달

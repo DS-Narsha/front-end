@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,80 +6,113 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  FlatList,
 } from 'react-native';
 import DS from '../../assets/DS.png';
 import SingleBadge from '../../components/SingleBadge';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useQuery } from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
+import AchieveData from '../../data/AchieveData.json';
+import {badgeSources} from '../../data/BadgeSources';
 
-
+// @ts-ignore
 export default function BadgeList({navigation}) {
-    // get badge list
-    const getBadgeList = async () =>{
-      try{
-        const res = await fetch(`http://localhost:8080/api/user/badge-list?userId=${"narsha1111"}`,{
-          method:"GET",
+  // get badge list
+  const getBadgeList = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/user/badge-list?userId=${'narsha1111'}`,
+        {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-       })
-       const json = await res.json();
-       return json;
-      } catch(err){
-        console.log(err);
-      }
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
     }
+  };
 
-    const BadgeQuery = useQuery({
-      queryKey: ["badge-list"], 
-      queryFn: getBadgeList
-    })
+  const achieveQuery = useQuery({
+    queryKey: ['badge-list'],
+    queryFn: getBadgeList,
+  });
 
-    const array=BadgeQuery.data;
+  const _RenderItem = useCallback(({item, index}: any) => {
+    // console.log(item.title);
+    return (
+      <SingleBadge
+        badge={
+          isCompletefunc(achieveQuery.data.data, index)
+            ? badgeSources[index]
+            : require('../../assets/badge/badge-none.png')
+        }
+        content={AchieveData[index]}
+        progress={stringToArray(achieveQuery.data.data, index)}
+      />
+    );
+  }, []);
+
+  const isCompletefunc = (data: any, index: number) => {
+    const badgeArray = data.substring(1, data.length - 1).split(', ');
+    if (badgeArray[index] === 'false') return false;
+    else return true;
+  };
+
+  const stringToArray = (data: any, index: number) => {
+    const badgeArray = data.substring(1, data.length - 1).split(', ');
+
+    return badgeArray;
+  };
 
   return (
-    <View>
-      <ScrollView>
-      {!BadgeQuery.isLoading && (
-      <>
-        <View style={styles.ds_container}>
-          <Image style={styles.ds_image} source={DS} />
-          <Text
-            style={
-              styles.ds_text
-            }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요?
+    <View style={styles.container}>
+      {!achieveQuery.isLoading && (
+        <>
+          <View style={styles.ds_container}>
+            <Image style={styles.ds_image} source={DS} />
+            <Text
+              style={
+                styles.ds_text
+              }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요?
   여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
-        </View>
-
-        <View style={styles.gridView}>
-          <SingleBadge name="좋아요 10개" success={array[0]}/>
-          <SingleBadge name="좋아요 10개" success={array[1]}/>
-          <SingleBadge name="좋아요 10개" success={array[2]}/>
-        </View>
-
-        <View style={styles.gridView}>
-          <SingleBadge name="좋아요 10개" success={array[3]}/>
-          <SingleBadge name="좋아요 10개" success={array[4]}/>
-          <SingleBadge name="좋아요 10개" success={array[5]}/>
-        </View>
-
-        <View style={styles.gridView}>
-          <SingleBadge name="좋아요 10개" success={array[6]}/>
-          <SingleBadge name="좋아요 10개" success={array[7]}/>
-          <SingleBadge name="좋아요 10개" success={array[8]}/>
-        </View>
-
-        <View style={styles.gridView}>
-          <SingleBadge name="좋아요 10개" success={array[9]}/>
-        </View>
+          </View>
+          <View
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignSelf: 'center',
+            }}>
+            <FlatList
+              data={AchieveData}
+              renderItem={_RenderItem}
+              key={'#'}
+              keyExtractor={(item, index) => '#' + index.toString()}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 100,
+                marginHorizontal: 20,
+                flexGrow: 0.5,
+                justifyContent: 'flex-start',
+                alignSelf: 'flex-start',
+              }}
+              numColumns={3}
+            />
+          </View>
         </>
-        )}
-      </ScrollView>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
+  },
   top: {
     flexDirection: 'row',
     height: 63,

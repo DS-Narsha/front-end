@@ -6,37 +6,37 @@ import ArrowRight from '../../assets/arrow-right.svg';
 import Toast from 'react-native-easy-toast';
 
 const styles = StyleSheet.create({
-container:{
+  container: {
     flex: 1,
-},
-top: {
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems:'center',
-  height: 105,
-  borderBottomLeftRadius: 30,
-  borderBottomRightRadius: 30,
-  backgroundColor: '#F9FAC8',
-},
-progress:{
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginLeft: 70,
-  marginRight: 54
-},
-progressbox:{
-  paddingHorizontal: 16,
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-dot:{
-  width: 21,
-  height: 21,
-  borderRadius: 50,
-  margin: 20,
-},
+  },
+  top: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 105,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    backgroundColor: '#F9FAC8',
+  },
+  progress: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 70,
+    marginRight: 54,
+  },
+  progressbox: {
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 21,
+    height: 21,
+    borderRadius: 50,
+    margin: 20,
+  },
   pickImg: {
     height: 300,
     width: 300,
@@ -45,26 +45,26 @@ dot:{
     paddingHorizontal: 16,
     backgroundColor: '#c0c0c0',
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
   img: {
     width: 100,
     height: 100,
     marginBottom: 10,
     resizeMode: 'cover',
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
-  selPhoto:{
+  selPhoto: {
     opacity: 0.7,
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
-  selPhotoText:{
+  selPhotoText: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#98DC63'
+    color: '#98DC63',
   },
-  currentPickImg:{
+  currentPickImg: {
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -78,8 +78,8 @@ export default function SelectImage({navigation}) {
   const [photos, getPhotos] = useCameraRoll();
   const [pageSize, setPageSize] = useState(24);
   let selectInputs = useRef<string[]>([]); // select photos, send next page
-  const [currentPhoto, setCurrentPhoto] = useState("")
-  const [state, setState] = useState("")
+  const [currentPhoto, setCurrentPhoto] = useState('');
+  const [state, setState] = useState('');
 
   // Toast ref
   const toastRef = useRef();
@@ -94,28 +94,31 @@ export default function SelectImage({navigation}) {
 
   useEffect(() => {
     permissionFunc(); // permission code
-  },[])
+  }, []);
 
   useEffect(() => {
     getPhotos({first: pageSize}); // getPhotos
-  },[pageSize])
+  }, [pageSize]);
 
-  const _RenderItem = useCallback(({ item }: any) => {
+  const _RenderItem = useCallback(({item}: any) => {
     return (
-      <TouchableOpacity onPress={() => {
-          selectHandler(item.node.image.uri)
+      <TouchableOpacity
+        onPress={() => {
+          selectHandler(item.node.image.uri);
         }}>
         <ImageBackground
-          source={{ uri: item.node.image.uri }}
-          style={[styles.img, selectInputs.current.includes(item.node.image.uri) && styles.selPhoto]}
-          imageStyle={{borderRadius: 10}}
-        >
-          {
-          selectInputs.current.includes(item.node.image.uri) && 
-          <Text style={styles.selPhotoText}>
-            {selectInputs.current.indexOf(item.node.image.uri) + 1}
-          </Text>
-          }
+          source={{uri: item.node.image.uri}}
+          style={[
+            styles.img,
+            selectInputs.current.includes(item.node.image.uri) &&
+              styles.selPhoto,
+          ]}
+          imageStyle={{borderRadius: 10}}>
+          {selectInputs.current.includes(item.node.image.uri) && (
+            <Text style={styles.selPhotoText}>
+              {selectInputs.current.indexOf(item.node.image.uri) + 1}
+            </Text>
+          )}
         </ImageBackground>
       </TouchableOpacity>
     );
@@ -152,84 +155,118 @@ async function hasAndroidPermission() {
           hasReadMediaImagesPermission && hasReadMediaVideoPermission,
       );
     } else {
-      return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+      selectInputs.current.push(uri);
+      setCurrentPhoto(uri);
     }
   };
 
-  const hasPermission = await getCheckPermissionPromise();
-  if (hasPermission) {
-    return true;
+  async function hasAndroidPermission() {
+    const getCheckPermissionPromise = () => {
+      if (Number(Platform.Version) >= 33) {
+        return Promise.all([
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          ),
+          PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+          ),
+        ]).then(
+          ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
+            hasReadMediaImagesPermission && hasReadMediaVideoPermission,
+        );
+      } else {
+        return PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        );
+      }
+    };
+
+    const hasPermission = await getCheckPermissionPromise();
+    if (hasPermission) {
+      return true;
+    }
+    const getRequestPermissionPromise = () => {
+      if (Number(Platform.Version) >= 33) {
+        return PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+        ]).then(
+          statuses =>
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] ===
+              PermissionsAndroid.RESULTS.GRANTED,
+        );
+      } else {
+        return PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ).then(status => status === PermissionsAndroid.RESULTS.GRANTED);
+      }
+    };
+
+    return await getRequestPermissionPromise();
   }
-  const getRequestPermissionPromise = () => {
-    if (Number(Platform.Version) >= 33) {
-      return PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-        PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
-      ]).then(
-        (statuses) =>
-          statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] ===
-            PermissionsAndroid.RESULTS.GRANTED,
-      );
-    } else {
-      return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE).then((status) => status === PermissionsAndroid.RESULTS.GRANTED);
-    }
-  };
 
-  return await getRequestPermissionPromise();
-}
-
-return (
-  <View style={styles.container}>
-    <View style={styles.top}>
-      <View style={styles.progressbox}>
-        <View style={styles.progress}>
-          <View style={[styles.dot, {backgroundColor: '#98DC63'}]}/>
-          <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
-          <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]}/>
-        </View>
-        { selectInputs.current.length < 1 ? (
-          <ArrowRight style={{color:'#C0C0C0'}} />
-        ) : (
-          <ArrowRight style={{color:'#61A257'}} onPress={() => navigation.navigate("PostLoadingPage", {photos: selectInputs.current})} />
-        )}
-        
-      </View>
-      <Text>이미지를 선택해볼까요?</Text>
-    </View>
-    {/* height */}
-    <View style={{height: 20}} />
+  return (
     <View style={styles.container}>
-    <View style={{alignItems: 'center'}}>
-      <ImageBackground source={currentPhoto ? {uri: currentPhoto} : require("../../assets/images.jpeg")}
-      imageStyle={{borderRadius: 10}}
-      style={styles.pickImg}>
-        {!currentPhoto && <Text style={styles.currentPickImg}>이미지를 선택해주세요.</Text>}
-      </ImageBackground>
-    </View>
-      {photos ? (
-        <FlatList
-          data={photos.edges}
-          renderItem={_RenderItem}
-          key={'#'}
-          keyExtractor={(item, index) => '#' + index.toString()}
-          // 페이징 처리
-          onEndReached={() => {
-            setPageSize(pageSize + 24);
-          }}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            marginHorizontal: 30,
-            paddingBottom: 100,
-            flexGrow: 1,
-            justifyContent: 'flex-start',
-            alignSelf:'flex-start',
-          }}
-          numColumns={3}
-        />
-      ) : (<Text>이미지가 없습니다.</Text>)}
-    </View>
+      <View style={styles.top}>
+        <View style={styles.progressbox}>
+          <View style={styles.progress}>
+            <View style={[styles.dot, {backgroundColor: '#98DC63'}]} />
+            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]} />
+            <View style={[styles.dot, {backgroundColor: '#D9D9D9'}]} />
+          </View>
+          {selectInputs.current.length < 1 ? (
+            <ArrowRight style={{color: '#C0C0C0'}} />
+          ) : (
+            <ArrowRight
+              style={{color: '#61A257'}}
+              onPress={() =>
+                navigation.navigate('PostLoadingPage', {
+                  photos: selectInputs.current,
+                })
+              }
+            />
+          )}
+        </View>
+        <Text>이미지를 선택해볼까요?</Text>
+      </View>
+      {/* height */}
+      <View style={{height: 20}} />
+      <View style={styles.container}>
+        <View style={{alignItems: 'center'}}>
+          <ImageBackground
+            source={
+              currentPhoto
+                ? {uri: currentPhoto}
+                : require('../../assets/graphic/basic-upload.jpg')
+            }
+            imageStyle={{borderRadius: 10}}
+            style={styles.pickImg}></ImageBackground>
+        </View>
+        {photos ? (
+          <FlatList
+            data={photos.edges}
+            renderItem={_RenderItem}
+            key={'#'}
+            keyExtractor={(item, index) => '#' + index.toString()}
+            // 페이징 처리
+            onEndReached={() => {
+              setPageSize(pageSize + 24);
+            }}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 100,
+              flexGrow: 1,
+              justifyContent: 'space-around',
+              alignSelf: 'center',
+            }}
+            numColumns={3}
+          />
+        ) : (
+          <Text>이미지가 없습니다.</Text>
+        )}
+      </View>
     <Toast ref={toastRef}
              positionValue={height * 0.5}
              fadeInDuration={500}
@@ -238,5 +275,5 @@ return (
       />
   </View>
 )
-
+}
 };
