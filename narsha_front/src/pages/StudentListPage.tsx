@@ -3,11 +3,19 @@ import {View, StyleSheet, Modal, Text, Pressable, ImageBackground, FlatList} fro
 import InitialProfileImage from '../assets/initial-profile-image.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ScrollView} from 'react-native-gesture-handler';
-import { useQuery } from '@tanstack/react-query';
+import {useQuery, useQueryClient } from '@tanstack/react-query';
 import StudentListModal from '../components/modal/StudentListModal';
 
+type UserData = {
+  groupCode:string
+};
 
 export default function StudentListPage({navigation}: any) {
+
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
 
   //모달
   const [pageSize, setPageSize] = useState(10);
@@ -15,7 +23,7 @@ export default function StudentListPage({navigation}: any) {
   //getStudentList
   const getStudentList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${"qkt1wKVnDt"}`,{
+      const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${userData.groupCode}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

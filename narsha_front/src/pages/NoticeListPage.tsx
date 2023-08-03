@@ -3,17 +3,26 @@ import {StyleSheet, View, Text, TouchableOpacity, Image, FlatList} from 'react-n
 import DS from '../assets/DS.png';
 import SingleInfo from '../components/SingleInfo';
 import {ScrollView} from 'react-native-gesture-handler';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+type UserData = {
+  groupCode:string
+};
 
 // @ts-ignore
 export default function NoticeList({navigation}) {
+  
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
 
   const [pageSize, setPageSize] = useState(5);
 
   //getNoticeList
   const getNoticeList = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/notice/list?groupCode=${"qkt1wKVnDt"}`,{
+      const res = await fetch(`http://localhost:8080/api/notice/list?groupCode=${userData.groupCode}`,{
         method:"GET",
         headers: {
           'Content-Type': 'application/json',

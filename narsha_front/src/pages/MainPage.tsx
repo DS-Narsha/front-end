@@ -12,15 +12,25 @@ import MainPost from '../components/post/MainPost';
 import NEW from '../assets/new-btn.svg';
 import RecentPost from '../components/post/RecentPost';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient } from '@tanstack/react-query';
+
+type UserData = {
+  groupCode:string
+};
 
 //@ts-ignore
 const MainScreen = ({navigation}) => {
+
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
   // get post listd
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-list?groupCode=${'uzUBho56rb'}`,
+        `http://localhost:8080/api/post/user-list?groupCode=${userData.groupCode}`,
         {
           method: 'GET',
           headers: {
@@ -43,6 +53,7 @@ const MainScreen = ({navigation}) => {
   return (
     <View style={{height:"100%"}}>
       <NoticeModal navigation={navigation} />
+
       <View>
         {!postQuery.isLoading && (
           <>
@@ -75,8 +86,8 @@ const MainScreen = ({navigation}) => {
             )}
           </>
         )}
-      </View>
 
+      </View>
       <TouchableOpacity style={styles.absolute}>
         <RecentPost />
       </TouchableOpacity>

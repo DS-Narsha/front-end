@@ -1,9 +1,66 @@
+<<<<<<< Updated upstream
+=======
+import {useQuery, useQueryClient} from '@tanstack/react-query';
+>>>>>>> Stashed changes
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import AchieveItem from '../components/AchieveItem';
 
+type UserData = {
+  userId:string
+};
+
 const AchievePage = () => {
+<<<<<<< Updated upstream
+=======
+
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
+  // get user badgeList
+  const getBadgeList = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/user/badge-list?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      console.log(JSON.stringify(json));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const achieveQuery = useQuery({
+    queryKey: ['badge-list'],
+    queryFn: getBadgeList,
+  });
+
+  const stringToArray = (data: any, index: number) => {
+    //console.log(achieveQuery.data);
+    //console.log('data: ' + data);
+    const badgeArray = data.substring(1, data.length - 1).split(', ');
+    //console.log(badgeArray[index]);
+    if (badgeArray[index] === 'false') return '진행 중';
+    else return '완료';
+  };
+
+  const isCompletefunc = (data: any, index: number) => {
+    const badgeArray = data.substring(1, data.length - 1).split(', ');
+    if (badgeArray[index] === 'false') return false;
+    else return true;
+  };
+
+>>>>>>> Stashed changes
   return (
     <View style={styles.container}>
       <ScrollView>

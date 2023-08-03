@@ -4,10 +4,11 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import userImg from '../assets/user-image.png';
 import Line from '../assets/Line.svg';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import images from '../assets/images.jpeg';
 import Heart from '../assets/heart.svg';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -15,15 +16,25 @@ import SEND from '../assets/send-btn.svg';
 import { TextInput } from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
 
+type UserData = {
+  userId:string,
+  groupCode:string
+};
 
 
 //@ts-ignore
 export default function PostDetail({route, navigation}) {
-    // const postId = route.params.postId
-    // get post detail
+    
+    const id = route.params.detail.postId
+    const queryClient = useQueryClient();
+
+    const {data: userData} = useQuery(['user'], () => {
+      return queryClient.getQueryData(['user']);
+    }) as {data: UserData};
+
     const getPostDetail = async () =>{
       try{
-        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${2}&groupCode=${"uzUBho56rb"}&userId=${"narsha1111"}`,{
+        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${id}&groupCode=${userData.groupCode}&userId=${userData.userId}`,{
           method:"GET",
           headers: {
             'Content-Type': 'application/json',
@@ -111,14 +122,6 @@ export default function PostDetail({route, navigation}) {
               {postQuery.data.data.content}
             </Text>
             <Text style={{fontSize: 10,color: '#909090', marginTop: 0, margin: 10}}>{dateToStr(new Date(postQuery.data.data.createAt))}</Text>
-        </View>
-
-        <View style={styles.txtContainer}>
-          <Image source={userImg} style={styles.cmtUserImg1} />
-          <View style={{marginTop: -5}}>
-            <Text style={{fontWeight: 'bold', fontSize: 15}}>comment_User</Text>
-            <Text>댓글 내용</Text>
-          </View>
         </View>
 
         <View style={{margin: 15, marginLeft: 35, marginBottom:200}}>
