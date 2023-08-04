@@ -11,7 +11,7 @@ const AchievePage = () => {
   const getBadgeList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/badge-list?userId=${'student1111'}`,
+        `http://localhost:8080/api/user/badge-list?userId=${'narsha1111'}`,
         {
           method: 'GET',
           headers: {
@@ -60,6 +60,7 @@ const AchievePage = () => {
         </View>
         <View style={styles.achieveContainer}>
           {!achieveQuery.isLoading &&
+            achieveQuery.data &&
             AchieveData.map((item, index) => {
               return (
                 <AchieveItem
