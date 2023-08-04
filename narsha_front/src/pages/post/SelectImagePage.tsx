@@ -1,7 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {PermissionsAndroid, StyleSheet, View, ImageBackground, Text, Platform, FlatList, Dimensions} from 'react-native';
-import {useCameraRoll} from "@react-native-camera-roll/camera-roll";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {
+  PermissionsAndroid,
+  StyleSheet,
+  View,
+  ImageBackground,
+  Text,
+  Platform,
+  FlatList,
+  Dimensions,
+} from 'react-native';
+import {useCameraRoll} from '@react-native-camera-roll/camera-roll';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import ArrowRight from '../../assets/arrow-right.svg';
 import Toast from 'react-native-easy-toast';
 
@@ -68,9 +77,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  notice:{
-    backgroundColor: "#000000"
-  }
+  notice: {
+    backgroundColor: '#000000',
+  },
 });
 
 // @ts-ignore
@@ -85,7 +94,7 @@ export default function SelectImage({navigation}) {
   const toastRef = useRef();
 
   // window size
-  const { width, height } = Dimensions.get("window")
+  const {width, height} = Dimensions.get('window');
 
   // floating toast func
   const showToast = useCallback(() => {
@@ -127,36 +136,20 @@ export default function SelectImage({navigation}) {
   // select image
   const selectHandler = (uri: string) => {
     if (selectInputs.current.includes(uri)) {
-      selectInputs.current = selectInputs.current.filter((el) => el !== uri);
-      setCurrentPhoto(selectInputs.current[selectInputs.current.length - 1])
-    }
-    else if(selectInputs.current.length < 10) { // maximum 10 photo
-      if(selectInputs.current.length >= 9)  showToast(); // when 10 photo full
-      selectInputs.current.push(uri)
-      setCurrentPhoto(uri)
-    }
-  }
-
-// permission code
-const permissionFunc = async() =>{
-  if (Platform.OS === "android" && !(await hasAndroidPermission())) {
-    return;
-  }
-}
-
-async function hasAndroidPermission() {
-  const getCheckPermissionPromise = () => {
-    if (Number(Platform.Version) >= 33) {
-      return Promise.all([
-        PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES),
-        PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO),
-      ]).then(
-        ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
-          hasReadMediaImagesPermission && hasReadMediaVideoPermission,
-      );
-    } else {
+      selectInputs.current = selectInputs.current.filter(el => el !== uri);
+      setCurrentPhoto(selectInputs.current[selectInputs.current.length - 1]);
+    } else if (selectInputs.current.length < 10) {
+      // maximum 10 photo
+      if (selectInputs.current.length >= 9) showToast(); // when 10 photo full
       selectInputs.current.push(uri);
       setCurrentPhoto(uri);
+    }
+  };
+
+  // permission code
+  const permissionFunc = async () => {
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
+      return;
     }
   };
 
@@ -267,13 +260,13 @@ async function hasAndroidPermission() {
           <Text>이미지가 없습니다.</Text>
         )}
       </View>
-    <Toast ref={toastRef}
-             positionValue={height * 0.5}
-             fadeInDuration={500}
-             fadeOutDuration={1500}
-             style={{backgroundColor:'rgba(0, 0, 0, 0.4)'}}
+      <Toast
+        ref={toastRef}
+        positionValue={height * 0.5}
+        fadeInDuration={500}
+        fadeOutDuration={1500}
+        style={{backgroundColor: 'rgba(0, 0, 0, 0.4)'}}
       />
-  </View>
-)
+    </View>
+  );
 }
-};
