@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   }
 });
 
+
 // @ts-ignore
 export default function SelectImage({navigation}) {
   const [photos, getPhotos] = useCameraRoll();

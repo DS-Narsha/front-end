@@ -11,6 +11,8 @@ import TimeSelectPage from '../../pages/TimeSelectPage';
 import StudentListPage from '../../pages/StudentListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
 import PostDetailPage from '../../pages/PostDetailPage';
+import CommentListPage from '../../pages/comment/CommentListPage';
+import LikeListPage from '../../pages/like/LikeListPage';
 import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
 import Write from '../../assets/write.svg';
@@ -68,6 +70,9 @@ export default function MyPageStack({route, navigation}) {
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
           },
+          cardStyle: {
+            backgroundColor: "#F9FAC8"
+          },
           headerBackImage: () => {
             return (
               <View style={{marginLeft: 7}}>
@@ -102,17 +107,26 @@ export default function MyPageStack({route, navigation}) {
         <Stack.Screen
           name="EditProfile"
           component={EditProfile}
-          options={{title: '프로필 수정'}}
+          options={{title: '프로필 수정',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
         <Stack.Screen
           name="FriendList"
           component={FriendList}
-          options={{title: '친구 목록'}}
+          options={{title: '친구 목록',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
         <Stack.Screen
           name="BadgeList"
           component={BadgeList}
-          options={{title: '뱃지 목록'}}
+          options={{title: '뱃지 목록',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
         <Stack.Screen
           name="NoticeList"
@@ -139,17 +153,26 @@ export default function MyPageStack({route, navigation}) {
         <Stack.Screen
           name="TeacherMenu"
           component={TeacherMenu}
-          options={{title: '선생님 관리 메뉴'}}
+          options={{title: '선생님 관리 메뉴',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
         <Stack.Screen
           name="TimeSelectPage"
           component={TimeSelectPage}
-          options={{title: '앱 사용시간 설정하기'}}
+          options={{title: '앱 사용시간 설정하기',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
         <Stack.Screen
           name="StudentListPage"
           component={StudentListPage}
-          options={{title: '그룹에 가입한 학생 목록'}}
+          options={{title: '그룹에 가입한 학생 목록',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
         <Stack.Screen
           name="NoticeWritePage"
@@ -160,7 +183,28 @@ export default function MyPageStack({route, navigation}) {
         <Stack.Screen
           name="PostDetailPage"
           component={PostDetailPage}
-          options={{title: '포스트 상세 페이지'}}
+          options={{title: '포스트 상세 페이지',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
+        />
+
+        <Stack.Screen
+        name="CommentListPage"
+        component={CommentListPage}
+        options={{title: '댓글 목록',
+        cardStyle: {
+          backgroundColor: "#ffffff"
+        }}}
+        />
+        <Stack.Screen
+        name="LikeListPage"
+        component={LikeListPage}
+        options={{
+          title: '좋아요 목록',
+          cardStyle: {
+            backgroundColor: "#ffffff"
+          }}}
         />
 
       </Stack.Navigator>

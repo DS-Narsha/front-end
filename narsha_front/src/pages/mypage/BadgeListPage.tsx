@@ -14,17 +14,12 @@ import {useQuery, useQueryClient} from '@tanstack/react-query';
 import AchieveData from '../../data/AchieveData.json';
 import {badgeSources} from '../../data/BadgeSources';
 
-
-// @ts-ignore
-export default function BadgeList({navigation}) {
-
 type UserData = {
-  userId:string
+  userId: string;
 };
 
 // @ts-ignore
 export default function BadgeList({route, navigation}) {
-
   const queryClient = useQueryClient();
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);

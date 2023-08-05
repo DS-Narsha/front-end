@@ -39,13 +39,13 @@ const LikeListPage = () => {
 
     const { data: likes, error, isLoading } = useQuery(["likes"], fetchComments);
 
-    if (isLoading) {
-        return (
-          <View style={styles.container}>
-            <Text>로딩 중...</Text>
-          </View>
-        );
-    }
+    // if (isLoading) {
+    //     return (
+    //       <View style={styles.container}>
+    //         <Text>로딩 중...</Text>
+    //       </View>
+    //     );
+    // }
 
     if (error) {
         return (
@@ -57,12 +57,12 @@ const LikeListPage = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.title}>
+            {/* <View style={styles.title}>
                 <TouchableOpacity>
                     <BackSvg />
                 </TouchableOpacity>
                 <Text style={styles.titleText}>게시글 좋아요 목록</Text>
-            </View>
+            </View> */}
             <View style={styles.likeContainer}>
                 {likes.map((like: Like, index: number) => (
                     <View style={styles.likeItem} key={index}>

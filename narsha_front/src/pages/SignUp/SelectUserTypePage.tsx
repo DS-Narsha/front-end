@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Pressable,
   Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import BackSvg from '../../assets/back.svg';
 import TeacherSvg from '../../assets/teacher.svg';
@@ -26,9 +27,6 @@ const navigateToUserInfo = (userType: any) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.pop()}>
-        <BackSvg />
-      </TouchableOpacity>
       <View style={styles.content}>
         <View style={styles.roundBtnContainer}>
           <Text style={styles.roundGreen}></Text>
@@ -47,6 +45,7 @@ const navigateToUserInfo = (userType: any) => {
           onRequestClose={() => {
             setModalTVisible(!modalTVisible);
           }}>
+          <TouchableWithoutFeedback onPress={() => setModalTVisible(false)}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <View style={styles.modalTitleArea}>
@@ -67,6 +66,7 @@ const navigateToUserInfo = (userType: any) => {
               </TouchableOpacity>
             </View>
           </View>
+          </TouchableWithoutFeedback>
         </Modal>
 
         <Modal
@@ -76,6 +76,7 @@ const navigateToUserInfo = (userType: any) => {
           onRequestClose={() => {
             setModalSVisible(!modalSVisible);
           }}>
+          <TouchableWithoutFeedback onPress={() => setModalSVisible(false)}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <View style={styles.modalTitleArea}>
@@ -100,6 +101,7 @@ const navigateToUserInfo = (userType: any) => {
               </TouchableOpacity>
             </View>
           </View>
+          </TouchableWithoutFeedback>
         </Modal>
 
         <View>
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FCFDE1',
     height: '100%',
-    padding: 20,
+    padding: 25,
   },
   content: {
     padding: 20,
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginBottom: 30,
-    marginTop: 15,
+    marginTop: 35,
   },
   roundGreen: {
     backgroundColor: '#98DC63',
@@ -178,9 +180,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
-    elevation: 5,
+    elevation: 4,
   },
   btnText: {
     fontSize: 24,
@@ -195,9 +197,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
-    elevation: 5,
+    elevation: 4,
   },
   centeredView: {
     flex: 1,

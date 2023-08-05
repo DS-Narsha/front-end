@@ -9,18 +9,15 @@ import {
 } from 'react-native';
 import NoticeModal from '../components/modal/NoticeModal';
 import MainPost from '../components/post/MainPost';
-import NEW from '../assets/new-btn.svg';
 import RecentPost from '../components/post/RecentPost';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useQuery, useQueryClient } from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 
 type UserData = {
-  groupCode:string
+  groupCode: string;
 };
 
 //@ts-ignore
 const MainScreen = ({navigation}) => {
-
   const queryClient = useQueryClient();
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -51,7 +48,7 @@ const MainScreen = ({navigation}) => {
   });
 
   return (
-    <View style={{height:"100%"}}>
+    <View style={{height: '100%'}}>
       <NoticeModal navigation={navigation} />
 
       <View>
@@ -86,7 +83,6 @@ const MainScreen = ({navigation}) => {
             )}
           </>
         )}
-
       </View>
       <TouchableOpacity style={styles.absolute}>
         <RecentPost />

@@ -13,11 +13,11 @@ import FriendList from '../../assets/friend-list.svg';
 import BadgeList from '../../assets/badge-list.svg';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
-import PostDetail from '../PostDetailPage';
 
 type UserData = {
   userId: string;
   userType: string;
+  groupCode: string;
 };
 
 //@ts-ignore
@@ -42,9 +42,7 @@ export default function MyPage({navigation}) {
           },
         },
       );
-
       const json = await res.json();
-
       return json;
     } catch (err) {
       console.log(err);
@@ -55,7 +53,7 @@ export default function MyPage({navigation}) {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-list?groupCode=${'uzUBho56rb'}`,
+        `http://localhost:8080/api/post/user-list?groupCode=${userData.groupCode}`,
         {
           method: 'GET',
           headers: {
@@ -145,8 +143,21 @@ export default function MyPage({navigation}) {
               </View>
             </TouchableOpacity>
           </View>
+          <View style={{height: 10}} />
+          <View style={styles.btnbox}>
+            <TouchableOpacity onPress={() => navigation.navigate('FriendList')}>
+              <View style={styles.btn}>
+                <FriendList />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('BadgeList')}>
+              <View style={styles.btn}>
+                <BadgeList />
+              </View>
+            </TouchableOpacity>
+          </View>
           {postQuery.data.data ? (
-            <View style={{marginTop: 20}}>
+            <View style={{marginTop: 10}}>
               <FlatList
                 data={postQuery.data.data}
                 renderItem={_RenderItem}
@@ -171,18 +182,6 @@ export default function MyPage({navigation}) {
           ) : (
             <Text>이미지가 없습니다.</Text>
           )}
-          <View style={styles.btnbox}>
-            <TouchableOpacity onPress={() => navigation.navigate('FriendList')}>
-              <View style={styles.btn}>
-                <FriendList />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('BadgeList')}>
-              <View style={styles.btn}>
-                <BadgeList />
-              </View>
-            </TouchableOpacity>
-          </View>
         </>
       )}
     </View>
@@ -258,10 +257,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   btnbox: {
-    flexDirection: 'column',
-    position: 'absolute',
-    top: '29%',
-    left: '70%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   btn: {
     padding: 2,
