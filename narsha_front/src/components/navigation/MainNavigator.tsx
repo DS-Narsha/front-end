@@ -41,7 +41,6 @@ const MainNavigator = ({route}) => {
           bottom: 0,
           right: 0,
           paddingBottom: 8,
-          backgroundColor: 'transparant',
         },
         style: {
           backgroundColor: '#E3F1A9',
