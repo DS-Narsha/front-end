@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     color: '#000000',
+    fontFamily: 'NanumSquareR',
   },
 });
 

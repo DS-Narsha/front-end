@@ -29,7 +29,6 @@ const AchievePage = () => {
         },
       );
       const json = await res.json();
-      console.log(JSON.stringify(json));
       return json;
     } catch (err) {
       console.log(err);
@@ -69,6 +68,7 @@ const AchievePage = () => {
         </View>
         <View style={styles.achieveContainer}>
           {!achieveQuery.isLoading &&
+            achieveQuery.data &&
             AchieveData.map((item, index) => {
               return (
                 <AchieveItem

@@ -18,8 +18,8 @@ const StartPage = ({navigation}) => {
       <View style={styles.introContainer}>
         <Text style={styles.introTitle}>뭉게뭉게</Text>
         <Text style={styles.introContent}>
-        안녕하세요! SNS 교육 플랫폼{'\n'}
-        뭉게뭉게입니다!
+          안녕하세요! SNS 교육 플랫폼{'\n'}
+          뭉게뭉게입니다!
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -58,10 +58,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#61A257',
     fontSize: 40,
+    fontFamily: 'NanumSquareB',
+    marginBottom: 10,
   },
   introContent: {
     width: 220,
     fontSize: 16,
+    fontFamily: 'NanumSquareR',
   },
   buttonContainer: {
     flex: 1,

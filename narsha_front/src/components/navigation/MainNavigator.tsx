@@ -12,7 +12,7 @@ import MyPage_Sel from '../../assets/mypage-sel.svg';
 import MyPage_Desel from '../../assets/mypage-desel.svg';
 import MainStack from './MainStack';
 import MypageStack from './MyPageStack';
-import PostStack from './PostStack'
+import PostStack from './PostStack';
 import AchieveStack from './AchieveStack';
 import AlarmStack from './AlarmStack';
 
@@ -20,16 +20,15 @@ const Tab = createBottomTabNavigator();
 
 //@ts-ignore
 const MainNavigator = ({route}) => {
-
   return (
     <Tab.Navigator
       initialRouteName="Main"
       screenOptions={({route}) => ({
         headerStyle: {
           backgroundColor: '#E3F1A9',
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
         },
+        headerTitleAlign: 'center',
+        safeAreaInsets: {bottom: 0},
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
           borderTopLeftRadius: 30,
@@ -41,6 +40,9 @@ const MainNavigator = ({route}) => {
           bottom: 0,
           right: 0,
           paddingBottom: 8,
+        },
+        style: {
+          backgroundColor: '#E3F1A9',
         },
         tabBarShowLabel: false,
         tabBarIcon: ({focused, color, size}) => {
@@ -60,7 +62,7 @@ const MainNavigator = ({route}) => {
       <Tab.Screen
         name="Main"
         component={MainStack}
-        options={({ route }) => ({
+        options={({route}) => ({
           unmountOnBlur: true,
           headerShown: false,
         })}
