@@ -10,7 +10,7 @@ import Line from '../assets/Line.svg';
 import { useQuery } from '@tanstack/react-query';
 import images from '../assets/images.jpeg';
 import Heart from '../assets/heart.svg';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import { TextInput } from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
@@ -23,7 +23,7 @@ export default function PostDetail({route, navigation}) {
     // get post detail
     const getPostDetail = async () =>{
       try{
-        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${2}&groupCode=${"uzUBho56rb"}&userId=${"narsha1111"}`,{
+        const res = await fetch(`http://localhost:8080/api/post/detail?postId=${2}&groupCode=${"aveL24meWj"}&userId=${"student1111"}`,{
           method:"GET",
           headers: {
             'Content-Type': 'application/json',
@@ -99,10 +99,12 @@ export default function PostDetail({route, navigation}) {
 
         <View style={styles.txtContainer}>
             <Heart style={{marginLeft: 10}} />
+            <TouchableOpacity onPress={() => navigation.navigate('LikeListPage')}>
             <Text
               style={{fontSize: 13, color: '#909090', marginTop: 0, margin: 10}}>
               Narsha님 외 56명이 좋아합니다
             </Text>
+            </TouchableOpacity>
         </View>
 
         <View style={styles.contentContainer}>
@@ -124,9 +126,12 @@ export default function PostDetail({route, navigation}) {
         <View style={{margin: 15, marginLeft: 35, marginBottom:200}}>
           <Line />
 
+          <TouchableOpacity
+          onPress={() => navigation.navigate('CommentListPage')}>
           <Text style={{marginTop: 15, color: '#61A257'}}>
             댓글 17개 전체 보기
           </Text>
+          </TouchableOpacity>
 
           <View style={styles.cmtBody}>
             <Image source={userImg} style={styles.cmtUserImg2} />

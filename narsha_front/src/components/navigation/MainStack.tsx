@@ -33,6 +33,9 @@ export default function MainNavigatorStack() {
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
           },
+          cardStyle: {
+            backgroundColor: "#FFFFFF"
+          },
           headerBackImage: () => {
             return (
               <View style={{marginLeft: 7}}>
@@ -45,13 +48,16 @@ export default function MainNavigatorStack() {
         <Stack.Screen
           name="Main"
           component={Main}
-          options={{title: 'App name'}}
+          options={{title: '뭉게뭉게'}}
         />
         <Stack.Screen
           name="NoticeList"
           component={NoticeList}
           options={({navigation}) => ({
             title: '공지 목록',
+            cardStyle: {
+              backgroundColor: "#F9FAC8"
+            },
             headerRight: () => {
               return (
                 <View style={{marginRight: 16}}>
@@ -72,7 +78,10 @@ export default function MainNavigatorStack() {
         <Stack.Screen
           name="NoticeWritePage"
           component={NoticeWritePage}
-          options={{title: '공지 작성 페이지'}}
+          options={{title: '공지 작성 페이지',
+          cardStyle: {
+            backgroundColor: "#F9FAC8"
+          }}}
         />
         {/* <Stack.Screen name="AlarmPage" component={AlarmPage} /> */}
       </Stack.Navigator>

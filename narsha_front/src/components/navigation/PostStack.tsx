@@ -18,6 +18,7 @@ const tabBarStyle = {
   right: 0,
   paddingBottom: 8,
 }
+
 //@ts-ignore
 export default function PostStack({ navigation, route }) {
   useEffect(()=> {
@@ -39,6 +40,7 @@ export default function PostStack({ navigation, route }) {
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
           },
+          
           headerShown: false
         }}>
         <Stack.Screen name="SelectImage" component={SelectImage} />

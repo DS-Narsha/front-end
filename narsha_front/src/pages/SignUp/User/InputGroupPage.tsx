@@ -95,17 +95,17 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#FCFDE1",
         height: "100%",
-        padding: 20
+        padding: 25
     },
     content: {
-        padding: 20,
+      padding: 5
     },
     roundBtnContainer: {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
         marginBottom: 30,
-        marginTop: 35
+        marginTop: 50
     },
     roundGreen: {
         backgroundColor: "#98DC63",

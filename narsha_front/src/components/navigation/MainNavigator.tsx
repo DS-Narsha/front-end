@@ -1,7 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import AchievePage from '../../pages/AchievePage';
-import AlarmPage from '../../pages/AlarmPage';
 import Main_Sel from '../../assets/main-sel.svg';
 import Main_Desel from '../../assets/main-desel.svg';
 import Achieve_Sel from '../../assets/achieve-sel.svg';
@@ -15,6 +13,8 @@ import MyPage_Desel from '../../assets/mypage-desel.svg';
 import MainStack from './MainStack';
 import MypageStack from './MyPageStack';
 import PostStack from './PostStack'
+import AchieveStack from './AchieveStack';
+import AlarmStack from './AlarmStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -46,11 +46,11 @@ const MainNavigator = ({route}) => {
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'Main') {
             return focused ? <Main_Sel /> : <Main_Desel style={{}} />; // 메인
-          } else if (route.name === 'AchievePage') {
+          } else if (route.name === 'AchieveStack') {
             return focused ? <Achieve_Sel /> : <Achieve_DeSel />; //업적
           } else if (route.name === 'PostStack') {
             return focused ? <Write_Sel /> : <Write_Desel />; //글쓰기
-          } else if (route.name === 'AlarmPage') {
+          } else if (route.name === 'AlarmStack') {
             return focused ? <Alarm_Sel /> : <Alarm_Desel />; //알림
           } else if (route.name === 'MyPageStack') {
             return focused ? <MyPage_Sel /> : <MyPage_Desel />; //마이페이지
@@ -66,9 +66,9 @@ const MainNavigator = ({route}) => {
         })}
       />
       <Tab.Screen
-        name="AchievePage"
-        component={AchievePage}
-        options={{unmountOnBlur: true, title: '업적 페이지'}}
+        name="AchieveStack"
+        component={AchieveStack}
+        options={{unmountOnBlur: true, headerShown: false}}
       />
       <Tab.Screen
         name="PostStack"
@@ -76,9 +76,9 @@ const MainNavigator = ({route}) => {
         options={{unmountOnBlur: true, headerShown: false}}
       />
       <Tab.Screen
-        name="AlarmPage"
-        component={AlarmPage}
-        options={{tabBarBadge: '30', unmountOnBlur: true, title: '알림 페이지'}}
+        name="AlarmStack"
+        component={AlarmStack}
+        options={{tabBarBadge: '30', unmountOnBlur: true, headerShown: false}}
       />
       <Tab.Screen
         name="MyPageStack"

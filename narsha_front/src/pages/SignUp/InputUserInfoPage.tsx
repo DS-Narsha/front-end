@@ -81,6 +81,7 @@ const InputUserInfoPage = ({navigation, route}) => {
 
   const handleCheckAvailability = async () => {
     try {
+      console.log("check")
       const response = await fetch(`http://localhost:8080/api/user/check-userId?userId=${userId}`, {
       method: 'GET',
       headers: {
@@ -110,9 +111,6 @@ const InputUserInfoPage = ({navigation, route}) => {
       <ScrollView 
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}>
-      <TouchableOpacity onPress={() => navigation.pop()}>
-        <BackSvg />
-      </TouchableOpacity>
         <View style={styles.roundBtnContainer}>
           <Text style={styles.roundGreen}></Text>
           <Text style={styles.roundGreen}></Text>
@@ -168,17 +166,18 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FCFDE1',
     height: '100%',
-    padding: 20,
+    padding: 25,
+    
   },
   content: {
-    padding: 20,
+    padding: 5
   },
   roundBtnContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     marginBottom: 30,
-    marginTop: 15,
+    marginTop: 50,
   },
   roundGreen: {
     backgroundColor: '#98DC63',
@@ -226,8 +225,6 @@ const styles = StyleSheet.create({
     height: 48,
     marginBottom: 45,
 
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   inputContainerID: {
     backgroundColor: '#ffffff',
@@ -238,8 +235,6 @@ const styles = StyleSheet.create({
     height: 48,
     marginBottom: 6,
 
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   inputText: {
     fontSize: 14,
@@ -260,14 +255,14 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   warningText: {
-    marginRight: 140,
+    marginRight: 170,
     marginTop: 2,
     color: '#FF0000',
     fontSize: 12,
     marginBottom: 45
   },
   passText: {
-    marginRight: 140,
+    marginRight: 170,
     marginTop: 2,
     color: '#0000FF',
     fontSize: 12,
@@ -281,9 +276,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
-    elevation: 5,
+    elevation: 4,
+    marginBottom: 7
   },
   buttonText: {
     fontSize: 18,

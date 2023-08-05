@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
+  Keyboard,
 } from 'react-native';
 import AppLogo from '../../../assets/app-logo.svg';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import BackSvg from '../../../assets/back.svg';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 //@ts-ignore
 const LoginPage = ({navigation}) => {
@@ -45,12 +47,6 @@ const LoginPage = ({navigation}) => {
         navigation.reset({
           routes: [{ name: 'MainNavigator' }],
         });
-
-        //navigation.navigate('CommentPage')
-      } else if(data.res === 2) {
-        Alert.alert('로그인 실패', data.message);
-      } else if (data.res === 1) {
-        Alert.alert('로그인 실패', data.message);
       } else {
         console.log(data.message);
         Alert.alert('로그인 실패', data.message);
@@ -62,14 +58,13 @@ const LoginPage = ({navigation}) => {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.pop()}>
-        <BackSvg />
-      </TouchableOpacity>
       <View style={styles.logo}>
         <AppLogo />
         <Text style={styles.logoText}>로그인</Text>
       </View>
+      <View style={styles.content}>
       <View style={styles.formArea}>
         <View style={styles.inputContainer}>
           <TextInput
@@ -94,7 +89,7 @@ const LoginPage = ({navigation}) => {
         </View>
       </View>
       <View style={styles.textArea}>
-        <Text>App이름 회원이 아니신가요?</Text>
+        <Text>뭉게뭉게 회원이 아니신가요?</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('UserType');
@@ -105,7 +100,9 @@ const LoginPage = ({navigation}) => {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
+      </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -115,6 +112,9 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 25,
   },
+  content: {
+    padding: 5
+  },
   logo: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 26,
     marginTop: 30,
-    marginBottom: 20,
+    marginBottom: 25,
     color: '#35562F',
     fontWeight: 'bold',
   },
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     borderColor: '#C0C0C0',
     width: '100%',
     height: 48,
-    marginBottom: 30,
+    marginBottom: 35,
   },
   inputText: {
     fontSize: 14,
@@ -156,9 +156,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
-    elevation: 5,
+    elevation: 4,
   },
   btnText: {
     fontSize: 18,

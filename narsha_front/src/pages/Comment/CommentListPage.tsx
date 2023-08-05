@@ -45,6 +45,9 @@ const CommentListPage = () => {
         return queryClient.getQueryData(['user']);
     }) as { data: UserData };
 
+
+  
+
     // 사용자 프로필 불러오기
     const fetchUserProfile = async (userId: string) => {
         try {
@@ -86,15 +89,19 @@ const CommentListPage = () => {
         }
     };
 
+    
+
+
+
     const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
 
-    if (isLoading) {
-        return (
-          <View style={styles.container}>
-            <Text>로딩 중...</Text>
-          </View>
-        );
-    }
+    // if (isLoading) {
+    //     return (
+    //       <View style={styles.container}>
+    //         <Text>로딩 중...</Text>
+    //       </View>
+    //     );
+    // }
 
     if (error) {
         return (
@@ -112,12 +119,12 @@ const CommentListPage = () => {
         <KeyboardAvoidingView
         style={styles.container}
         >   
-            <View style={styles.title}>
+            {/* <View style={styles.title}>
                 <TouchableOpacity>
                     <BackSvg />
                 </TouchableOpacity>
                 <Text style={styles.titleText}>댓글 목록</Text>
-            </View>
+            </View> */}
 
                 <View style={styles.commentContainer}>
                     <ScrollView 
@@ -192,7 +199,7 @@ const CommentListPage = () => {
                 <Text style={styles.commentImage}></Text>
                 )}
                 <View style={styles.bottomInputText}>
-                    <TextInput placeholder="   @아이디로 글 남기기"/>
+                    <TextInput placeholder="@아이디로 글 남기기"/>
                 </View>
                 <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                     <CommentSendSvg />
@@ -207,6 +214,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,    
+        backgroundColor: "#ffffff"
     },
     scrollViewContainer: {
         flexGrow: 1,
@@ -225,7 +233,7 @@ const styles = StyleSheet.create({
     },
     commentContainer: {
         height: "84%",
-        marginBottom: 15
+        marginBottom: 0,
     },
     commentItem: {
         flexDirection: "row",
@@ -272,7 +280,8 @@ const styles = StyleSheet.create({
         width: '68%',
         height: 42,
         marginLeft: 15,
-        marginRight: 15
+        marginRight: 15,
+        paddingLeft: 10
     },
     centeredView: {
         flex: 1,

@@ -35,7 +35,7 @@ const GroupPage = ({navigation, route}) => {
           },
           body: JSON.stringify({
             groupName,
-            userId: res,
+            userId: res.userId,
             school: schoolName,
             grade,
             group_class: groupClass
@@ -138,17 +138,17 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#FCFDE1",
         height: "100%",
-        padding: 20
+        padding: 25
     },
     content: {
-        padding: 20,
+      padding: 5
     },
     roundBtnContainer: {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "row",
         marginBottom: 30,
-        marginTop: 30
+        marginTop: 50
     },
     roundGreen: {
         backgroundColor: "#98DC63",
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: "#35562F",
         fontWeight: "bold",
-        marginBottom: 60 
+        marginBottom: 35
     },
     formArea: {
         justifyContent: "center",
@@ -221,9 +221,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         shadowOffset: {
           width: 0,
-          height: 3,
+          height: 2,
         },
-        elevation: 5,
+        elevation: 4,
+        marginBottom: 7
       },
       buttonText: {
         fontSize: 18,
