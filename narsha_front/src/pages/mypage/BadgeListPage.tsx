@@ -10,17 +10,31 @@ import {
 } from 'react-native';
 import DS from '../../assets/DS.png';
 import SingleBadge from '../../components/SingleBadge';
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import AchieveData from '../../data/AchieveData.json';
 import {badgeSources} from '../../data/BadgeSources';
 
+
 // @ts-ignore
 export default function BadgeList({navigation}) {
+
+type UserData = {
+  userId:string
+};
+
+// @ts-ignore
+export default function BadgeList({route, navigation}) {
+
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
   // get badge list
   const getBadgeList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/badge-list?userId=${'narsha1111'}`,
+        `http://localhost:8080/api/user/badge-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {

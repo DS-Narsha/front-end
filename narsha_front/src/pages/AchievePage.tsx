@@ -1,4 +1,4 @@
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -6,12 +6,21 @@ import AchieveItem from '../components/AchieveItem';
 import AchieveData from '../data/AchieveData.json';
 import {badgeSources} from '../data/BadgeSources';
 
+type UserData = {
+  userId: string;
+};
+
 const AchievePage = () => {
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
   // get user badgeList
   const getBadgeList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/badge-list?userId=${'student1111'}`,
+        `http://localhost:8080/api/user/badge-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {

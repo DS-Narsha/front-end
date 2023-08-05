@@ -6,14 +6,24 @@ import SingleFriend from '../../components/SingleFriend';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ScrollView} from 'react-native-gesture-handler';
 import userImg from '../../assets/user-image.png';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+type UserData = {
+  groupCode:string
+};
 
 //@ts-ignore
 export default function FriendList({navigation}) {
+  
+      const queryClient = useQueryClient();
+      const {data: userData} = useQuery(['user'], () => {
+        return queryClient.getQueryData(['user']);
+      }) as {data: UserData};
+
       // get friends list
       const getFriendsList = async () =>{
         try{
-          const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${"qkt1wKVnDt"}`,{
+          const res = await fetch(`http://localhost:8080/api/user/student-list?groupCode=${userData.groupCode}`,{
             method:"GET",
             headers: {
               'Content-Type': 'application/json',

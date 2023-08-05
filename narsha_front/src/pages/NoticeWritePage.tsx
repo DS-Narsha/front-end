@@ -2,14 +2,25 @@ import React, { useState } from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Alert, TextInput, Modal, Pressable} from 'react-native';
 import SingleTextInput from '../components/SingleTextInput';
 import MultiTextInput from '../components/MultiTextInput';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ScrollView } from 'react-native-gesture-handler';
+
+type UserData = {
+  userId:string,
+  groupCode:string
+};
 
 // 공지 작성 페이지
 
 export default function NoticeWritePage({navigation}: any) {
 
   const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
+  const userId = userData.userId
+  const groupCode = userData.groupCode
 
   const createNotice = useMutation(async () => {
     try{ 
@@ -19,10 +30,10 @@ export default function NoticeWritePage({navigation}: any) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          groupCode: "qkt1wKVnDt",
+          groupCode: groupCode,
           noticeTitle: textTitle,
           noticeContent: textContent,
-          writer: "narsha1111"
+          writer: userId
         }),
       })
       const data = await res.json();
