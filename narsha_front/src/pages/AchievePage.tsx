@@ -57,7 +57,7 @@ const AchievePage = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.textContainer}>
           <Text style={styles.text}>
             여러분의 SNS 사용을 도와줄 업적입니다~

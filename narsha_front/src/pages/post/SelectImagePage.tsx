@@ -17,6 +17,7 @@ import Toast from 'react-native-easy-toast';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#E3F1A9',
   },
   top: {
     flexDirection: 'column',
@@ -26,6 +27,11 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     backgroundColor: '#F9FAC8',
+    shadowOffset: {
+      width: 5,
+      height: -10,
+    },
+    elevation: 10,
   },
   progress: {
     flexDirection: 'row',
@@ -50,11 +56,16 @@ const styles = StyleSheet.create({
     height: 300,
     width: 300,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 15,
     paddingHorizontal: 16,
     backgroundColor: '#c0c0c0',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowOffset: {
+      width: 5,
+      height: -10,
+    },
+    elevation: 10,
   },
   img: {
     width: 100,
@@ -79,6 +90,12 @@ const styles = StyleSheet.create({
   },
   notice: {
     backgroundColor: '#000000',
+  },
+  line: {
+    borderWidth: 2,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    borderColor: '#F9FAC8',
   },
 });
 
@@ -226,7 +243,7 @@ export default function SelectImage({navigation}) {
         <Text>이미지를 선택해볼까요?</Text>
       </View>
       {/* height */}
-      <View style={{height: 20}} />
+      <View style={{height: 10}} />
       <View style={styles.container}>
         <View style={{alignItems: 'center'}}>
           <ImageBackground
@@ -238,8 +255,10 @@ export default function SelectImage({navigation}) {
             imageStyle={{borderRadius: 10}}
             style={styles.pickImg}></ImageBackground>
         </View>
+        <View style={styles.line} />
         {photos ? (
           <FlatList
+            style={{paddingTop: 15}}
             data={photos.edges}
             renderItem={_RenderItem}
             key={'#'}

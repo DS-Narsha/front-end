@@ -89,7 +89,7 @@ export default function MyPageStack({route, navigation}) {
         },
         headerTitleAlign: 'center',
         cardStyle: {
-          backgroundColor: '#F9FAC8',
+          backgroundColor: '#FCFDE1',
         },
         headerBackImage: () => {
           return (
@@ -104,7 +104,7 @@ export default function MyPageStack({route, navigation}) {
         name="MyPage"
         component={MyPage}
         options={({navigation}) => ({
-          title: `@ ${userData.userId}`,
+          title: `@${userData.userId}`,
           headerRight: () => {
             return (
               <View style={{marginRight: 16}}>

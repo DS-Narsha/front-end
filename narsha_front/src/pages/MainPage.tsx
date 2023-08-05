@@ -57,7 +57,11 @@ const MainScreen = ({navigation}) => {
             {postQuery.data ? (
               <View>
                 <FlatList
+                  showsVerticalScrollIndicator={false}
                   data={postQuery.data.data}
+                  contentContainerStyle={{
+                    paddingBottom: 170,
+                  }}
                   renderItem={({item}) => {
                     const {content, imageArray, user} = item;
 
