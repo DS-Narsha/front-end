@@ -14,13 +14,13 @@ import MyPage_Sel from '../../assets/mypage-sel.svg';
 import MyPage_Desel from '../../assets/mypage-desel.svg';
 import MainStack from './MainStack';
 import MypageStack from './MyPageStack';
-import PostStack from './PostStack'
+import PostStack from './PostStack';
+import {Dimensions, View} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 //@ts-ignore
 const MainNavigator = ({route}) => {
-
   return (
     <Tab.Navigator
       initialRouteName="Main"
@@ -30,6 +30,7 @@ const MainNavigator = ({route}) => {
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20,
         },
+        safeAreaInsets: {bottom: 0},
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
           borderTopLeftRadius: 30,
@@ -41,11 +42,15 @@ const MainNavigator = ({route}) => {
           bottom: 0,
           right: 0,
           paddingBottom: 8,
+          backgroundColor: 'transparant',
+        },
+        style: {
+          backgroundColor: '#E3F1A9',
         },
         tabBarShowLabel: false,
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'Main') {
-            return focused ? <Main_Sel /> : <Main_Desel style={{}} />; // 메인
+            return focused ? <Main_Sel /> : <Main_Desel />; // 메인
           } else if (route.name === 'AchievePage') {
             return focused ? <Achieve_Sel /> : <Achieve_DeSel />; //업적
           } else if (route.name === 'PostStack') {
@@ -60,7 +65,7 @@ const MainNavigator = ({route}) => {
       <Tab.Screen
         name="Main"
         component={MainStack}
-        options={({ route }) => ({
+        options={({route}) => ({
           unmountOnBlur: true,
           headerShown: false,
         })}
@@ -78,7 +83,11 @@ const MainNavigator = ({route}) => {
       <Tab.Screen
         name="AlarmPage"
         component={AlarmPage}
-        options={{tabBarBadge: '30', unmountOnBlur: true, title: '알림 페이지'}}
+        options={{
+          tabBarBadge: '30',
+          unmountOnBlur: true,
+          title: '알림 페이지',
+        }}
       />
       <Tab.Screen
         name="MyPageStack"
