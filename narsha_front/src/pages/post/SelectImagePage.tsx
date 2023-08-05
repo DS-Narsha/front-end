@@ -88,7 +88,6 @@ export default function SelectImage({navigation}) {
   const [pageSize, setPageSize] = useState(24);
   let selectInputs = useRef<string[]>([]); // select photos, send next page
   const [currentPhoto, setCurrentPhoto] = useState('');
-  const [state, setState] = useState('');
 
   // Toast ref
   const toastRef = useRef();
@@ -153,6 +152,7 @@ export default function SelectImage({navigation}) {
     }
   };
 
+  // permission method
   async function hasAndroidPermission() {
     const getCheckPermissionPromise = () => {
       if (Number(Platform.Version) >= 33) {
@@ -215,6 +215,7 @@ export default function SelectImage({navigation}) {
             <ArrowRight
               style={{color: '#61A257'}}
               onPress={() =>
+                // 메서드 추가
                 navigation.navigate('PostLoadingPage', {
                   photos: selectInputs.current,
                 })
