@@ -27,9 +27,8 @@ const MainNavigator = ({route}) => {
       screenOptions={({route}) => ({
         headerStyle: {
           backgroundColor: '#E3F1A9',
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
         },
+        headerTitleAlign: 'center',
         safeAreaInsets: {bottom: 0},
         tabBarHideOnKeyboard: true,
         tabBarStyle: {

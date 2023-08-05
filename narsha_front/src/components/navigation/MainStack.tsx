@@ -7,7 +7,7 @@ import Main from '../../pages/MainPage';
 import NoticeList from '../../pages/NoticeListPage';
 import NoticeWritePage from '../../pages/NoticeWritePage';
 import Write from '../../assets/write.svg';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 
 type UserData = {
   userId: string;
@@ -19,9 +19,9 @@ export default function MainNavigatorStack() {
   const queryClient = useQueryClient();
 
   // queryClient에서 userId와 userType을 가져오는 로직
-  const { data: userData } = useQuery(['user'], () => {
+  const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
-  }) as { data: UserData };
+  }) as {data: UserData};
 
   return (
     <NavigationContainer independent={true}>
@@ -30,8 +30,6 @@ export default function MainNavigatorStack() {
         screenOptions={{
           headerStyle: {
             backgroundColor: '#E3F1A9',
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
           },
           headerBackImage: () => {
             return (
@@ -55,15 +53,13 @@ export default function MainNavigatorStack() {
             headerRight: () => {
               return (
                 <View style={{marginRight: 16}}>
-                  {
-                    userData.userType == "teacher"
-                    ? <Write
-                    onPress={() => {
-                      navigation.navigate('NoticeWritePage');
-                    }}
+                  {userData.userType == 'teacher' ? (
+                    <Write
+                      onPress={() => {
+                        navigation.navigate('NoticeWritePage');
+                      }}
                     />
-                    :null
-                  }
+                  ) : null}
                 </View>
               );
             },
