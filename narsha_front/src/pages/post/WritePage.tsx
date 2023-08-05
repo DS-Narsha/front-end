@@ -11,11 +11,8 @@ import {
 } from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import SendBtn from '../../assets/send-btn.svg';
-import NextPhoto from '../../assets/next-photo.svg';
-import PrevPhoto from '../../assets/prev-photo.svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import Swiper from 'react-native-web-swiper';
 
 type Comment = {
   userId: {
@@ -39,6 +36,10 @@ const WritePage = ({route, navigation}) => {
   const [content, onChangeContent] = useState('');
   const queryClient = useQueryClient();
 
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
   // render item
   const _RenderItem = useCallback(({item, index}: any) => {
     return (
@@ -58,6 +59,30 @@ const WritePage = ({route, navigation}) => {
       </TouchableOpacity>
     );
   }, []);
+
+  // get profile
+  const getProfileDetail = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/user/detail?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const profileQuery = useQuery({
+    queryKey: ['profile-detail'],
+    queryFn: getProfileDetail,
+  });
 
   // uploading post
   const uploadPost = async () => {
@@ -147,62 +172,72 @@ const WritePage = ({route, navigation}) => {
         </View>
         <Text>글을 작성해볼까요?</Text>
       </View>
-      <ScrollView>
-        {/* content */}
-        <View style={styles.contentContainer}>
-          <View style={styles.selectPhotoBox}>
-            <ImageBackground
-              source={{uri: currentPhoto.current}}
-              style={styles.pickImg}
-              imageStyle={{borderRadius: 10}}
-            />
-            <View style={{alignItems: 'center', marginTop: 20}}></View>
-          </View>
-          {/*posting container*/}
-          <ScrollView
-            style={styles.uploadContentBox}
-            showsVerticalScrollIndicator={false}>
-            <View style={{marginTop: 20}}>
-              {/*select image list box*/}
-              <Text style={styles.uploadContentTitle}>내가 선택한 이미지</Text>
-              {resPhoto ? (
-                <FlatList
-                  data={resPhoto}
-                  renderItem={_RenderItem}
-                  key={'#'}
-                  scrollEnabled={false}
-                  keyExtractor={(item, index) => '#' + index.toString()}
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{
-                    marginHorizontal: 30,
-                    flexGrow: 1,
-                    justifyContent: 'flex-start',
-                    alignSelf: 'flex-start',
-                  }}
-                  numColumns={5}
-                />
-              ) : (
-                <Text>이미지가 없습니다.</Text>
-              )}
-              {/* height */}
-              <View style={{height: 30}}></View>
-              {/* writing box*/}
-              <Text style={styles.uploadContentTitle}>글 작성하기</Text>
-              <View style={styles.writingBox}>
-                <View style={styles.profile}></View>
-                <TextInput
-                  placeholder="어떤 글을 작성할건가요?"
-                  value={content}
-                  textAlignVertical="top"
-                  multiline={true}
-                  onChangeText={onChangeContent}
-                  style={styles.content}
-                />
-              </View>
+      {!profileQuery.isLoading && (
+        <ScrollView>
+          {/* content */}
+          <View style={styles.contentContainer}>
+            <View style={styles.selectPhotoBox}>
+              <ImageBackground
+                source={{uri: currentPhoto.current}}
+                style={styles.pickImg}
+                imageStyle={{borderRadius: 10}}
+              />
+              <View style={{alignItems: 'center', marginTop: 20}}></View>
             </View>
-          </ScrollView>
-        </View>
-      </ScrollView>
+            {/*posting container*/}
+            <ScrollView
+              style={styles.uploadContentBox}
+              showsVerticalScrollIndicator={false}>
+              <View style={{marginTop: 20}}>
+                {/*select image list box*/}
+                <Text style={styles.uploadContentTitle}>
+                  내가 선택한 이미지
+                </Text>
+                {resPhoto ? (
+                  <FlatList
+                    data={resPhoto}
+                    renderItem={_RenderItem}
+                    key={'#'}
+                    scrollEnabled={false}
+                    keyExtractor={(item, index) => '#' + index.toString()}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                      marginHorizontal: 30,
+                      flexGrow: 1,
+                      justifyContent: 'flex-start',
+                      alignSelf: 'flex-start',
+                    }}
+                    numColumns={5}
+                  />
+                ) : (
+                  <Text>이미지가 없습니다.</Text>
+                )}
+                {/* height */}
+                <View style={{height: 30}}></View>
+                {/* writing box*/}
+                <Text style={styles.uploadContentTitle}>글 작성하기</Text>
+                <View style={styles.writingBox}>
+                  <Image
+                    source={
+                      profileQuery.data.data.profileImage !== null
+                        ? {uri: profileQuery.data.data.profileImage}
+                        : require('../../assets/graphic/basic-profile.jpg')
+                    }
+                    style={styles.profile}></Image>
+                  <TextInput
+                    placeholder="여러분의 글을 작성해주세요."
+                    value={content}
+                    textAlignVertical="top"
+                    multiline={true}
+                    onChangeText={onChangeContent}
+                    style={styles.content}
+                  />
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -210,7 +245,7 @@ const WritePage = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#213123',
+    backgroundColor: '#E3F1A9',
     height: '100%',
   },
   top: {
@@ -221,6 +256,11 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     backgroundColor: '#F9FAC8',
+    shadowOffset: {
+      width: 5,
+      height: -10,
+    },
+    elevation: 10,
   },
   progress: {
     flexDirection: 'row',
@@ -248,6 +288,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#C0C0C0',
     marginHorizontal: 10,
+    marginVertical: 10,
   },
   contentContainer: {
     flex: 1,
@@ -278,9 +319,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    height: 90,
-    borderRadius: 10,
-    backgroundColor: '#C0C0C0',
+    height: 200,
+    borderRadius: 20,
+    backgroundColor: '#EFEFEF',
+    padding: 10,
   },
   gridView: {
     flexDirection: 'row',

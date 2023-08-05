@@ -14,6 +14,11 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     backgroundColor: '#F9FAC8',
+    shadowOffset: {
+      width: 5,
+      height: -10,
+    },
+    elevation: 10,
   },
   progress: {
     flexDirection: 'row',
