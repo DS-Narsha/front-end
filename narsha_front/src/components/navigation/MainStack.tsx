@@ -30,9 +30,11 @@ export default function MainNavigatorStack() {
         screenOptions={{
           headerStyle: {
             backgroundColor: '#E3F1A9',
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
           },
           cardStyle: {
-            backgroundColor: "#FFFFFF"
+            backgroundColor: '#FFFFFF',
           },
           headerBackImage: () => {
             return (
@@ -54,7 +56,7 @@ export default function MainNavigatorStack() {
           options={({navigation}) => ({
             title: '공지 목록',
             cardStyle: {
-              backgroundColor: "#F9FAC8"
+              backgroundColor: '#F9FAC8',
             },
             headerRight: () => {
               return (
@@ -74,10 +76,12 @@ export default function MainNavigatorStack() {
         <Stack.Screen
           name="NoticeWritePage"
           component={NoticeWritePage}
-          options={{title: '공지 작성 페이지',
-          cardStyle: {
-            backgroundColor: "#F9FAC8"
-          }}}
+          options={{
+            title: '공지 작성 페이지',
+            cardStyle: {
+              backgroundColor: '#F9FAC8',
+            },
+          }}
         />
         {/* <Stack.Screen name="AlarmPage" component={AlarmPage} /> */}
       </Stack.Navigator>
