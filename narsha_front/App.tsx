@@ -57,11 +57,11 @@ export default function App() {
 
   useEffect(() => {
     
-    console.log('now:'+now);
     console.log('start:' + start);
+    console.log('now:'+now);
     console.log("end:"+end);
 
-    console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+    // console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
     // console.log("possible1: ", possible);
 
     // setPossible(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))

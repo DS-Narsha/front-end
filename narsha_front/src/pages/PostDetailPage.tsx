@@ -48,12 +48,27 @@ export default function PostDetail({route, navigation}) {
     queryFn: getPostDetail,
   });
 
-  // data의 이미지 배열 나누기
-  const str = postQuery.data ? postQuery.data.data.imageArray.slice(1, -1) : '';
-  const arr = str.split(', ');
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = arr[i].toString();
-  }
+  const [a, setA] = useState<string[]>([]);
+
+  useEffect(() => {
+    const makeArr = async () => {
+      const data = await getPostDetail();
+      if (data) {
+        const str = data ? data.data.imageArray.slice(1, -1) : '';
+        const arr = str.split(', ');
+
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = arr[i].toString();
+        }
+
+        setA(arr); 
+      }
+    };
+
+    makeArr();
+
+  }, [postQuery.data]);
+
 
   const dateToStr = date => {
     var week = new Array('일', '월', '화', '수', '목', '금', '토');
@@ -94,11 +109,12 @@ export default function PostDetail({route, navigation}) {
             </View>
 
             <View style={styles.imgContainer}>
-              <Swiper
+              {a.length>0?(
+                <Swiper
                 loop
                 controlsEnabled={false}
                 containerStyle={{width: 300, height: 325}}>
-                {arr.map((item, index) => (
+                {a.map((item, index) => (
                   <View key={index}>
                     <Image
                       key={index}
@@ -107,7 +123,10 @@ export default function PostDetail({route, navigation}) {
                     />
                   </View>
                 ))}
-              </Swiper>
+                </Swiper>
+              ):<View/>
+            }
+              
             </View>
 
             <View style={styles.txtContainer}>

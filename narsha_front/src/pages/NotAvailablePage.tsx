@@ -5,12 +5,12 @@ import {
     Image
   } from 'react-native';
 
-  
+
 const NotAvailable = () => {
 
     return (
         <View>
-            <Image source={require('../../src/assets/notAvailable.png')} style={{height:"100%"}}/>
+            <Image source={require('../assets/notAvailable.png')} style={{height:"100%"}}/>
         </View>
     )
 

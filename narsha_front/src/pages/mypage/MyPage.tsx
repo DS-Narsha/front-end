@@ -53,7 +53,7 @@ export default function MyPage({navigation}) {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-post-list?userId=${userData.userId}`,
+        `http://localhost:8080/api/post/user-list?groupCode=${userData.groupCode}`,
         {
           method: 'GET',
           headers: {
@@ -72,6 +72,7 @@ export default function MyPage({navigation}) {
     const imageArray = item.imageArray
       .substring(1, item.imageArray.length - 1)
       .split(', ');
+
     return (
       <TouchableOpacity
         onPress={() => {
