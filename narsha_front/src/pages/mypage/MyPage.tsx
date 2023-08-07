@@ -53,7 +53,7 @@ export default function MyPage({navigation}) {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-list?groupCode=${userData.groupCode}`,
+        `http://localhost:8080/api/post/user-post-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
