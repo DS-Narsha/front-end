@@ -27,7 +27,7 @@ const MainPost = props => {
               }
               style={styles.userImg}
             />
-            <Text style={{fontWeight: '600', fontSize: 18}}>
+            <Text style={{fontWeight: '600', fontSize: 18, fontFamily: 'NanumSquareR'}}>
               {props.user.userId}
             </Text>
           </View>
@@ -50,20 +50,20 @@ const MainPost = props => {
             <Chat style={{marginLeft: 20}} />
           </View>
           <Text
-            style={{fontSize: 13, color: '#909090', marginTop: 5, margin: 10}}>
+            style={{fontSize: 13, color: '#909090', marginTop: 5, margin: 10, fontFamily: 'NanumSquareR'}}>
             Narsha님 외 56명이 좋아합니다
           </Text>
 
-          <Text style={{fontSize: 16, marginTop: 5, margin: 10}}>
+          <Text style={{fontSize: 16, marginTop: 5, margin: 10, fontFamily: 'NanumSquareR'}}>
             {props.content}
           </Text>
           <View style={{flexDirection: 'row', marginTop: 15}}>
             <Image source={userImg} style={styles.cmtUserImg} />
             <View style={{marginTop: -5}}>
-              <Text style={{fontWeight: 'bold', fontSize: 15}}>
+              <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
                 comment_User
               </Text>
-              <Text>댓글 내용</Text>
+              <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
             </View>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
+    fontFamily: 'NanumSquareR',
   },
   userImg: {
     width: 30,

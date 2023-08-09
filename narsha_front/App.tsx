@@ -3,6 +3,7 @@ import React, {useEffect, useState, createContext} from 'react';
 import MainNavigator from './src/components/navigation/MainNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import AuthStack from './src/components/navigation/AuthStack';
+import NotAvailable from './src/pages/NotAvailablePage';
 import {KeyboardAvoidingView, StyleSheet, Platform, View} from 'react-native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {StartTimeContext} from './src/components/StartTimeContext';
@@ -10,6 +11,7 @@ import {EndTimeContext} from './src/components/EndTimeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const isLoggedIn = false;
+// const [possible, setPossible] = useState(true);
 
 // react query
 const queryClient = new QueryClient();
@@ -49,20 +51,27 @@ export default function App() {
     getTime();
   }, []);
 
-  useEffect(() => {
-    const now = String(new Date().getHours()).padStart(2, "0") + String(new Date().getMinutes()).padStart(2, "0");
-    const start = String(startTime.getHours()).padStart(2, "0") + String(startTime.getMinutes()).padStart(2, "0");
-    const end = String(endTime.getHours()).padStart(2, "0") + String(endTime.getMinutes()).padStart(2, "0");
+  const now = String(new Date().getHours()).padStart(2, "0") + String(new Date().getMinutes()).padStart(2, "0");
+  const start = String(startTime.getHours()).padStart(2, "0") + String(startTime.getMinutes()).padStart(2, "0");
+  const end = String(endTime.getHours()).padStart(2, "0") + String(endTime.getMinutes()).padStart(2, "0");
 
-    console.log('now:'+now);
-  
+  useEffect(() => {
+    
     console.log('start:' + start);
+    console.log('now:'+now);
     console.log("end:"+end);
 
+    // console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+    // console.log("possible1: ", possible);
 
-    {startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end)?
-      console.log("T"):console.log("F")}
-      // SplashScreen.hide():SplashScreen.show()}
+    // setPossible(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+    // console.log("possible2: ", possible);
+
+
+  //   {possible?(
+  //     SplashScreen.hide(),
+  //     console.log("t")
+  // ):(console.log("f"))}
     
   });
 
@@ -77,7 +86,9 @@ export default function App() {
               behavior={Platform.select({ios: 'padding', android: undefined})}
               style={styles.avoid}>
               <NavigationContainer>
-                {isLoggedIn ? <MainNavigator /> : <AuthStack />}
+                {/* {true? */}
+                {(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))? 
+                (isLoggedIn ? <MainNavigator /> : <AuthStack />):(<NotAvailable/>)}
               </NavigationContainer>
             </KeyboardAvoidingView>
           </QueryClientProvider>

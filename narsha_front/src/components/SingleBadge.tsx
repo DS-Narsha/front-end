@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
+    fontFamily: 'NanumSquareR'
   },
   container: {
     margin: 10,
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
+    fontFamily: 'NanumSquareB'
   },
 });
 

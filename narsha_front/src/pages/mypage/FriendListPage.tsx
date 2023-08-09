@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
     color: '#61A257',
+    fontFamily: 'NanumSquareR'
   },
   container: {
     padding: 15,
@@ -134,9 +135,11 @@ const styles = StyleSheet.create({
     margin: 3,
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: 'NanumSquareB'
   },
   user_name: {
     margin: 3,
     fontSize: 14,
+    fontFamily: 'NanumSquareR'
   },
 });

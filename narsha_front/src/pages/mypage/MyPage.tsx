@@ -72,6 +72,7 @@ export default function MyPage({navigation}) {
     const imageArray = item.imageArray
       .substring(1, item.imageArray.length - 1)
       .split(', ');
+
     return (
       <TouchableOpacity
         onPress={() => {

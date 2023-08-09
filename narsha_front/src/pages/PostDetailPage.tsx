@@ -48,12 +48,27 @@ export default function PostDetail({route, navigation}) {
     queryFn: getPostDetail,
   });
 
-  // data의 이미지 배열 나누기
-  const str = postQuery.data ? postQuery.data.data.imageArray.slice(1, -1) : '';
-  const arr = str.split(', ');
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = arr[i].toString();
-  }
+  const [a, setA] = useState<string[]>([]);
+
+  useEffect(() => {
+    const makeArr = async () => {
+      const data = await getPostDetail();
+      if (data) {
+        const str = data ? data.data.imageArray.slice(1, -1) : '';
+        const arr = str.split(', ');
+
+        for (let i = 0; i < arr.length; i++) {
+          arr[i] = arr[i].toString();
+        }
+
+        setA(arr); 
+      }
+    };
+
+    makeArr();
+
+  }, [postQuery.data]);
+
 
   const dateToStr = date => {
     var week = new Array('일', '월', '화', '수', '목', '금', '토');
@@ -88,17 +103,18 @@ export default function PostDetail({route, navigation}) {
                 source={{uri: postQuery.data.data.writer.profileImage}}
                 style={styles.userImg}
               />
-              <Text style={{fontWeight: '600', fontSize: 18}}>
+              <Text style={{fontWeight: '600', fontSize: 18, fontFamily: 'NanumSquareB'}}>
                 {postQuery.data.data.writer.userId}
               </Text>
             </View>
 
             <View style={styles.imgContainer}>
-              <Swiper
+              {a.length>0?(
+                <Swiper
                 loop
                 controlsEnabled={false}
                 containerStyle={{width: 300, height: 325}}>
-                {arr.map((item, index) => (
+                {a.map((item, index) => (
                   <View key={index}>
                     <Image
                       key={index}
@@ -107,7 +123,10 @@ export default function PostDetail({route, navigation}) {
                     />
                   </View>
                 ))}
-              </Swiper>
+                </Swiper>
+              ):<View/>
+            }
+              
             </View>
 
             <View style={styles.txtContainer}>
@@ -120,6 +139,7 @@ export default function PostDetail({route, navigation}) {
                     color: '#909090',
                     marginTop: 0,
                     margin: 10,
+                    fontFamily: 'NanumSquareR'
                   }}>
                   Narsha님 외 56명이 좋아합니다
                 </Text>
@@ -127,7 +147,7 @@ export default function PostDetail({route, navigation}) {
             </View>
 
             <View style={styles.contentContainer}>
-              <Text style={{fontSize: 15, marginTop: 0, margin: 10}}>
+              <Text style={{fontSize: 15, marginTop: 0, margin: 10, fontFamily: 'NanumSquareR'}}>
                 {postQuery.data.data.content}
               </Text>
               <Text
@@ -136,6 +156,7 @@ export default function PostDetail({route, navigation}) {
                   color: '#909090',
                   marginTop: 0,
                   margin: 10,
+                  fontFamily: 'NanumSquareR'
                 }}>
                 {dateToStr(new Date(postQuery.data.data.createAt))}
               </Text>
@@ -146,7 +167,7 @@ export default function PostDetail({route, navigation}) {
 
               <TouchableOpacity
                 onPress={() => navigation.navigate('CommentListPage')}>
-                <Text style={{marginTop: 15, color: '#61A257'}}>
+                <Text style={{marginTop: 15, color: '#61A257', fontFamily: 'NanumSquareR'}}>
                   댓글 17개 전체 보기
                 </Text>
               </TouchableOpacity>
@@ -154,50 +175,50 @@ export default function PostDetail({route, navigation}) {
               <View style={styles.cmtBody}>
                 <Image source={userImg} style={styles.cmtUserImg2} />
                 <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
                     comment_User
                   </Text>
-                  <Text>댓글 내용</Text>
+                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
                 </View>
               </View>
 
               <View style={styles.cmtBody}>
                 <Image source={userImg} style={styles.cmtUserImg2} />
                 <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
                     comment_User
                   </Text>
-                  <Text>댓글 내용</Text>
+                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
                 </View>
               </View>
 
               <View style={styles.cmtBody}>
                 <Image source={userImg} style={styles.cmtUserImg2} />
                 <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
                     comment_User
                   </Text>
-                  <Text>댓글 내용</Text>
+                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
                 </View>
               </View>
 
               <View style={styles.cmtBody}>
                 <Image source={userImg} style={styles.cmtUserImg2} />
                 <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
                     comment_User
                   </Text>
-                  <Text>댓글 내용</Text>
+                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
                 </View>
               </View>
 
               <View style={styles.cmtBody}>
                 <Image source={userImg} style={styles.cmtUserImg2} />
                 <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
                     comment_User
                   </Text>
-                  <Text>댓글 내용</Text>
+                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
                 </View>
               </View>
             </View>
@@ -289,5 +310,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '75%',
+    fontFamily: 'NanumSquareB'
   },
 });
