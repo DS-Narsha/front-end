@@ -146,9 +146,9 @@ const InputUserInfoPage = ({navigation, route}) => {
           <Text style={styles.formText}>비밀번호</Text>
           <View style={styles.inputContainer}>
             <TextInput 
-            style={styles.inputText} 
-            secureTextEntry
+            style={{ ...styles.inputText, fontFamily: undefined }}
             value={password}
+            secureTextEntry
             onChangeText={(text: React.SetStateAction<string>) => setPassword(text)} />
           </View>
         </View>
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
     color: '#35562F',
     fontWeight: '800',
     marginBottom: 60,
+    fontFamily: 'NanumSquareB',
   },
   formArea: {
     justifyContent: 'center',
@@ -239,10 +240,11 @@ const styles = StyleSheet.create({
   inputText: {
     fontSize: 14,
     marginLeft: 10,
+    fontFamily: 'NanumSquareR',
   },
   checkButton: {
     position: 'absolute',
-    top: 7,
+    top: 8,
     right: 3,
     backgroundColor: '#ffffff',
     borderRadius: 12,
@@ -253,20 +255,23 @@ const styles = StyleSheet.create({
   checkButtonText: {
     fontSize: 13,
     color: '#000000',
+    fontFamily: 'NanumSquareR',
   },
   warningText: {
     marginRight: 170,
     marginTop: 2,
     color: '#FF0000',
     fontSize: 12,
-    marginBottom: 45
+    marginBottom: 45,
+    fontFamily: 'NanumSquareR',
   },
   passText: {
     marginRight: 170,
     marginTop: 2,
     color: '#0000FF',
     fontSize: 12,
-    marginBottom: 45
+    marginBottom: 45,
+    fontFamily: 'NanumSquareR',
   },
   nextButton: {
     backgroundColor: '#AADF98',
@@ -284,6 +289,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: '#000000',
+    fontFamily: 'NanumSquareB',
   },
 });
 

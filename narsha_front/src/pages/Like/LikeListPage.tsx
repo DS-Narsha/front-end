@@ -10,6 +10,7 @@ import {
 import BackSvg from "../../assets/back.svg";
 import CommentSendSvg from "../../assets/comment-send.svg"
 import { useQuery } from "@tanstack/react-query";
+import basicProfile from '../../assets/graphic/basic-profile.jpg';
 
 type Like = {
     userId: {
@@ -20,11 +21,12 @@ type Like = {
 };
 
 //@ts-ignore
-const LikeListPage = () => {
+const LikeListPage = ({route}) => {
+    const postId = route.params.id;
 
     const fetchComments = async () => {
         try {
-          const response = await fetch("http://localhost:8080/api/like/list?postId=1");
+          const response = await fetch(`http://localhost:8080/api/like/list?postId=${postId}`);
           const data = await response.json();
           if (data.status === 200) {
             return data.data;
@@ -39,13 +41,13 @@ const LikeListPage = () => {
 
     const { data: likes, error, isLoading } = useQuery(["likes"], fetchComments);
 
-    // if (isLoading) {
-    //     return (
-    //       <View style={styles.container}>
-    //         <Text>로딩 중...</Text>
-    //       </View>
-    //     );
-    // }
+    if (isLoading) {
+        return (
+          <View style={styles.container}>
+            {/* <Text>로딩 중...</Text> */}
+          </View>
+        );
+    }
 
     if (error) {
         return (
@@ -57,12 +59,6 @@ const LikeListPage = () => {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.title}>
-                <TouchableOpacity>
-                    <BackSvg />
-                </TouchableOpacity>
-                <Text style={styles.titleText}>게시글 좋아요 목록</Text>
-            </View> */}
             <View style={styles.likeContainer}>
                 {likes.map((like: Like, index: number) => (
                     <View style={styles.likeItem} key={index}>
@@ -73,7 +69,9 @@ const LikeListPage = () => {
                         style={styles.likeImage}
                         />
                     ) : (
-                        <Text style={styles.likeImage}> </Text>
+                        <Image 
+                            source={basicProfile}
+                            style={styles.likeImage} />
                     )}
                         <View style={styles.likeTextBox}>
                             <Text style={styles.likeID}>{like.userId.userId}</Text>
@@ -127,12 +125,14 @@ const styles = StyleSheet.create({
         color: "#000000",
         fontSize: 15,
         fontWeight: "700",
-        marginBottom: 2
+        marginBottom: 4,
+        fontFamily: 'NanumSquareB'
     },
     likeName: {
         color: "#000000",
         fontSize: 16,
-        marginBottom: 3,
+        marginBottom: 5,
+        fontFamily: 'NanumSquareR'
     },
     
 })

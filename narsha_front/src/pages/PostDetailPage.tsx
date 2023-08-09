@@ -9,6 +9,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
+import BackSvg from "../assets/back.svg";
 
 type UserData = {
   userId: string;
@@ -17,6 +18,7 @@ type UserData = {
 
 //@ts-ignore
 export default function PostDetail({route, navigation}) {
+
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
 
@@ -132,7 +134,7 @@ export default function PostDetail({route, navigation}) {
             <View style={styles.txtContainer}>
               <Heart style={{marginLeft: 10}} />
               <TouchableOpacity
-                onPress={() => navigation.navigate('LikeListPage')}>
+                onPress={() => navigation.navigate('LikeListPage', { id: id })}>
                 <Text
                   style={{
                     fontSize: 13,
@@ -166,7 +168,7 @@ export default function PostDetail({route, navigation}) {
               <Line />
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('CommentListPage')}>
+                onPress={() => navigation.navigate('CommentListPage', { id: id })}>
                 <Text style={{marginTop: 15, color: '#61A257', fontFamily: 'NanumSquareR'}}>
                   댓글 17개 전체 보기
                 </Text>

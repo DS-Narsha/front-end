@@ -8,6 +8,7 @@ import {
     ActivityIndicator
 } from 'react-native';
 
+// @ts-ignore
 const Loading = () => {
     const [modalVisible, setModalVisible] = useState(false);
     return (

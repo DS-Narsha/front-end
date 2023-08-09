@@ -1,6 +1,6 @@
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {useEffect} from 'react';
 import MyPage from '../../pages/mypage/MyPage';
 import EditProfile from '../../pages/mypage/EditProfilePage';
@@ -59,22 +59,29 @@ export default function MyPageStack({route, navigation}) {
         navigation.setOptions({tabBarStyle: {display: 'none'}});
         break;
       case 'StudentListPage':
-        navigation.setOptions({tabBarStyle: {display: 'none'}});
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       case 'TimeSelectPage':
-        navigation.setOptions({tabBarStyle: {display: 'none'}});
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       case 'NoticeWritePage':
-        navigation.setOptions({tabBarStyle: {display: 'none'}});
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       case 'NoticeList':
-        navigation.setOptions({tabBarStyle: {display: 'none'}});
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       case 'PostDetailPage':
         navigation.setOptions({tabBarStyle: {display: 'none'}});
         break;
+      case 'CommentListPage':
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
+        break;
+      case 'LikeListPage':
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
+        break;
       default:
         navigation.setOptions({tabBarStyle: tabBarStyle});
+        break;
     }
   }, [navigation, route]);
 
@@ -93,12 +100,11 @@ export default function MyPageStack({route, navigation}) {
         },
         headerBackImage: () => {
           return (
-            <View style={{marginLeft: 7}}>
-              <BackSvg />
+            <View style={{marginLeft: 7}}>             
+                <BackSvg />
             </View>
           );
         },
-        headerTitleAlign: 'center',
       }}>
       <Stack.Screen
         name="MyPage"

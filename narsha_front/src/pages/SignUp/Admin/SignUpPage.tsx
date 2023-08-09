@@ -119,11 +119,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginBottom: 18,
     color: '#000000',
+    fontFamily: 'NanumSquareB',
   },
   textTitle: {
     fontSize: 16,
     marginBottom: 8,
     color: '#000000',
+    fontFamily: 'NanumSquareR',
   },
   textBody: {
     fontSize: 16,
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     color: '#000000',
+    fontFamily: 'NanumSquareB',
   },
 });
 

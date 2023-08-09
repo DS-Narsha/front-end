@@ -17,6 +17,8 @@ import CommentSendSvg from "../../assets/comment-send.svg"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import Loading from './Loading';
+import basicProfile from '../../assets/graphic/basic-profile.jpg';
+import { useNavigationState } from "@react-navigation/native";
 
 // 댓글 목록 페이지 
 
@@ -35,18 +37,21 @@ type UserData = {
 };
 
 //@ts-ignore
-const CommentListPage = () => {
+const CommentListPage = ({route, navigation}) => {
+    const postId = route.params.id;
     const [modalVisible, setModalVisible] = useState(false);
+    const[loadingModalVisible, setLoadingModalVisible] = useState(false);
     const [profileImage, setProfileImage] = useState('');
+    const[commentContent, setCommentContent] = useState('');
     const queryClient = useQueryClient();
+
+
+    
 
     // queryClient에서 userId와 userType을 가져오는 로직
     const { data: userData } = useQuery(['user'], () => {
         return queryClient.getQueryData(['user']);
     }) as { data: UserData };
-
-
-  
 
     // 사용자 프로필 불러오기
     const fetchUserProfile = async (userId: string) => {
@@ -67,8 +72,6 @@ const CommentListPage = () => {
     
       useEffect(() => {
         if (userData && userData.userId) {
-            console.log(userData.userId);
-            console.log(userData.userType);
           fetchUserProfile(userData.userId);
         }
       }, [userData]);
@@ -76,7 +79,7 @@ const CommentListPage = () => {
     // 포스트에 해당되는 댓글 목록 불러오기        
     const fetchComments = async () => {
         try {
-          const response = await fetch("http://localhost:8080/api/comment/list?postId=1");
+          const response = await fetch(`http://localhost:8080/api/comment/list?postId=${postId}`);
           const data = await response.json();
           if (data.status === 200) {
             return data.data;
@@ -89,8 +92,42 @@ const CommentListPage = () => {
         }
     };
 
-    
 
+    const commentMutation = useMutation(async () => {
+        const response = await fetch(`http://localhost:8080/api/comment/create`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            postId: postId,
+            userId: userData.userId,
+            content: commentContent
+          }),
+        })
+    
+        const data = await response.json();
+        return data;
+    
+    });
+
+    const handleCommentSubmit = async () => {
+        try{
+            //setLoadingModalVisible(true);
+            await commentMutation.mutateAsync();
+
+            // setLoadingModalVisible(false);
+            setModalVisible(false);
+            queryClient.invalidateQueries(["comments"]);
+
+            setCommentContent('');
+
+        } catch(error) {
+            Alert.alert("오류");
+
+            setModalVisible(false);
+        }
+    }
 
 
     const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
@@ -98,7 +135,7 @@ const CommentListPage = () => {
     if (isLoading) {
         return (
           <View style={styles.container}>
-            <Text>로딩 중...</Text>
+            {/* <Text>로딩 중...</Text> */}
           </View>
         );
     }
@@ -113,18 +150,15 @@ const CommentListPage = () => {
     
     const keyboardBehavior =
     Platform.OS === 'ios' ? 'position' : Platform.OS === 'android' ? 'height' : 'height';
-
+    // 뒤로가기 버튼을 눌렀을 때 현재 스택의 정보 출력
+    const handleGoBack = () => {
+        console.log("뒤로가기")
+        navigation.pop();
+    };
       
     return (
         <KeyboardAvoidingView
-        style={styles.container}
-        >   
-            {/* <View style={styles.title}>
-                <TouchableOpacity>
-                    <BackSvg />
-                </TouchableOpacity>
-                <Text style={styles.titleText}>댓글 목록</Text>
-            </View> */}
+        style={styles.container}>   
 
                 <View style={styles.commentContainer}>
                     <ScrollView 
@@ -138,7 +172,9 @@ const CommentListPage = () => {
                                 style={styles.commentImage}
                                 />
                             ) : (
-                                <Text style={styles.commentImage}> </Text>
+                                <Image 
+                                source={basicProfile}
+                                style={styles.commentImage} />
                             )}
                             
                             <View style={styles.commentTextBox}>
@@ -181,14 +217,15 @@ const CommentListPage = () => {
                 <View style={styles.modalBtnArea}>
                     <TouchableOpacity
                         style={[styles.button]}
-                        onPress={() => setModalVisible(!modalVisible)}>
+                        onPress={handleCommentSubmit}>
                         <Text style={styles.textStyle}>확인</Text>
                     </TouchableOpacity>
                 </View>
                 </View>
                 </View>
             </Modal>
-        
+
+
             <View style={styles.bottomContainer}>
                 {profileImage ? (
                 <Image
@@ -196,10 +233,17 @@ const CommentListPage = () => {
                     style={styles.commentImage}
                 />
                 ) : (
-                <Text style={styles.commentImage}></Text>
+                    <Image 
+                        source={basicProfile}
+                        style={styles.commentImage} />
                 )}
                 <View style={styles.bottomInputText}>
-                    <TextInput placeholder="@아이디로 글 남기기"/>
+                    <TextInput 
+                    onChangeText={(text: React.SetStateAction<string>) =>
+                        setCommentContent(text)
+                      }
+                      value={commentContent}
+                    placeholder="@아이디로 글 남기기"/>
                 </View>
                 <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                     <CommentSendSvg />
@@ -219,20 +263,10 @@ const styles = StyleSheet.create({
     scrollViewContainer: {
         flexGrow: 1,
     },
-    title: {
-        flexDirection: "row",
-        textAlign: "center",
-        marginBottom: 30,
-        
-    },
-    titleText: {
-        fontSize: 20,
-        fontWeight: "500",
-        marginLeft: 120,
-        color: "#000000"
-    },
+
+
     commentContainer: {
-        height: "84%",
+        height: "92%",
         marginBottom: 0,
     },
     commentItem: {
@@ -255,15 +289,18 @@ const styles = StyleSheet.create({
         color: "#000000",
         fontSize: 15,
         fontWeight: "600",
-        marginBottom: 2
+        marginBottom: 4,
+        fontFamily: 'NanumSquareB'
     },
     commentText: {
         color: "#000000",
         fontSize: 16,
-        marginBottom: 3,
+        marginBottom: 5,
+        fontFamily: 'NanumSquareR'
     },
     commentDay: {
         fontSize: 14,
+        fontFamily: 'NanumSquareR'
     },
     bottomContainer: {
         flexDirection: "row",
@@ -281,7 +318,8 @@ const styles = StyleSheet.create({
         height: 42,
         marginLeft: 15,
         marginRight: 15,
-        paddingLeft: 10
+        paddingLeft: 10,
+        fontFamily: 'NanumSquareR'
     },
     centeredView: {
         flex: 1,
@@ -301,7 +339,8 @@ const styles = StyleSheet.create({
     },
     modalTitleText: {
         color: "black",
-        fontSize: 17
+        fontSize: 17,
+        fontFamily: 'NanumSquareB'
     },
     modalView: {
         margin: 20,
@@ -345,12 +384,14 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
         textAlign: 'center',
-        paddingBottom: 2
+        paddingBottom: 2,
+        fontFamily: 'NanumSquareB'
     },
     modalText: {
         marginBottom: 3,
         textAlign: 'center',
-        color: 'black'
+        color: 'black',
+        fontFamily: 'NanumSquareR'
     },
     modalAlertArea: {
         marginTop: 25
@@ -374,9 +415,10 @@ const styles = StyleSheet.create({
     },
     alertText: {
         color: "black",
-        fontSize: 11,
+        fontSize: 12,
         marginLeft: 7,
-        paddingBottom: 5
+        paddingBottom: 5,
+        fontFamily: 'NanumSquareR'
     }
 })
 

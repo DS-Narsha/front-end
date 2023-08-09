@@ -165,11 +165,13 @@ const styles = StyleSheet.create({
     color: '#35562F',
     fontWeight: 'bold',
     marginBottom: 10,
+    fontFamily: 'NanumSquareB'
   },
   textBody: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 110,
+    fontFamily: 'NanumSquareR'
   },
   teacherBtn: {
     backgroundColor: '#E3F1A9',
@@ -188,6 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '900',
     marginTop: 5,
+    fontFamily: 'NanumSquareR'
   },
   studentBtn: {
     backgroundColor: '#F9FAC8',
@@ -220,6 +223,7 @@ const styles = StyleSheet.create({
   modalTitleText: {
     color: 'black',
     fontSize: 18,
+    fontFamily: 'NanumSquareB'
   },
   modalView: {
     margin: 20,
@@ -252,11 +256,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingBottom: 2,
+    fontFamily: 'NanumSquareR'
   },
   modalText: {
-    marginBottom: 3,
+    marginBottom: 8,
     textAlign: 'center',
     color: 'black',
+    fontFamily: 'NanumSquareR',
+    fontSize: 13
   },
 });
 
