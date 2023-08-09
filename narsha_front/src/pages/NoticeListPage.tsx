@@ -78,6 +78,7 @@ export default function NoticeList({navigation}) {
             flexGrow: 0.5,
             justifyContent: 'space-around',
             alignSelf:'center',
+            flexDirection: 'column-reverse',
             backgroundColor: '#FCFDE1'
           }}
           numColumns={1}
@@ -114,6 +115,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 20,
     padding: 8,
+    fontFamily: 'NanumSquareB',
     color: '#61A257',
     shadowOffset: {
       width: 0,

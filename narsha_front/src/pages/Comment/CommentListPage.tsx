@@ -95,13 +95,13 @@ const CommentListPage = () => {
 
     const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
 
-    // if (isLoading) {
-    //     return (
-    //       <View style={styles.container}>
-    //         <Text>로딩 중...</Text>
-    //       </View>
-    //     );
-    // }
+    if (isLoading) {
+        return (
+          <View style={styles.container}>
+            <Text>로딩 중...</Text>
+          </View>
+        );
+    }
 
     if (error) {
         return (

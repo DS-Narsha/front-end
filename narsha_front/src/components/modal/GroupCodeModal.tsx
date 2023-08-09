@@ -129,6 +129,8 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   modalText: {
+    fontFamily: 'NanumSquareR',
+    color: '#000000',
     flexDirection: 'row',
     marginLeft: 20,
     marginTop: 20,
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   modalTitleText: {
+    fontFamily: 'NanumSquareB',
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
@@ -149,11 +152,13 @@ const styles = StyleSheet.create({
   container: {
   },
   strongText: {
+    fontFamily: 'NanumSquareB',
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
   },
   content: {
+    fontFamily: 'NanumSquareR',
     marginLeft: 10,
     fontSize: 14,
     color: '#909090',

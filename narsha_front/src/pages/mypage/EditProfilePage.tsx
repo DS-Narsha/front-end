@@ -64,7 +64,7 @@ export default function EditProfile({navigation}) {
       formData.append(
         'content',
         JSON.stringify({
-          userId: 'narsha1111',
+          userId: userData.userId,
           birth: textBirthday,
           nikname: textNickname,
           intro: textIntro,
@@ -276,7 +276,7 @@ export default function EditProfile({navigation}) {
               mutate(), navigation.navigate('MyPage');
             }}>
             <View style={styles.edit}>
-              <EditButton />
+              <Text style={styles.btntitle}>수정하기</Text>
             </View>
           </TouchableOpacity>
         </>
@@ -293,6 +293,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
+    fontFamily: 'NanumSquareR',
+    color: '#000000',
     height: 40,
     width: 250,
     borderColor: 'gray',
@@ -315,6 +317,18 @@ const styles = StyleSheet.create({
   },
   edit: {
     marginTop: 70,
+    backgroundColor: '#AADF98',
+    height: 51,
+    width: 195,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 30,
+    marginBottom:20,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   editPhoto: {
     opacity: 0.5,
@@ -328,7 +342,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: 'rgba(150, 150, 150, 0.5)',
   },
   modalView: {
@@ -399,8 +412,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   strongText: {
+    fontFamily: 'NanumSquareB',
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
+  },
+  btntitle: {
+    fontFamily: 'NanumSquareB',
+    color: '#000000',
+    fontSize: 15,
+    fontWeight: '200',
   },
 });

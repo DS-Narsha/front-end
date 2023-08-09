@@ -105,6 +105,9 @@ export default function MyPageStack({route, navigation}) {
         component={MyPage}
         options={({navigation}) => ({
           title: `@${userData.userId}`,
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           headerRight: () => {
             return (
               <View style={{marginRight: 16}}>
@@ -125,6 +128,9 @@ export default function MyPageStack({route, navigation}) {
         component={EditProfile}
         options={{
           title: '프로필 수정',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },
@@ -135,6 +141,9 @@ export default function MyPageStack({route, navigation}) {
         component={FriendList}
         options={{
           title: '친구 목록',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },
@@ -145,6 +154,9 @@ export default function MyPageStack({route, navigation}) {
         component={BadgeList}
         options={{
           title: '뱃지 목록',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },
@@ -155,6 +167,9 @@ export default function MyPageStack({route, navigation}) {
         component={NoticeList}
         options={({navigation}) => ({
           title: '공지 목록',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           headerRight: () => {
             return (
               <View style={{marginRight: 16}}>
@@ -175,6 +190,9 @@ export default function MyPageStack({route, navigation}) {
         component={TeacherMenu}
         options={{
           title: '선생님 관리 메뉴',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },
@@ -185,6 +203,9 @@ export default function MyPageStack({route, navigation}) {
         component={TimeSelectPage}
         options={{
           title: '앱 사용시간 설정하기',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },
@@ -195,6 +216,9 @@ export default function MyPageStack({route, navigation}) {
         component={StudentListPage}
         options={{
           title: '그룹에 가입한 학생 목록',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },
@@ -203,7 +227,12 @@ export default function MyPageStack({route, navigation}) {
       <Stack.Screen
         name="NoticeWritePage"
         component={NoticeWritePage}
-        options={{title: '공지 작성 페이지'}}
+        options={{
+          title: '공지 작성 페이지',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
+        }}
       />
 
       <Stack.Screen
@@ -211,6 +240,9 @@ export default function MyPageStack({route, navigation}) {
         component={PostDetailPage}
         options={{
           title: '포스트 상세 페이지',
+          headerTitleStyle: {
+            fontFamily: 'NanumSquareB', color: '#000000',
+          },
           cardStyle: {
             backgroundColor: '#ffffff',
           },

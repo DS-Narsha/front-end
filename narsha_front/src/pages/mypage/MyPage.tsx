@@ -53,7 +53,7 @@ export default function MyPage({navigation}) {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-list?groupCode=${userData.groupCode}`,
+        `http://localhost:8080/api/post/user-post-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -92,7 +92,7 @@ export default function MyPage({navigation}) {
     queryFn: getProfileDetail,
   });
 
-  const postQuery = useQuery({
+  const PostQuery = useQuery({
     queryKey: ['posting-list'],
     queryFn: getPostingList,
   });
@@ -112,17 +112,17 @@ export default function MyPage({navigation}) {
                 style={styles.profile}
               />
             </View>
-            <Text style={{fontWeight: 'bold', fontSize: 15, padding: 2}}>
+            <Text style={{fontFamily: 'NanumSquareB', color: '#000000', fontSize: 15, padding: 2}}>
               {profileQuery.data.data.nikname === null
                 ? '닉네임을 작성해주세요.'
                 : profileQuery.data.data.nikname}
             </Text>
-            <Text style={{fontSize: 12, padding: 1}}>
+            <Text style={{fontFamily: 'NanumSquareR', color: '#000000', fontSize: 12, padding: 2}}>
               {profileQuery.data.data.birth === null
                 ? '생일을 아직 등록하지 않았어요.'
                 : profileQuery.data.data.birth}
             </Text>
-            <Text style={{fontSize: 13, padding: 2}}>
+            <Text style={{fontFamily: 'NanumSquareR', color: '#000000', fontSize: 12.5, padding: 3}}>
               {profileQuery.data.data.intro === null
                 ? '소개글을 아직 쓰지 않았어요.'
                 : profileQuery.data.data.intro}
@@ -132,6 +132,8 @@ export default function MyPage({navigation}) {
               onPress={() => navigation.navigate('EditProfile')}>
               <Text
                 style={{
+                  fontFamily: 'NanumSquareB',
+                  color: '#000000',
                   fontWeight: 'bold',
                   fontSize: 10,
                   padding: 2,
@@ -156,10 +158,10 @@ export default function MyPage({navigation}) {
               </View>
             </TouchableOpacity>
           </View>
-          {postQuery.data.data ? (
+          {PostQuery.data.data ? (
             <View style={{marginTop: 10}}>
               <FlatList
-                data={postQuery.data.data}
+                data={PostQuery.data.data}
                 renderItem={_RenderItem}
                 key={'#'}
                 keyExtractor={(item, index) => '#' + index.toString()}
@@ -169,14 +171,16 @@ export default function MyPage({navigation}) {
                 }}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
-                  paddingBottom: 100,
+                  paddingBottom: 400,
                   marginHorizontal: 30,
                   flexGrow: 0.5,
                   justifyContent: 'flex-start',
-                  alignSelf: 'flex-start',
+                  alignSelf: 'center',
+                  // flexDirection: 'column-reverse',
                   backgroundColor: '#FFFFFF',
                 }}
                 numColumns={3}
+                // columnWrapperStyle={{ flexDirection: 'row-reverse' }}
               />
             </View>
           ) : (

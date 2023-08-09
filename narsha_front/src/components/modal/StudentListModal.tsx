@@ -5,7 +5,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default function StudentListModal({ item }: any) {
   const [modalVisible, setModalVisible] = useState(false);
-  const profileImage = item.profileImage.substring(0,item.profileImage.length).split(', ')
+  const length = item.profileImage.length;
+  const profileImage = item.profileImage.substring(0,length);
 
   return (
     <View style={styles.container}>
@@ -50,7 +51,7 @@ export default function StudentListModal({ item }: any) {
         <View style={styles.studentContentContainer}>
           <View>
             <ImageBackground
-              source={{ uri: profileImage[0] }}
+              source={{ uri: profileImage }}
               style={[styles.img]}
               imageStyle={{ borderRadius: 10 }} />
           </View>
@@ -73,7 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: 'rgba(150, 150, 150, 0.5)',
   },
   modalView: {
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   btnText: {
+    fontFamily: 'NanumSquareB',
     color: '#000000',
     fontSize: 15,
     fontWeight: '300',
@@ -155,15 +156,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   strongText: {
+    fontFamily: 'NanumSquareB',
     fontSize: 14,
     fontWeight: '300',
     color: '#000000',
+    paddingBottom: 2,
   },
   nickname: {
     fontSize: 12,
     color: '#909090',
   },
   content: {
+    fontFamily: 'NanumSquareR',
     marginLeft: 10,
     fontSize: 14,
     color: '#909090',

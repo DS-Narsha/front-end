@@ -32,7 +32,12 @@ export default function AlarmStack() {
         <Stack.Screen
           name="Alarm"
           component={AlarmPage}
-          options={{title: '알림'}}
+          options={{
+            title: '알림',
+            headerTitleStyle: {
+              fontFamily: 'NanumSquareB', color: '#000000',
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

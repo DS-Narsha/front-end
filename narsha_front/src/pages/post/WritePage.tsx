@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -26,6 +26,7 @@ type Comment = {
 type UserData = {
   userId: string;
   userType: string;
+  groupCode: string;
 };
 
 //@ts-ignore
@@ -35,6 +36,8 @@ const WritePage = ({route, navigation}) => {
   const [selPhoto, useSelPhoto] = useState(resPhoto[0]);
   const [content, onChangeContent] = useState('');
   const queryClient = useQueryClient();
+  // const [postId, onChangePostId] = useState();
+  let postId = 0;
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -101,8 +104,8 @@ const WritePage = ({route, navigation}) => {
       formData.append(
         'info',
         JSON.stringify({
-          groupCode: 'TBu3VNrBdm',
-          writer: 'narsha1111',
+          groupCode: userData.groupCode,
+          writer: userData.userId,
           content: content,
         }),
       );
@@ -131,18 +134,50 @@ const WritePage = ({route, navigation}) => {
     // setting datas at UI, 특정 속성 수정
     queryClient.setQueryData(
       ['posting-list', 'data', 'user', 'userId'],
-      'narsha5555',
+      userData.userId,
     );
     queryClient.setQueryData(['posting-list', 'data', 'content'], content);
     queryClient.setQueryData(['posting-list', 'data', 'imageArray'], resPhoto);
+    
     // if error -> rollback
     return () => queryClient.setQueryData(['posting-list'], oldData);
   };
+
+  const getAIComment = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/comment/create/chat?postId=${postId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const AICommentQuery = useQuery({
+    queryKey: ['AI-comment'],
+    queryFn: getAIComment,
+    enabled: false,
+  });
 
   // useMutation: post
   const {mutate} = useMutation(['profile-update'], {
     mutationFn: () => uploadPost(),
     onMutate: mutatePost,
+    onSuccess:(data) => {
+      console.log(data.data.postId);
+      // onChangePostId(data.data.postId);
+      postId = data.data.postId;
+      console.log(postId);
+      AICommentQuery.refetch();
+    },
     onError: (error, variable, rollback) => {
       if (rollback) rollback();
       else console.log(error);

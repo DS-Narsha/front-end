@@ -52,7 +52,7 @@ export default function NoticeWritePage({navigation}: any) {
       
       if(data.status === 200) {
         setModalVisible(!modalVisible)
-        navigation.navigate('NoticeList');
+        navigation.reset({routes: [{name: 'Main'}]});
       } else {
         console.log(data.message);
         Alert.alert('공지 등록 실패', data.message);
@@ -114,8 +114,8 @@ export default function NoticeWritePage({navigation}: any) {
               </View>
               <View style={styles.modalBody}>
                 <View style={styles.modalText}>
-                  <Text style={styles.strongText}>공지는 등록 후 삭제가 불가능 합니다.</Text>
-                  <Text style={styles.strongText}>정말로 공지를 등록하시겠습니까?</Text>
+                  <Text style={styles.contentText}>공지는 등록 후 삭제가 불가능 합니다.</Text>
+                  <Text style={styles.contentText}>정말로 공지를 등록하시겠습니까?</Text>
                 </View>
               </View>
               <View style={styles.modalEnd}>
@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   title: {
+    fontFamily: 'NanumSquareB',
     fontWeight: '200',
     fontSize: 15,
     color: '#000000',
@@ -188,6 +189,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   btntitle: {
+    fontFamily: 'NanumSquareB',
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
@@ -226,7 +228,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: 'rgba(150, 150, 150, 0.5)',
   },
   modalView: {
@@ -277,7 +278,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   strongText: {
-    fontSize: 14,
+    fontFamily: 'NanumSquareB',
+    fontSize: 13,
     fontWeight: '200',
     color: '#000000',
   },
@@ -294,5 +296,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
+  },
+  contentText: {
+    fontFamily: 'NanumSquareR',
+    fontSize: 13,
+    color: '#000000',
+    marginBottom: 3,
   },
 });

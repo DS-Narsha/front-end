@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
       alignItems: 'flex-end',
   },
   text:{
+    fontFamily: 'NanumSquareB',
       color: '#000000',
       fontSize: 15,
       fontWeight: '200',

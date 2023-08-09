@@ -34,7 +34,12 @@ export default function AchieveStack() {
         <Stack.Screen
           name="AchievePage"
           component={AchievePage}
-          options={{title: '업적'}}
+          options={{
+            title: '업적',
+            headerTitleStyle: {
+              fontFamily: 'NanumSquareB', color: '#000000',
+            },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

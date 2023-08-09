@@ -19,7 +19,7 @@ export default function SingleInfo({ item }: any) {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <View style={styles.modalHead}>
-                        <Text style={{fontWeight:'bold'}}>{createAt}</Text>
+                        <Text style={{fontFamily: 'NanumSquareB',}}>{createAt}</Text>
                         </View>
 
                         <View style={styles.modalBody}>
@@ -46,8 +46,8 @@ export default function SingleInfo({ item }: any) {
       <Pressable onPress={() => setModalVisible(true)} style={styles.container}>
             <View style={styles.topItem}>
               <InfoIcon />
-              <View>
-                <Text style={styles.titleText}>{item.noticeTitle}</Text>
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleText} numberOfLines={1} >{item.noticeTitle}</Text>
                 <Text style={styles.dateText}>{createAt}</Text>
               </View>
             </View>
@@ -82,17 +82,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bottomItem: {
+    fontFamily: 'NanumSquareB',
     marginTop: 17,
     fontSize: 12,
     color: '#909090',
   },
   titleText: {
+    fontFamily: 'NanumSquareB',
+    color: '#000000',
+    marginBottom: 3,
     marginTop: -5,
     marginLeft: 10,
     fontSize: 14,
-    fontWeight: 'bold',
   },
   dateText: {
+    fontFamily: 'NanumSquareB',
     marginTop: 0,
     marginLeft: 10,
     fontSize: 12,
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    backgroundColor: 'rgba(150, 150, 150, 0.5)'
 },
 modalView: {
     margin: 20,
@@ -136,7 +140,9 @@ modalBody:{
     flex: 2,
     width: "100%",
     alignItems: "center",
-    justifyContent:"center"
+    justifyContent:"center",
+    paddingLeft: 15,
+    paddingRight:15,
 },
 modalEnd:{
     flex: 0.8,
@@ -160,22 +166,30 @@ btn:{
     borderRadius: 30,
 },
 btnText:{
+    fontFamily: 'NanumSquareB',
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
 },
 strongText:{
+    fontFamily: 'NanumSquareB',
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
 },
 titleBodyText:{
+  fontFamily: 'NanumSquareB',
   marginTop:15,
   marginBottom:15,
-  fontWeight:'bold',
+  color: '#000000',
 },
 bodyText:{
+  fontFamily: 'NanumSquareR',
   paddingLeft:25,
   paddingRight:25,
+  color: '#000000',
+},
+titleContainer:{
+  marginRight: 30,
 }
 });

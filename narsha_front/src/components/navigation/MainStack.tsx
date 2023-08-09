@@ -48,13 +48,21 @@ export default function MainNavigatorStack() {
         <Stack.Screen
           name="Main"
           component={Main}
-          options={{title: '뭉게뭉게'}}
+          options={{
+            title: '뭉게뭉게',
+            headerTitleStyle: {
+              fontFamily: 'NanumSquareB', color: '#000000',
+            },
+          }}
         />
         <Stack.Screen
           name="NoticeList"
           component={NoticeList}
           options={({navigation}) => ({
             title: '공지 목록',
+            headerTitleStyle: {
+              fontFamily: 'NanumSquareB', color: '#000000',
+            },
             cardStyle: {
               backgroundColor: '#F9FAC8',
             },
@@ -78,6 +86,9 @@ export default function MainNavigatorStack() {
           component={NoticeWritePage}
           options={{
             title: '공지 작성 페이지',
+            headerTitleStyle: {
+              fontFamily: 'NanumSquareB', color: '#000000',
+            },
             cardStyle: {
               backgroundColor: '#F9FAC8',
             },
