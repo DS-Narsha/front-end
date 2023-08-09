@@ -89,12 +89,12 @@ const LoginPage = ({navigation}) => {
         </View>
       </View>
       <View style={styles.textArea}>
-        <Text>뭉게뭉게 회원이 아니신가요?</Text>
+        <Text style={styles.textContent}>뭉게뭉게 회원이 아니신가요?</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('UserType');
           }}>
-          <Text>회원가입 하기</Text>
+          <Text style={styles.textContent}>회원가입 하기</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: '#35562F',
     fontWeight: 'bold',
+    fontFamily: 'NanumSquareB'
   },
   formArea: {
     marginTop: 40,
@@ -134,6 +135,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 110,
+  },
+  textContent: {
+    fontFamily: 'NanumSquareR'
   },
   inputContainer: {
     backgroundColor: '#ffffff',
@@ -163,6 +167,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     color: '#000000',
+    fontFamily: 'NanumSquareB'
   },
 });
 

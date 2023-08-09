@@ -166,12 +166,14 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: "#35562F",
         fontWeight: "bold",
+        fontFamily: 'NanumSquareB',
     },
     textBody: {
         fontSize: 24,
         color: "#35562F",
         fontWeight: "bold",
-        marginBottom: 35
+        marginBottom: 35,
+        fontFamily: 'NanumSquareB',
     },
     formArea: {
         justifyContent: "center",
@@ -181,12 +183,14 @@ const styles = StyleSheet.create({
     formText: {
         fontSize: 16,
         fontWeight: "bold",
-        marginBottom: 5
+        marginBottom: 5,
+        fontFamily: 'NanumSquareR',
     },
     classTitle: {
         fontSize: 16,
         fontWeight: "bold",
-        marginBottom: 20
+        marginBottom: 20,
+        fontFamily: 'NanumSquareR',
     },
     classForm: {
         flexDirection: "row",
@@ -198,7 +202,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         paddingRight: 30,
-        paddingTop:10
+        paddingTop:10,
+        fontFamily: 'NanumSquareR',
     },
     inputContainer: {
         backgroundColor: '#ffffff',
@@ -212,6 +217,7 @@ const styles = StyleSheet.create({
       inputText: {
         fontSize: 14,
         marginLeft: 10,
+        fontFamily: 'NanumSquareR',
       },
     nextButton: {
         backgroundColor: '#AADF98',
@@ -229,6 +235,7 @@ const styles = StyleSheet.create({
       buttonText: {
         fontSize: 18,
         color: '#000000',
+        fontFamily: 'NanumSquareB',
       },
 })
 

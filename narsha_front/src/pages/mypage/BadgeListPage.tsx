@@ -78,7 +78,9 @@ export default function BadgeList({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      {!achieveQuery.isLoading && (
+      {!achieveQuery.isLoading && 
+      achieveQuery.data &&
+      (
         <>
           <View style={styles.ds_container}>
             <Image style={styles.ds_image} source={DS} />
