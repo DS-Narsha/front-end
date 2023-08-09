@@ -49,8 +49,6 @@ const WritePage = ({route, navigation}) => {
   const [selIndex, useSelIndex] = useState(0);
   const [content, onChangeContent] = useState('');
   const queryClient = useQueryClient();
-  // console.log(objectDetect);
-  // console.log(objectImgSize);
   const [clickLabel, setClickLabel] = useState(true);
 
   // modal state
@@ -102,7 +100,7 @@ const WritePage = ({route, navigation}) => {
     );
   }, []);
 
-  // get profile
+  // get profile //
   const getProfileDetail = async () => {
     try {
       const res = await fetch(
@@ -126,7 +124,7 @@ const WritePage = ({route, navigation}) => {
     queryFn: getProfileDetail,
   });
 
-  // uploading post
+  // uploading post //
   const uploadPost = async () => {
     try {
       let formData = new FormData(); // from-data object
@@ -149,7 +147,6 @@ const WritePage = ({route, navigation}) => {
         }),
       );
       formData.append('fileType', 'png');
-      console.log(formData);
       const res = await fetch(`http://localhost:8080/api/post/upload`, {
         method: 'POST',
         headers: {
@@ -194,6 +191,50 @@ const WritePage = ({route, navigation}) => {
     },
   });
 
+  // achieve mutate //
+  // uploading post
+  const updateAchieve = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${1}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      console.log(json);
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // onMutate
+  const mutateAchieve = async () => {
+    // get old data
+    const oldData = await queryClient.getQueryData(['badge-list']);
+    // setting datas at UI, 특정 속성 수정
+    queryClient.setQueryData(['badge-list', 'data', 'data'], userData.userId);
+    // if error -> rollback
+    return () => queryClient.setQueryData(['badge-list'], oldData);
+  };
+
+  // useMutation: post
+  const AchieveMutateFunc = useMutation(['update-badge'], {
+    mutationFn: () => updateAchieve(),
+    onMutate: mutateAchieve,
+    onError: (error, variable, rollback) => {
+      if (rollback) rollback();
+      else console.log(error);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['badge-list']);
+    },
+  });
+
   return (
     <View style={styles.container}>
       {/* top */}
@@ -208,6 +249,8 @@ const WritePage = ({route, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               mutate();
+              !JSON.parse(profileQuery.data.data.badgeList)[0] &&
+                AchieveMutateFunc.mutate();
               navigation.reset({routes: [{name: 'Main'}]});
               setLoadingModalVisible(true);
               // loadingTimeout;
