@@ -28,12 +28,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 14,
     fontWeight: 'bold',
+    fontFamily: 'NanumSquareB',
   },
   InfoTitle: {
     marginTop: 0,
     marginLeft: 10,
     fontSize: 12,
     color: '#909090',
+    fontFamily: 'NanumSquareR',
   },
 });
 

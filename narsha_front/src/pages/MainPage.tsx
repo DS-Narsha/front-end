@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: 70,
     paddingHorizontal: 10,
+    fontFamily: 'NanumSquareR'
   },
 });
 
