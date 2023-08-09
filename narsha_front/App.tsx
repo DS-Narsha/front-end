@@ -86,8 +86,8 @@ export default function App() {
               behavior={Platform.select({ios: 'padding', android: undefined})}
               style={styles.avoid}>
               <NavigationContainer>
-                {/* {true? */}
-                {(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))? 
+                {true?
+                // {(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))? 
                 (isLoggedIn ? <MainNavigator /> : <AuthStack />):(<NotAvailable/>)}
               </NavigationContainer>
             </KeyboardAvoidingView>

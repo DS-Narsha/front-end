@@ -49,14 +49,11 @@ const WritePage = ({route, navigation}) => {
   const [selIndex, useSelIndex] = useState(0);
   const [content, onChangeContent] = useState('');
   const queryClient = useQueryClient();
-<<<<<<< HEAD
   // const [postId, onChangePostId] = useState();
   let postId = 0;
-=======
   // console.log(objectDetect);
   // console.log(objectImgSize);
   const [clickLabel, setClickLabel] = useState(true);
->>>>>>> ysy
 
   // modal state
   const [guideModalVisible, setGuideModalVisible] = useState(false);
@@ -230,6 +227,7 @@ const WritePage = ({route, navigation}) => {
       queryClient.invalidateQueries(['profile-detail']);
     },
   });
+  console.log("여기입니당"+ objectDetect[selIndex]);
 
   return (
     <View style={styles.container}>

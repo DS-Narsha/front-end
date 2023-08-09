@@ -20,6 +20,7 @@ const PostLoadingPage = ({route, navigation}) => {
         objectDetect: data,
       });
   }, 2000 * route.params.photos.length - 1000);
+  
 
   useEffect(() => {
     mutate();
@@ -55,7 +56,7 @@ const PostLoadingPage = ({route, navigation}) => {
         },
       );
       const json = await res.json();
-      console.log(json);
+      console.log("objectdect: "+JSON.stringify(json));
 
       return json;
     } catch (err) {
