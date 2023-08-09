@@ -13,6 +13,7 @@ import RecentPost from '../components/post/RecentPost';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 
 type UserData = {
+  userId: string;
   groupCode: string;
 };
 
@@ -27,7 +28,7 @@ const MainScreen = ({navigation}) => {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-list?groupCode=${userData.groupCode}`,
+        `http://localhost:8080/api/post/main-list?groupCode=${userData.groupCode}&userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: 70,
     paddingHorizontal: 10,
+    fontFamily: 'NanumSquareR',
   },
 });
 
