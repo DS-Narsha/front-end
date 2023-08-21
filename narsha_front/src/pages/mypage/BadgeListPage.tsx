@@ -52,6 +52,11 @@ export default function BadgeList({route, navigation}) {
   const _RenderItem = useCallback(({item, index}: any) => {
     // console.log(item.title);
     return (
+      <View>
+        {!achieveQuery.isLoading && 
+      achieveQuery.data &&
+      (
+        <>
       <SingleBadge
         badge={
           isCompletefunc(achieveQuery.data.data, index)
@@ -61,6 +66,9 @@ export default function BadgeList({route, navigation}) {
         content={AchieveData[index]}
         progress={stringToArray(achieveQuery.data.data, index)}
       />
+      </>
+      )}
+      </View>
     );
   }, []);
 

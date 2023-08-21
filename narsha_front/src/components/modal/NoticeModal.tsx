@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 14,
     fontWeight: 'bold',
-    fontFamily: 'NanumSquareB',
   },
   InfoTitle: {
     fontFamily: 'NanumSquareR',
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 12,
     color: '#909090',
-    fontFamily: 'NanumSquareR',
   },
   hamburgerview: {
     flex:1,
@@ -90,13 +88,16 @@ export default function NoticeModal({navigation}) {
 
   return (
     <View style={styles.container}>
-      {!recentNoticeQuery.isLoading && (
+      {!recentNoticeQuery.isLoading && recentNoticeQuery.data.data && (
           <>
       <InfoIcon />
       <View style={styles.noticeContent}>
         <Text style={styles.titleText}>공지 사항</Text>
         <Text style={styles.InfoTitle} numberOfLines={1}>
-          {recentNoticeQuery.data.data.noticeTitle}
+        {recentNoticeQuery.data.data === null
+                    ? '아직 등록된 공지가 없습니다.'
+                    : recentNoticeQuery.data.data.noticeTitle}
+                    {/* // : "일단 이렇게"} */}
         </Text>
       </View>
       <View style={styles.hamburgerview}>

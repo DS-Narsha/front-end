@@ -179,7 +179,7 @@ const CommentListPage = ({route, navigation}) => {
                             
                             <View style={styles.commentTextBox}>
                                 <Text style={styles.commentID}>{comment.userId.userId}</Text>
-                                <Text style={styles.commentText}>{comment.content}</Text>
+                                <View style={{marginRight: 35}}><Text style={styles.commentText}>{comment.content}</Text></View>
                                 <Text style={styles.commentDay}>{comment.createAt.replace("T", " ").slice(0, 16)}</Text>
                             </View>
                         </View>

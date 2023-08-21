@@ -2,11 +2,13 @@ import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, ImageBackground} from 'react-native';
 import InitialProfileImage from '../../assets/initial-profile-image.svg';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import BasicProfile from '../../assets/graphic/basicProfileImage.svg';
 
 export default function StudentListModal({ item }: any) {
   const [modalVisible, setModalVisible] = useState(false);
-  const length = item.profileImage.length;
-  const profileImage = item.profileImage.substring(0,length);
+  // const length = item.profileImage.length;
+  // const profileImage = item.profileImage.substring(0,length);
+  // const profileImage = item.profileImage.substring(0,item.profileImage.length);
 
   return (
     <View style={styles.container}>
@@ -33,7 +35,11 @@ export default function StudentListModal({ item }: any) {
               </View>
               <View style={styles.modalText}>
                 <Text style={styles.strongText}>생일</Text>
-                <Text style={styles.content}>{item.birth}</Text>
+                <Text style={styles.content}>
+                  {item.birth === null
+                    ? '아직 생일을 설정하지 않았습니다.'
+                    : item.birth}
+                </Text>
               </View>
             </View>
             <View style={styles.modalEnd}>
@@ -50,17 +56,23 @@ export default function StudentListModal({ item }: any) {
       <Pressable onPress={() => setModalVisible(true)}>
         <View style={styles.studentContentContainer}>
           <View>
-            <ImageBackground
-              source={{ uri: profileImage }}
-              style={[styles.img]}
-              imageStyle={{ borderRadius: 10 }} />
+            {item.profileImage === null
+              ? <View style={{width: 50, height: 50, borderRadius: 10}}><BasicProfile /></View>
+              : <ImageBackground
+                  source={{ uri: item.profileImage.substring(0,item.profileImage.length) }}
+                  style={[styles.img]}
+                  imageStyle={{ borderRadius: 10 }} />}
           </View>
           <View>
             <View style={styles.textcontainer}>
               <Text style={styles.strongText}>{item.userName}</Text>
             </View>
             <View style={styles.textcontainer}>
-              <Text style={styles.nickname}>{item.nikname}</Text>
+              <Text style={styles.nickname}>
+                {item.nikname === null
+                  ? '아직 닉네임을 설정하지 않았습니다.'
+                  : item.nikname}
+              </Text>
             </View>
           </View>
         </View>

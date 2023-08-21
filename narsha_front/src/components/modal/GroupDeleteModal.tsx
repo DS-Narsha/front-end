@@ -1,13 +1,28 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
-import GroupCode from '../../assets/teacherMenu/groupCode.svg';
-import { useQuery } from '@tanstack/react-query';
+import DeleteGroup from '../../assets/teacherMenu/deleteGroup.svg';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import AuthStack from '../navigation/AuthStack';
 
-export default function GroupCodeModal() {
-  const getGroupCode = async () =>{
+type UserData = {
+  userId: string;
+  userType: string;
+  groupCode: string;
+};
+
+export default function GroupCodeModal({navigation}: any) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const queryClient = useQueryClient();
+
+  // queryClient에서 userId와 userType을 가져오는 로직
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
+  const deleteGroup = async () =>{
     try{
-      const res = await fetch(`http://localhost:8080/api/user/detail?userId=${"narsha1111"}`,{
-        method:"GET",
+      const res = await fetch(`http://localhost:8080/api/group/delete?groupCode=${userData.groupCode}`,{
+        method:"DELETE",
         headers: {
           'Content-Type': 'application/json',
         },
@@ -20,16 +35,24 @@ export default function GroupCodeModal() {
 
   }
 
-  const {status, data, error, isLoading} = useQuery({
-    queryKey: ["group-code"], 
-    queryFn: getGroupCode
-  })
+  const deleteGroupQuery = useQuery({
+    queryKey: ["group-delete"], 
+    queryFn: deleteGroup,
+    enabled: false,
+  });  
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const startDeleteGroup = async () => {
+    deleteGroupQuery.refetch();
+    navigation.reset({
+      routes: [{ name: 'AuthStack' }],
+    });
+    // <AuthStack />
+  }
+
   return (
     <View>
-      {!isLoading &&(
-      <>
+      {/* {!isLoading &&(
+      <> */}
         <View style={styles.container}>
       <Modal
         animationType="slide"
@@ -42,13 +65,15 @@ export default function GroupCodeModal() {
           <View style={styles.modalView}>
 
             <View style={styles.modalHead}>
-              <Text style={styles.modalTitleText}>그룹 코드</Text>
+              <Text style={styles.modalTitleText}>그룹 삭제</Text>
             </View>
 
             <View style={styles.modalBody}>
               <View style={styles.modalText}>
-                <Text style={styles.strongText}>그룹 코드: </Text>
-                <Text style={styles.content}>{data.data.groupCode.groupCode}</Text>
+                <Text style={styles.boldText}>정말로 그룹을 삭제하시겠습니까?</Text>
+                <Text style={styles.content}>(그룹을 삭제하면 해당 그룹의 모든 활동</Text>
+                <Text style={styles.content}>내역이 삭제되며,</Text>
+                <Text style={styles.content}>삭제 후에 복구는 불가능 합니다.)</Text>
               </View>
             </View>
 
@@ -56,6 +81,11 @@ export default function GroupCodeModal() {
               <Pressable onPress={() => setModalVisible(!modalVisible)}>
                 <View style={styles.btn}>
                   <Text style={styles.strongText}>닫기</Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={startDeleteGroup}>
+                <View style={styles.btn}>
+                  <Text style={styles.strongText}>삭제하기</Text>
                 </View>
               </Pressable>
             </View>
@@ -67,13 +97,13 @@ export default function GroupCodeModal() {
       <Pressable onPress={() => setModalVisible(true)}>
         <View>
           <View>
-            <GroupCode />
+            <DeleteGroup />
           </View>
         </View>
       </Pressable>
     </View>
-      </>
-      )}
+      {/* </>
+      )} */}
     </View>
     
   );
@@ -89,7 +119,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     width: '68%',
-    height: 130,
+    height: 230,
     backgroundColor: 'white',
     borderRadius: 20,
     flexDirection: 'column',
@@ -105,7 +135,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalHead: {
-    flex: 0.8,
+    flex: 0.7,
     width: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -114,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   modalBody: {
-    flex: 0.8,
+    flex: 1.5,
     width: '100%',
     alignItems: 'flex-start',
     justifyContent: 'center',
@@ -124,13 +154,16 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
   modalText: {
     fontFamily: 'NanumSquareR',
+    alignItems: 'center',
+    justifyContent: 'center',
     color: '#000000',
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginLeft: 20,
     marginTop: 20,
   },
@@ -138,6 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#AADF98',
     height: 30,
     width: 100,
+    marginHorizontal: 3,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
@@ -158,8 +192,15 @@ const styles = StyleSheet.create({
   },
   content: {
     fontFamily: 'NanumSquareR',
-    marginLeft: 10,
+    marginVertical: 2,
     fontSize: 14,
     color: '#909090',
+  },
+  boldText: {
+    fontFamily: 'NanumSquareB',
+    marginBottom: 5,
+    fontSize: 14,
+    fontWeight: '200',
+    color: '#000000',
   },
 });
