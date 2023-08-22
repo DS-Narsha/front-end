@@ -10,6 +10,17 @@ import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
 import BackSvg from "../assets/back.svg";
+import basicProfile from '../assets/graphic/basic-profile.jpg';
+
+
+type Comment = {
+  userId: {
+    userId: string;
+    profileImage: string;
+  };
+  content: string;
+  createAt: string;
+};
 
 type UserData = {
   userId: string;
@@ -21,6 +32,9 @@ export default function PostDetail({route, navigation}) {
 
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
+  const [profileImage, setProfileImage] = useState('');
+  const [commentContent, setCommentContent] = useState('');
+
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -43,6 +57,24 @@ export default function PostDetail({route, navigation}) {
       console.log(err);
     }
   };
+
+     // 포스트에 해당되는 댓글 목록 불러오기        
+     const fetchComments = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/comment/list?postId=${id}`);
+        const data = await response.json();
+        if (data.status === 200) {
+          return data.data;
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+        throw error;
+      }
+  };
+
+  const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
 
   // query
   const postQuery = useQuery({
@@ -170,59 +202,38 @@ export default function PostDetail({route, navigation}) {
               <TouchableOpacity
                 onPress={() => navigation.navigate('CommentListPage', { id: id })}>
                 <Text style={{marginTop: 15, color: '#61A257', fontFamily: 'NanumSquareR'}}>
-                  댓글 17개 전체 보기
+                  댓글 {comments.length}개 전체 보기
                 </Text>
               </TouchableOpacity>
 
-              <View style={styles.cmtBody}>
-                <Image source={userImg} style={styles.cmtUserImg2} />
-                <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                    comment_User
-                  </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
-                </View>
+              
+              <View>
+                {comments.map((comment: Comment, index: number)=>(
+                  (index<5?(
+                    <View style={styles.cmtBody} key={index}>
+                  {comment.userId.profileImage ? (
+                      <Image
+                      source={{ uri: comment.userId.profileImage }}
+                      style={styles.cmtUserImg2}
+                      />
+                  ) : (
+                      <Image 
+                      source={basicProfile}
+                      style={styles.cmtUserImg2} />
+                  )}
+                  
+                  <View style={{marginTop: 5}}>
+                    <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
+                    {comment.userId.userId}
+                    </Text>
+                    <Text style={{fontFamily: 'NanumSquareR', marginRight: 50}}>{comment.content}</Text>
+                  </View>
+                  </View>
+                  ):<View></View>)
+                ))}
+               
               </View>
 
-              <View style={styles.cmtBody}>
-                <Image source={userImg} style={styles.cmtUserImg2} />
-                <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                    comment_User
-                  </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
-                </View>
-              </View>
-
-              <View style={styles.cmtBody}>
-                <Image source={userImg} style={styles.cmtUserImg2} />
-                <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                    comment_User
-                  </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
-                </View>
-              </View>
-
-              <View style={styles.cmtBody}>
-                <Image source={userImg} style={styles.cmtUserImg2} />
-                <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                    comment_User
-                  </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
-                </View>
-              </View>
-
-              <View style={styles.cmtBody}>
-                <Image source={userImg} style={styles.cmtUserImg2} />
-                <View style={{marginTop: -5}}>
-                  <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                    comment_User
-                  </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
-                </View>
-              </View>
             </View>
           </ScrollView>
 

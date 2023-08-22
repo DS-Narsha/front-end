@@ -42,7 +42,7 @@ export default function FriendList({navigation}) {
       })
 
   return (
-    <View>
+    <View style={{height:'100%'}}>
       <View style={styles.ds_container}>
         <Image style={styles.ds_image} source={DS} />
         <Text
