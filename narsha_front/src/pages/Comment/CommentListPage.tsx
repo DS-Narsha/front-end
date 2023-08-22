@@ -283,7 +283,9 @@ const styles = StyleSheet.create({
       borderRadius: 10
     },
     commentTextBox: {
-        marginLeft: 20
+        marginLeft: 20,
+        flexShrink: 1,
+        
     },
     commentID: {
         color: "#000000",
@@ -296,7 +298,8 @@ const styles = StyleSheet.create({
         color: "#000000",
         fontSize: 16,
         marginBottom: 5,
-        fontFamily: 'NanumSquareR'
+        fontFamily: 'NanumSquareR',
+       
     },
     commentDay: {
         fontSize: 14,

@@ -6,19 +6,41 @@ import {
   TouchableOpacity, 
   Alert,
   Platform,
-  ToastAndroid
+  ToastAndroid,
+  BackHandler
  } from 'react-native';
 import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 import CopyGroup from '../../../assets/copy-group.svg';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Clipboard from '@react-native-clipboard/clipboard'; 
+import { useFocusEffect } from '@react-navigation/native';
 
 
 // 회원가입 완료 페이지_관리자 + 사용자 
 
 //@ts-ignore
 const SignUpPage = ({navigation, route}) => {
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        // 특정 페이지에서 뒤로가기 막기
+        BackHandler.exitApp();
+        return true; // 뒤로가기 막기
+      };
+
+      // 뒤로가기 이벤트 리스너 추가
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      // useFocusEffect의 클린업 함수로서, 화면이 focus를 잃었을 때 실행
+      return () => {
+        // 뒤로가기 이벤트 리스너 제거
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+      };
+    }, [])
+  );
+
 
   const { userType, userId } = route.params;
   const [groupCode, setGroupCode] = useState('');

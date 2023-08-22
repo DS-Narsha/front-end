@@ -9,11 +9,15 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
+    BackHandler,
+    Modal,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import BackSvg from "../../../assets/back.svg";
 import MyTextInput from "../../../components/MyTextInput";
 import CustomButton from "../../../components/CustomButton";
 import { useMutation } from "@tanstack/react-query";
+import { useFocusEffect } from "@react-navigation/native";
 
 // 관리자_그룹 만들기 페이지
 
@@ -26,6 +30,26 @@ const GroupPage = ({navigation, route}) => {
     const[groupName, setGroupName] = useState('');
     const[grade, setGrade] = useState('');
     const[groupClass, setGroupClass] = useState('');
+    const [isModalVisible, setModalVisible] = useState(false);
+  
+    useFocusEffect(
+      React.useCallback(() => {
+        const onBackPress = () => {
+          // 특정 페이지에서 뒤로가기 막기
+          setModalVisible(true); // 모달 창 표시
+          return true; // 뒤로가기 막기
+        };
+    
+        // 뒤로가기 이벤트 리스너 추가
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+        // useFocusEffect의 클린업 함수로서, 화면이 focus를 잃었을 때 실행
+        return () => {
+          // 뒤로가기 이벤트 리스너 제거
+          BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        };
+      }, [])
+    );
 
     const groupMutation = useMutation(async () => {
         const response = await fetch(`http://localhost:8080/api/group/create`,{
@@ -130,6 +154,51 @@ const GroupPage = ({navigation, route}) => {
                 </TouchableOpacity>
             </View>
           </ScrollView>
+
+          {/* 모달 컴포넌트 */}
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={() => {
+            setModalVisible(!isModalVisible);
+          }}>
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.modalTitleArea}>
+                <Text style={styles.modalTitleText}>앱 종료</Text>
+              </View>
+
+              <Text style={styles.modalText}>정말로 앱을 종료하시겠습니까?</Text>
+              <Text style={styles.modalText}>그룹 정보가 저장되지 않습니다.</Text>
+
+              <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+              onPress={() => {
+                setModalVisible(false);
+              }}
+              style={styles.modalButton}
+              >
+                <Text style={styles.modalButtonText}>취소</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+              onPress={() => {
+                setModalVisible(false);
+                BackHandler.exitApp();
+              }}
+              style={styles.modalButton}
+            >
+              <Text style={styles.modalButtonText}>종료</Text>
+            </TouchableOpacity>
+            </View>
+            </View>
+          </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+
+        
       </KeyboardAvoidingView>        
     )
 }
@@ -236,6 +305,70 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#000000',
         fontFamily: 'NanumSquareB',
+      },
+      modalText: {
+        marginBottom: 8,
+        textAlign: 'center',
+        color: 'black',
+        fontFamily: 'NanumSquareR',
+        fontSize: 16
+      },
+      modalButtonContainer: {
+        flexDirection: 'row', 
+        marginTop: 5, 
+        width: '90%',
+        justifyContent: 'space-between', // 버튼 사이의 간격 균등 분할
+      },
+      modalButton: {
+        backgroundColor: '#AADF98',
+        padding: 10,
+        marginTop: 10,
+        alignItems: 'center',
+        width: '46%',
+        borderRadius: 10,
+      },
+      modalButtonText: {
+        color: 'black',
+        fontFamily: 'NanumSquareB',
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(150, 150, 150, 0.5)',
+      },
+      modalTitleArea: {
+        backgroundColor: '#AADF98',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 17,
+        width: '121%',
+        height: 60,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+      modalTitleText: {
+        color: 'black',
+        fontSize: 18,
+        fontFamily: 'NanumSquareB'
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        width: '75%',
+        borderRadius: 20,
+        paddingLeft: 25,
+        paddingRight: 25,
+        paddingBottom: 25,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
       },
 })
 
