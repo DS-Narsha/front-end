@@ -29,8 +29,8 @@ export default function EditProfile({navigation}) {
   // queryClient
   const queryClient = useQueryClient();
 
-  // queryClient에서 userId와 userType을 가져오는 로직
   const {data: userData} = useQuery(['user'], () => {
+    // get userDate
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
@@ -55,12 +55,14 @@ export default function EditProfile({navigation}) {
   const updateProfile = async () => {
     try {
       let formData = new FormData(); // from-data object
-      console.log(profileImgUri);
-      formData.append('image', {
-        uri: profileImgUri,
-        name: profileImg.fileName,
-        type: profileImg.type,
-      });
+      if (profileImg !== '' || profileImgUri !== originProfile.current) {
+        //console.log('사진 수정');
+        formData.append('image', {
+          uri: profileImgUri,
+          name: profileImg.fileName,
+          type: profileImg.type,
+        });
+      }
       formData.append(
         'content',
         JSON.stringify({
@@ -90,11 +92,14 @@ export default function EditProfile({navigation}) {
   const mutateProfile = async () => {
     // get old data
     const oldData = await queryClient.getQueryData(['profile-detail']);
-    // setting datas at UI, 특정 속성 수정
-    queryClient.setQueryData(
-      ['profile-detail', 'data', 'profileImage'],
-      profileImgUri,
-    );
+    console.log(profileImgUri !== originProfile.current);
+    if (profileImg !== '' || profileImgUri !== originProfile.current) {
+      //console.log('사진 수정');
+      queryClient.setQueryData(
+        ['profile-detail', 'data', 'profileImage'],
+        profileImgUri,
+      );
+    }
     queryClient.setQueryData(
       ['profile-detail', 'data', 'nikname'],
       textNickname,
@@ -123,7 +128,8 @@ export default function EditProfile({navigation}) {
       queryClient.invalidateQueries(['profile-detail']);
     },
   });
-
+  console.log(data.data.profileImage);
+  let originProfile = useRef(data.data.profileImage);
   const [profileImgUri, setProfileImageUri] = useState(data.data.profileImage); // image uri
   const [profileImg, setProfileImg] = useState(''); // image object
   const [textBirthday, onChangeTextBirthday] = useState(data.data.birth);
@@ -323,7 +329,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 30,
-    marginBottom:20,
+    marginBottom: 20,
     shadowOffset: {
       width: 0,
       height: 3,
