@@ -4,8 +4,49 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
+import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
+
+
+type UserData = {
+  groupCode: string;
+};
 
 const TimePicker = props => {
+
+  // groupCode 가져오기
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
+  // get time
+  const getTime = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/group/get-time?groupCode=${userData.groupCode}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const timeQuery = useQuery({
+    queryKey: ['time'],
+    queryFn: getTime,
+  });
+
+  console.log(timeQuery.data? timeQuery.data.data.startTime:"hi")
+  console.log(timeQuery.data? timeQuery.data.data.endTime:"hi")
+
+    
   // const [time, setTime] = useState(new Date())
   // const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);

@@ -4,6 +4,7 @@ import TimePicker from '../components/TimePicker';
 import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
 
 // async-storage에 활성화 시간 저장하기
 export const storeData = async (key: string, value: Date) => {
@@ -15,7 +16,17 @@ export const storeData = async (key: string, value: Date) => {
   }
 };
 
+type UserData = {
+  groupCode: string;
+};
+
 export default function TimeSelectPage({navigation}: any) {
+
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
 
@@ -37,6 +48,35 @@ export default function TimeSelectPage({navigation}: any) {
     EndTime.setEndTime(eTime)
 
   }
+
+    // update time
+    const updateTime = useMutation(async () => {
+      try {  
+        const res = await fetch(`http://localhost:8080/api/group/update-time`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            startTime:333,
+            endTime:444,
+            groupCode:userData.groupCode
+          }),
+        });
+        const json = await res.json();
+        return json;
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
+    const handleTimeSubmit = async () => {
+      try{
+          await updateTime.mutateAsync();
+      } catch(error) {
+      }
+  }
+  
   
   return (
       <View style={styles.container}>
@@ -47,7 +87,7 @@ export default function TimeSelectPage({navigation}: any) {
           <View><TimePicker SetEnd={setETime} bool={false} /></View>
           <View style={styles.textContainer2}><Text style={styles.text}>까지</Text></View>
         </View>
-        <TouchableOpacity onPress={() => {CheckTime(); navigation.navigate('MyPage') }}>
+        <TouchableOpacity onPress={() => {CheckTime(); navigation.navigate('MyPage'); handleTimeSubmit();}}>
           <View style={styles.btn}>
             <Text style={styles.btnText}>설정하기</Text>
           </View>

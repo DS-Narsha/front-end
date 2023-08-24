@@ -15,6 +15,7 @@ import MypageStack from './MyPageStack';
 import PostStack from './PostStack';
 import AchieveStack from './AchieveStack';
 import AlarmStack from './AlarmStack';
+import NotAvailable from '../../pages/NotAvailablePage';
 
 const Tab = createBottomTabNavigator();
 

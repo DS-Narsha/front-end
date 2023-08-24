@@ -32,8 +32,6 @@ export default function PostDetail({route, navigation}) {
 
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
-  const [profileImage, setProfileImage] = useState('');
-  const [commentContent, setCommentContent] = useState('');
 
 
   const {data: userData} = useQuery(['user'], () => {
@@ -75,6 +73,8 @@ export default function PostDetail({route, navigation}) {
   };
 
   const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
+
+  const len = comments? comments.length:0
 
   // query
   const postQuery = useQuery({
@@ -202,7 +202,7 @@ export default function PostDetail({route, navigation}) {
               <TouchableOpacity
                 onPress={() => navigation.navigate('CommentListPage', { id: id })}>
                 <Text style={{marginTop: 15, color: '#61A257', fontFamily: 'NanumSquareR'}}>
-                  댓글 {comments.length}개 전체 보기
+                  댓글 {len}개 전체 보기
                 </Text>
               </TouchableOpacity>
 

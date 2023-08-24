@@ -3,7 +3,6 @@ import React, {useEffect, useState, createContext} from 'react';
 import MainNavigator from './src/components/navigation/MainNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import AuthStack from './src/components/navigation/AuthStack';
-import NotAvailable from './src/pages/NotAvailablePage';
 import {KeyboardAvoidingView, StyleSheet, Platform, View} from 'react-native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {StartTimeContext} from './src/components/StartTimeContext';
@@ -46,6 +45,7 @@ export default function App() {
       if (e) {
         setEndTime(new Date(e));
       }
+
     }
 
     getTime();
@@ -57,9 +57,13 @@ export default function App() {
 
   useEffect(() => {
     
+    
     console.log('start:' + start);
     console.log('now:'+now);
     console.log("end:"+end);
+
+    console.log(endTime);
+    console.log(startTime)
 
     // console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
     // console.log("possible1: ", possible);
@@ -86,9 +90,7 @@ export default function App() {
               behavior={Platform.select({ios: 'padding', android: undefined})}
               style={styles.avoid}>
               <NavigationContainer>
-                {true?
-                // {(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))? 
-                (isLoggedIn ? <MainNavigator /> : <AuthStack />):(<NotAvailable/>)}
+                {isLoggedIn ? <MainNavigator /> : <AuthStack />}
               </NavigationContainer>
             </KeyboardAvoidingView>
           </QueryClientProvider>
