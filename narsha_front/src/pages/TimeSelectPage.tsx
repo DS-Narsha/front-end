@@ -38,8 +38,8 @@ export default function TimeSelectPage({navigation}: any) {
     queryFn: getTime,
   });
 
-  const [sTime, setSTime] = useState(timeQuery.data? timeQuery.data.data.startTime:new Date());
-  const [eTime, setETime] = useState(timeQuery.data? timeQuery.data.data.endTime:new Date());
+  const [sTime, setSTime] = useState(timeQuery.data? new Date(timeQuery.data.data.startTime):new Date());
+  const [eTime, setETime] = useState(timeQuery.data? new Date(timeQuery.data.data.endTime):new Date());
 
   console.log(timeQuery.data? timeQuery.data.data.startTime:new Date())
   console.log(timeQuery.data? timeQuery.data.data.endTime:new Date())
