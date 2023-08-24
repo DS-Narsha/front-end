@@ -5,7 +5,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import { StartTimeContext } from '../components/StartTimeContext';
 import { EndTimeContext } from '../components/EndTimeContext';
 import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
-
+import moment from "moment"
 
 type UserData = {
   groupCode: string;
@@ -43,28 +43,17 @@ const TimePicker = props => {
     queryFn: getTime,
   });
 
-  console.log(timeQuery.data? timeQuery.data.data.startTime:"hi")
-  console.log(timeQuery.data? timeQuery.data.data.endTime:"hi")
+  // console.log(timeQuery.data? timeQuery.data.data.startTime:"hi")
+  // console.log(timeQuery.data? timeQuery.data.data.endTime:"hi")
 
     
-  // const [time, setTime] = useState(new Date())
-  // const [selectedDate, setSelectedDate] = useState(new Date());
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   
   const StartTime = useContext(StartTimeContext);
   const EndTime = useContext(EndTimeContext);
-  const [startTime, setStartTime] = useState(StartTime.startTime);
-  const [endTime, setEndTime] = useState(EndTime.endTime);
-
-
-  // const FormatTime = (time: any) => {
-  //   let timeString =
-  //   time.getHours() +
-  //   ':' +
-  //   time.getMinutes();
-
-  //   return timeString; 
-  // };
+  // const [startTime, setStartTime] = useState(timeQuery.data.data? timeQuery.data.data.startTime.substr(11,5):new Date().toLocaleTimeString());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
 
   const showDatePicker = () => {
     setDatePickerVisible(true);
@@ -75,7 +64,7 @@ const TimePicker = props => {
   };
 
   const handleConfirm = (time: any) => {
-    // setSelectedDate(time);
+
     {
       props.bool? 
       (props.SetStart(time), 

@@ -229,7 +229,7 @@ export default function PostDetail({route, navigation}) {
                     <Text style={{fontFamily: 'NanumSquareR', marginRight: 50}}>{comment.content}</Text>
                   </View>
                   </View>
-                  ):<View></View>)
+                  ):<View key={index}></View>)
                 ))}
                
               </View>

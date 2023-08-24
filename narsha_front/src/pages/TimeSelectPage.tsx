@@ -1,20 +1,7 @@
 import React, {useState, useContext} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import TimePicker from '../components/TimePicker';
-import { StartTimeContext } from '../components/StartTimeContext';
-import { EndTimeContext } from '../components/EndTimeContext';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
-
-// async-storage에 활성화 시간 저장하기
-export const storeData = async (key: string, value: Date) => {
-  try {
-    const stringValue = JSON.stringify(value);
-    await AsyncStorage.setItem(key, stringValue);
-  } catch (e: any) {
-    console.error(e.message);
-  }
-};
 
 type UserData = {
   groupCode: string;
@@ -27,56 +14,64 @@ export default function TimeSelectPage({navigation}: any) {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
-  const StartTime = useContext(StartTimeContext);
-  const EndTime = useContext(EndTimeContext);
-
-  const [sTime, setSTime] = useState(StartTime.startTime);
-  const [eTime, setETime] = useState(EndTime.endTime);
-
-  const CheckTime = () => {
-    async function StoreTime() {
-      try{
-        await storeData("startTime", sTime)
-        await storeData("endTime", eTime)
-      } catch (e) {
-        console.warn(e);
-      }
-    }
-
-    StoreTime()
-    StartTime.setStartTime(sTime)
-    EndTime.setEndTime(eTime)
-
-  }
-
-    // update time
-    const updateTime = useMutation(async () => {
-      try {  
-        const res = await fetch(`http://localhost:8080/api/group/update-time`, {
-          method: 'PUT',
+  // get time
+  const getTime = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/group/get-time?groupCode=${userData.groupCode}`,
+        {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            startTime:333,
-            endTime:444,
-            groupCode:userData.groupCode
-          }),
-        });
-        const json = await res.json();
-        return json;
-      } catch (err) {
-        console.log(err);
-      }
-    });
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    const handleTimeSubmit = async () => {
-      try{
-          await updateTime.mutateAsync();
-      } catch(error) {
-      }
-  }
-  
+  const timeQuery = useQuery({
+    queryKey: ['time'],
+    queryFn: getTime,
+  });
+
+  const [sTime, setSTime] = useState(timeQuery.data? timeQuery.data.data.startTime:new Date());
+  const [eTime, setETime] = useState(timeQuery.data? timeQuery.data.data.endTime:new Date());
+
+  console.log(timeQuery.data? timeQuery.data.data.startTime:new Date())
+  console.log(timeQuery.data? timeQuery.data.data.endTime:new Date())
+
+  // update time
+  const updateTime = useMutation(async () => {
+    try {  
+      const res = await fetch(`http://localhost:8080/api/group/update-time`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startTime:sTime,
+          endTime:eTime,
+          groupCode:userData.groupCode
+        }),
+      });
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleTimeSubmit = async () => {
+    try{
+        await updateTime.mutateAsync();
+    } catch(error) {
+    }
+}
+
   
   return (
       <View style={styles.container}>
@@ -87,7 +82,7 @@ export default function TimeSelectPage({navigation}: any) {
           <View><TimePicker SetEnd={setETime} bool={false} /></View>
           <View style={styles.textContainer2}><Text style={styles.text}>까지</Text></View>
         </View>
-        <TouchableOpacity onPress={() => {CheckTime(); navigation.navigate('MyPage'); handleTimeSubmit();}}>
+        <TouchableOpacity onPress={() => {handleTimeSubmit(); navigation.navigate('MyPage');}}>
           <View style={styles.btn}>
             <Text style={styles.btnText}>설정하기</Text>
           </View>
