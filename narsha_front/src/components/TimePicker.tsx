@@ -42,19 +42,11 @@ const TimePicker = props => {
     queryKey: ['time'],
     queryFn: getTime,
   });
-
-  // console.log(timeQuery.data? timeQuery.data.data.startTime:"hi")
-  // console.log(timeQuery.data? timeQuery.data.data.endTime:"hi")
-
     
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  
-  const StartTime = useContext(StartTimeContext);
-  const EndTime = useContext(EndTimeContext);
-  // const [startTime, setStartTime] = useState(timeQuery.data.data? timeQuery.data.data.startTime.substr(11,5):new Date().toLocaleTimeString());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [datePickerVisible, setDatePickerVisible] = useState(false);  
 
+  const [startTime, setStartTime] = useState(timeQuery.data.data? new Date(timeQuery.data.data.startTime):new Date());
+  const [endTime, setEndTime] = useState(timeQuery.data.data? new Date(timeQuery.data.data.endTime):new Date());
   const showDatePicker = () => {
     setDatePickerVisible(true);
   };
