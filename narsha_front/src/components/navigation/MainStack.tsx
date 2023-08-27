@@ -116,7 +116,7 @@ export default function MainStack({route, navigation}) {
         name="GuidePage"
         component={GuidePage}
         options={{
-          title: '가이드 페이지',
+          title: '둥실둥실 사용설명서',
           headerTitleStyle: {
             fontFamily: 'NanumSquareB',
             color: '#000000',

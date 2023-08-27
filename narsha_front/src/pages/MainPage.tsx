@@ -11,6 +11,7 @@ import NoticeModal from '../components/modal/NoticeModal';
 import MainPost from '../components/post/MainPost';
 import RecentPost from '../components/post/RecentPost';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
+import GuidePage from './GuidePage';
 
 type UserData = {
   userId: string;
@@ -90,6 +91,14 @@ const MainScreen = ({navigation}) => {
         )}
       </View>
       <TouchableOpacity style={styles.absolute}>
+        {/* guide page */}
+        <TouchableOpacity
+          style={styles.floating}
+          onPress={() => navigation.navigate('GuidePage')}>
+          <Text style={styles.floatingText}>둥실둥실{'\n'}사용법</Text>
+        </TouchableOpacity>
+
+        {/* recent post modal */}
         <RecentPost />
       </TouchableOpacity>
     </View>
@@ -103,6 +112,26 @@ const styles = StyleSheet.create({
     bottom: 70,
     paddingHorizontal: 10,
     fontFamily: 'NanumSquareR',
+  },
+  floating: {
+    width: 58,
+    height: 58,
+    marginBottom: 15,
+    justifyContent: 'center',
+    backgroundColor: '#FFB4B4',
+    borderRadius: 50,
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    elevation: 5,
+    shadowRadius: 10,
+  },
+  floatingText: {
+    fontSize: 12,
+    fontFamily: 'NanumSquareR',
+    textAlign: 'center',
+    color: '#ffffff',
   },
 });
 
