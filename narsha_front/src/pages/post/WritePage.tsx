@@ -178,7 +178,7 @@ const WritePage = ({route, navigation}) => {
     );
     queryClient.setQueryData(['posting-list', 'data', 'content'], content);
     queryClient.setQueryData(['posting-list', 'data', 'imageArray'], resPhoto);
-    
+
     // if error -> rollback
     return () => queryClient.setQueryData(['posting-list'], oldData);
   };
@@ -211,7 +211,7 @@ const WritePage = ({route, navigation}) => {
   const {mutate} = useMutation(['profile-update'], {
     mutationFn: () => uploadPost(),
     onMutate: mutatePost,
-    onSuccess:(data) => {
+    onSuccess: data => {
       console.log(data.data.postId);
       // onChangePostId(data.data.postId);
       postId = data.data.postId;
@@ -226,7 +226,7 @@ const WritePage = ({route, navigation}) => {
       queryClient.invalidateQueries(['profile-detail']);
     },
   });
-  console.log("여기입니당"+ objectDetect[selIndex]);
+  console.log('여기입니당' + objectDetect[selIndex]);
 
   // achieve mutate //
   // uploading post
@@ -288,7 +288,7 @@ const WritePage = ({route, navigation}) => {
               mutate();
               !JSON.parse(profileQuery.data.data.badgeList)[0] &&
                 AchieveMutateFunc.mutate();
-              navigation.reset({routes: [{name: 'Main'}]});
+              navigation.reset({routes: [{name: 'MainNavigator'}]});
               setLoadingModalVisible(true);
               // loadingTimeout;
               // return () => {

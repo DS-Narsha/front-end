@@ -22,7 +22,7 @@ const Tab = createBottomTabNavigator();
 const MainNavigator = ({route}) => {
   return (
     <Tab.Navigator
-      initialRouteName="Main"
+      initialRouteName="MainStack"
       screenOptions={({route}) => ({
         headerStyle: {
           backgroundColor: '#E3F1A9',
@@ -46,7 +46,7 @@ const MainNavigator = ({route}) => {
         },
         tabBarShowLabel: false,
         tabBarIcon: ({focused, color, size}) => {
-          if (route.name === 'Main') {
+          if (route.name === 'MainStack') {
             return focused ? <Main_Sel /> : <Main_Desel style={{}} />; // 메인
           } else if (route.name === 'AchieveStack') {
             return focused ? <Achieve_Sel /> : <Achieve_DeSel />; //업적
@@ -60,7 +60,7 @@ const MainNavigator = ({route}) => {
         },
       })}>
       <Tab.Screen
-        name="Main"
+        name="MainStack"
         component={MainStack}
         options={({route}) => ({
           unmountOnBlur: true,
