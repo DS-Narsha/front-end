@@ -1,0 +1,30 @@
+[
+  {
+    "question": "질문1입니다.",
+    "content": "답변1입니다."
+  },
+  {
+    "question": "질문2입니다.",
+    "content": "답변2입니다."
+  },
+  {
+    "question": "질문3입니다.",
+    "content": "답변3입니다."
+  },
+  {
+    "question": "질문4입니다.",
+    "content": "답변4입니다."
+  },
+  {
+    "question": "질문5입니다.",
+    "content": "답변5입니다."
+  },
+  {
+    "question": "질문6입니다.",
+    "content": "답변6입니다."
+  },
+  {
+    "question": "질문7입니다.",
+    "content": "답변7입니다."
+  }
+]

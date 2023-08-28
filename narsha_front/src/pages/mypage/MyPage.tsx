@@ -113,17 +113,35 @@ export default function MyPage({navigation}) {
                 style={styles.profile}
               />
             </View>
-            <Text style={{fontFamily: 'NanumSquareB', color: '#000000', fontSize: 15, padding: 2}}>
+            <Text
+              style={{
+                fontFamily: 'NanumSquareB',
+                color: '#000000',
+                fontSize: 15,
+                padding: 2,
+              }}>
               {profileQuery.data.data.nikname === null
                 ? '닉네임을 작성해주세요.'
                 : profileQuery.data.data.nikname}
             </Text>
-            <Text style={{fontFamily: 'NanumSquareR', color: '#000000', fontSize: 12, padding: 2}}>
+            <Text
+              style={{
+                fontFamily: 'NanumSquareR',
+                color: '#000000',
+                fontSize: 12,
+                padding: 2,
+              }}>
               {profileQuery.data.data.birth === null
                 ? '생일을 아직 등록하지 않았어요.'
                 : profileQuery.data.data.birth}
             </Text>
-            <Text style={{fontFamily: 'NanumSquareR', color: '#000000', fontSize: 12.5, padding: 3}}>
+            <Text
+              style={{
+                fontFamily: 'NanumSquareR',
+                color: '#000000',
+                fontSize: 12.5,
+                padding: 3,
+              }}>
               {profileQuery.data.data.intro === null
                 ? '소개글을 아직 쓰지 않았어요.'
                 : profileQuery.data.data.intro}
@@ -176,7 +194,7 @@ export default function MyPage({navigation}) {
                   marginHorizontal: 30,
                   flexGrow: 0.5,
                   justifyContent: 'flex-start',
-                  alignSelf: 'center',
+                  alignContent: 'flex-start',
                   // flexDirection: 'column-reverse',
                   backgroundColor: '#FFFFFF',
                 }}
