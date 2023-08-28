@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, ImageBackground} from 'react-native';
-import InitialProfileImage from '../../assets/initial-profile-image.svg';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import BasicProfile from '../../assets/graphic/basicProfileImage.svg';
+
 
 export default function StudentListModal({ item }: any) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -56,12 +54,12 @@ export default function StudentListModal({ item }: any) {
       <Pressable onPress={() => setModalVisible(true)}>
         <View style={styles.studentContentContainer}>
           <View>
-            {item.profileImage === null
-              ? <View style={{width: 50, height: 50, borderRadius: 10}}><BasicProfile /></View>
-              : <ImageBackground
-                  source={{ uri: item.profileImage.substring(0,item.profileImage.length) }}
+            <ImageBackground
+                  source={item.profileImage !== null
+                    ? {uri: item.profileImage.substring(0,item.profileImage.length)}
+                    : require('../../assets/graphic/basic-profile.jpg')}
                   style={[styles.img]}
-                  imageStyle={{ borderRadius: 10 }} />}
+                  imageStyle={{ borderRadius: 10 }} />
           </View>
           <View>
             <View style={styles.textcontainer}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
+import {Text, View, StyleSheet, Button, Pressable} from 'react-native';
 import Notification from '../assets/teacherMenu/notification.svg';
 import StudentList from '../assets/teacherMenu/studentList.svg';
 import AppTime from '../assets/teacherMenu/appTime.svg';
@@ -42,7 +42,7 @@ export default function TeacherMenu({navigation}: any) {
         </TouchableOpacity>
         <TouchableOpacity>
           <View style={{padding: 15}}>
-            <GroupDeleteModal />
+            <GroupDeleteModal navigation={navigation}/>
           </View>
         </TouchableOpacity>
         <TouchableOpacity>
