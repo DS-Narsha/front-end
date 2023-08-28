@@ -42,6 +42,7 @@ export default function TimeSelectPage({navigation}: any) {
   const [eTime, setETime] = useState(timeQuery.data? new Date(timeQuery.data.data.endTime):new Date());
 
   console.log(timeQuery.data? timeQuery.data.data.startTime:new Date())
+  console.log(new Date())
   console.log(timeQuery.data? timeQuery.data.data.endTime:new Date())
 
   // update time

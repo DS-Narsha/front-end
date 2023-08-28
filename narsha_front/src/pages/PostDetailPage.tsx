@@ -208,30 +208,32 @@ export default function PostDetail({route, navigation}) {
 
               
               <View>
-                {comments.map((comment: Comment, index: number)=>(
-                  (index<5?(
-                    <View style={styles.cmtBody} key={index}>
-                  {comment.userId.profileImage ? (
-                      <Image
-                      source={{ uri: comment.userId.profileImage }}
-                      style={styles.cmtUserImg2}
-                      />
-                  ) : (
-                      <Image 
-                      source={basicProfile}
-                      style={styles.cmtUserImg2} />
-                  )}
-                  
-                  <View style={{marginTop: 5}}>
-                    <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                    {comment.userId.userId}
-                    </Text>
-                    <Text style={{fontFamily: 'NanumSquareR', marginRight: 50}}>{comment.content}</Text>
-                  </View>
-                  </View>
-                  ):<View key={index}></View>)
-                ))}
-               
+                {comments?
+                  comments.map((comment: Comment, index: number)=>(
+                    (index<5?(
+                      <View style={styles.cmtBody} key={index}>
+                    {comment.userId.profileImage ? (
+                        <Image
+                        source={{ uri: comment.userId.profileImage }}
+                        style={styles.cmtUserImg2}
+                        />
+                    ) : (
+                        <Image 
+                        source={basicProfile}
+                        style={styles.cmtUserImg2} />
+                    )}
+                    
+                    <View style={{marginTop: 5}}>
+                      <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
+                      {comment.userId.userId}
+                      </Text>
+                      <Text style={{fontFamily: 'NanumSquareR', marginRight: 50}}>{comment.content}</Text>
+                    </View>
+                    </View>
+                    ):<View key={index}></View>)
+                  ))
+                  :<View/> 
+              }
               </View>
 
             </View>

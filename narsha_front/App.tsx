@@ -4,7 +4,9 @@ import MainNavigator from './src/components/navigation/MainNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import AuthStack from './src/components/navigation/AuthStack';
 import {KeyboardAvoidingView, StyleSheet, Platform, View} from 'react-native';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {QueryClient, QueryClientProvider, useQuery} from '@tanstack/react-query';
+import NotAvailable from './src/pages/NotAvailablePage';
+import Loading from './src/pages/comment/Loading';
 
 const isLoggedIn = false;
 
@@ -24,9 +26,11 @@ export default function App() {
         <KeyboardAvoidingView
           behavior={Platform.select({ios: 'padding', android: undefined})}
           style={styles.avoid}>
-          <NavigationContainer>
-            {isLoggedIn ? <MainNavigator /> : <AuthStack />}
-          </NavigationContainer>
+            {isLoggedIn? <Loading/>:
+            <NavigationContainer>
+              <AuthStack />
+            </NavigationContainer>
+            }
         </KeyboardAvoidingView>
       </QueryClientProvider>
     </View>
