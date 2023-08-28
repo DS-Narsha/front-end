@@ -3,6 +3,8 @@ import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import DeleteGroup from '../../assets/teacherMenu/deleteGroup.svg';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import AuthStack from '../navigation/AuthStack';
+import MyPageStack from '../navigation/MyPageStack';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 type UserData = {
   userId: string;
@@ -10,7 +12,7 @@ type UserData = {
   groupCode: string;
 };
 
-export default function GroupCodeModal({navigation}: any) {
+export default function GroupCodeModal({navigation}:any) {
   const [modalVisible, setModalVisible] = useState(false);
   const queryClient = useQueryClient();
 
@@ -43,10 +45,13 @@ export default function GroupCodeModal({navigation}: any) {
 
   const startDeleteGroup = async () => {
     deleteGroupQuery.refetch();
-    navigation.reset({
-      routes: [{ name: 'AuthStack' }],
-    });
-    // <AuthStack />
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Start' }],
+      })
+    );
+    setModalVisible(!modalVisible);
   }
 
   return (

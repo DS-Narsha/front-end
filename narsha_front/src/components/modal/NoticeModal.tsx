@@ -88,7 +88,7 @@ export default function NoticeModal({navigation}) {
 
   return (
     <View style={styles.container}>
-      {!recentNoticeQuery.isLoading && recentNoticeQuery.data.data && (
+      {!recentNoticeQuery.isLoading && recentNoticeQuery.data && (
           <>
       <InfoIcon />
       <View style={styles.noticeContent}>
@@ -97,7 +97,6 @@ export default function NoticeModal({navigation}) {
         {recentNoticeQuery.data.data === null
                     ? '아직 등록된 공지가 없습니다.'
                     : recentNoticeQuery.data.data.noticeTitle}
-                    {/* // : "일단 이렇게"} */}
         </Text>
       </View>
       <View style={styles.hamburgerview}>
