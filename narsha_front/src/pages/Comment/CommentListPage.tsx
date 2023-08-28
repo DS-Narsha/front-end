@@ -45,9 +45,6 @@ const CommentListPage = ({route, navigation}) => {
     const[commentContent, setCommentContent] = useState('');
     const queryClient = useQueryClient();
 
-
-    
-
     // queryClient에서 userId와 userType을 가져오는 로직
     const { data: userData } = useQuery(['user'], () => {
         return queryClient.getQueryData(['user']);
