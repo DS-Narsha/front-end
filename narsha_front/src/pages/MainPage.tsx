@@ -12,6 +12,8 @@ import MainPost from '../components/post/MainPost';
 import RecentPost from '../components/post/RecentPost';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import GuidePage from './GuidePage';
+// @ts-ignore
+import {API_URL, REACT_NATIVE_APP_MODE} from 'react-native-dotenv';
 
 type UserData = {
   userId: string;
@@ -24,6 +26,9 @@ const MainScreen = ({navigation}) => {
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
+
+  console.log('API_URL: ', API_URL);
+  console.log('REACT_NATIVE_APP_MODE:', REACT_NATIVE_APP_MODE);
 
   // get post listd
   const getPostingList = async () => {
