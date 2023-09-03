@@ -1,25 +1,32 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Modal} from 'react-native';
 import GroupButton from '../../../components/GroupButton';
-import { useMutation, useQuery } from "@tanstack/react-query";
+import {useMutation, useQuery} from '@tanstack/react-query';
+import Config from 'react-native-config';
 
 //@ts-ignore
 const SelectGroupPage = ({navigation, route}) => {
-
-  const { userId } = route.params;
+  const {userId} = route.params;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
-  const [groupList, setGroupList] = useState<{ groupCode: { groupName: string } }[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState<{ groupCode: { groupName: string } } | null>(null);
+  const [groupList, setGroupList] = useState<
+    {groupCode: {groupName: string}}[]
+  >([]);
+  const [selectedGroup, setSelectedGroup] = useState<{
+    groupCode: {groupName: string};
+  } | null>(null);
 
   const fetchGroupList = async () => {
-    const response = await fetch(`http://localhost:8080/api/user-group/join-group-list?userId=${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `http://${Config.HOST_NAME}/api/user-group/join-group-list?userId=${userId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     const data = await response.json();
     setGroupList(data);
@@ -29,7 +36,7 @@ const SelectGroupPage = ({navigation, route}) => {
     fetchGroupList();
   }, []);
 
-  const handleGroupClick = (group: { groupCode: { groupName: string } }) => {
+  const handleGroupClick = (group: {groupCode: {groupName: string}}) => {
     setSelectedGroup(group);
   };
 
@@ -37,7 +44,7 @@ const SelectGroupPage = ({navigation, route}) => {
     if (selectedGroup) {
       console.log('Selected Group:', selectedGroup.groupCode.groupName);
       // 여기에서 선택된 그룹을 사용하거나 저장하는 로직을 추가할 수 있습니다.
-      navigation.navigate('MainNavigator', { selectedGroup });
+      navigation.navigate('MainNavigator', {selectedGroup});
     }
   };
 
@@ -70,7 +77,8 @@ const SelectGroupPage = ({navigation, route}) => {
                 style={[styles.button]}
                 onPress={() => {
                   setModalVisible(!modalVisible);
-                  handleSelectClick();}}>
+                  handleSelectClick();
+                }}>
                 <Text style={styles.textStyle}>확인</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -115,18 +123,19 @@ const SelectGroupPage = ({navigation, route}) => {
       </Modal>
 
       <View style={styles.groupArea}>
-      {groupList && groupList.map((group, index) => (
-        <TouchableOpacity
-        key={index}
-        onPress={() => handleGroupClick(group)}
-        style={[
-          styles.groupButton,
-          selectedGroup?.groupCode.groupName === group.groupCode.groupName && styles.selectedGroupButton,
-        ]}
-      >
-        <GroupButton title={group.groupCode.groupName} />
-      </TouchableOpacity>
-      ))}
+        {groupList &&
+          groupList.map((group, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleGroupClick(group)}
+              style={[
+                styles.groupButton,
+                selectedGroup?.groupCode.groupName ===
+                  group.groupCode.groupName && styles.selectedGroupButton,
+              ]}>
+              <GroupButton title={group.groupCode.groupName} />
+            </TouchableOpacity>
+          ))}
       </View>
 
       <View style={styles.btnArea}>

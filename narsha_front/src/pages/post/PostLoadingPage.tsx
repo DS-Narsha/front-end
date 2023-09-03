@@ -4,6 +4,7 @@ import {StyleSheet, View, Image, Text} from 'react-native';
 import ReadingGlasses from '../../components/animation/ReadingGlasses';
 import ImageCards from '../../components/animation/ImageCards';
 import LoadingCloud from '../../components/animation/LoadingCloud';
+import Config from 'react-native-config';
 
 //@ts-ignore
 const PostLoadingPage = ({route, navigation}) => {
@@ -20,7 +21,6 @@ const PostLoadingPage = ({route, navigation}) => {
         objectDetect: data,
       });
   }, 2000 * route.params.photos.length - 1000);
-  
 
   useEffect(() => {
     mutate();
@@ -46,7 +46,7 @@ const PostLoadingPage = ({route, navigation}) => {
       }
       console.log('formData: ' + JSON.stringify(formData));
       const res = await fetch(
-        `http://localhost:8080/api/ai-flask/object-detect`,
+        `http://${Config.HOST_NAME}/api/ai-flask/object-detect`,
         {
           method: 'POST',
           headers: {
@@ -56,7 +56,7 @@ const PostLoadingPage = ({route, navigation}) => {
         },
       );
       const json = await res.json();
-      console.log("objectdect: "+JSON.stringify(json));
+      console.log('objectdect: ' + JSON.stringify(json));
 
       return json;
     } catch (err) {

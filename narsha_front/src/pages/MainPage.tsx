@@ -26,13 +26,13 @@ const MainScreen = ({navigation}) => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
-  console.log(Config.APP_ID);
+  //console.log(Config.APP_ID, Config.HOST_NAME);
 
   // get post listd
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/main-list?groupCode=${userData.groupCode}&userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/post/main-list?groupCode=${userData.groupCode}&userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {

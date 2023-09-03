@@ -34,7 +34,7 @@ export default function MyPage({navigation}) {
   const getProfileDetail = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/detail?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -53,7 +53,7 @@ export default function MyPage({navigation}) {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/user-post-list?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/post/user-post-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {

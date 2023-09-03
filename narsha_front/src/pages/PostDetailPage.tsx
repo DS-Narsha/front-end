@@ -9,9 +9,9 @@ import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
-import BackSvg from "../assets/back.svg";
+import BackSvg from '../assets/back.svg';
 import basicProfile from '../assets/graphic/basic-profile.jpg';
-
+import Config from 'react-native-config';
 
 type Comment = {
   userId: {
@@ -29,10 +29,8 @@ type UserData = {
 
 //@ts-ignore
 export default function PostDetail({route, navigation}) {
-
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
-
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -41,7 +39,7 @@ export default function PostDetail({route, navigation}) {
   const getPostDetail = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/detail?postId=${id}&groupCode=${userData.groupCode}&userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/post/detail?postId=${id}&groupCode=${userData.groupCode}&userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -56,25 +54,31 @@ export default function PostDetail({route, navigation}) {
     }
   };
 
-     // 포스트에 해당되는 댓글 목록 불러오기        
-     const fetchComments = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/api/comment/list?postId=${id}`);
-        const data = await response.json();
-        if (data.status === 200) {
-          return data.data;
-        } else {
-          throw new Error(data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-        throw error;
+  // 포스트에 해당되는 댓글 목록 불러오기
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/comment/list?postId=${id}`,
+      );
+      const data = await response.json();
+      if (data.status === 200) {
+        return data.data;
+      } else {
+        throw new Error(data.message);
       }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
   };
 
-  const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
+  const {
+    data: comments,
+    error,
+    isLoading,
+  } = useQuery(['comments'], fetchComments);
 
-  const len = comments? comments.length:0
+  const len = comments ? comments.length : 0;
 
   // query
   const postQuery = useQuery({
@@ -95,14 +99,12 @@ export default function PostDetail({route, navigation}) {
           arr[i] = arr[i].toString();
         }
 
-        setA(arr); 
+        setA(arr);
       }
     };
 
     makeArr();
-
   }, [postQuery.data]);
-
 
   const dateToStr = date => {
     var week = new Array('일', '월', '화', '수', '목', '금', '토');
@@ -137,43 +139,48 @@ export default function PostDetail({route, navigation}) {
                 source={{uri: postQuery.data.data.writer.profileImage}}
                 style={styles.userImg}
               />
-              <Text style={{fontWeight: '600', fontSize: 18, fontFamily: 'NanumSquareB'}}>
+              <Text
+                style={{
+                  fontWeight: '600',
+                  fontSize: 18,
+                  fontFamily: 'NanumSquareB',
+                }}>
                 {postQuery.data.data.writer.userId}
               </Text>
             </View>
 
             <View style={styles.imgContainer}>
-              {a.length>0?(
+              {a.length > 0 ? (
                 <Swiper
-                loop
-                controlsEnabled={false}
-                containerStyle={{width: 300, height: 325}}>
-                {a.map((item, index) => (
-                  <View key={index}>
-                    <Image
-                      key={index}
-                      source={{uri: item}}
-                      style={styles.pickImg}
-                    />
-                  </View>
-                ))}
+                  loop
+                  controlsEnabled={false}
+                  containerStyle={{width: 300, height: 325}}>
+                  {a.map((item, index) => (
+                    <View key={index}>
+                      <Image
+                        key={index}
+                        source={{uri: item}}
+                        style={styles.pickImg}
+                      />
+                    </View>
+                  ))}
                 </Swiper>
-              ):<View/>
-            }
-              
+              ) : (
+                <View />
+              )}
             </View>
 
             <View style={styles.txtContainer}>
               <Heart style={{marginLeft: 10}} />
               <TouchableOpacity
-                onPress={() => navigation.navigate('LikeListPage', { id: id })}>
+                onPress={() => navigation.navigate('LikeListPage', {id: id})}>
                 <Text
                   style={{
                     fontSize: 13,
                     color: '#909090',
                     marginTop: 0,
                     margin: 10,
-                    fontFamily: 'NanumSquareR'
+                    fontFamily: 'NanumSquareR',
                   }}>
                   Narsha님 외 56명이 좋아합니다
                 </Text>
@@ -181,7 +188,13 @@ export default function PostDetail({route, navigation}) {
             </View>
 
             <View style={styles.contentContainer}>
-              <Text style={{fontSize: 15, marginTop: 0, margin: 10, fontFamily: 'NanumSquareR'}}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  marginTop: 0,
+                  margin: 10,
+                  fontFamily: 'NanumSquareR',
+                }}>
                 {postQuery.data.data.content}
               </Text>
               <Text
@@ -190,7 +203,7 @@ export default function PostDetail({route, navigation}) {
                   color: '#909090',
                   marginTop: 0,
                   margin: 10,
-                  fontFamily: 'NanumSquareR'
+                  fontFamily: 'NanumSquareR',
                 }}>
                 {dateToStr(new Date(postQuery.data.data.createAt))}
               </Text>
@@ -200,42 +213,62 @@ export default function PostDetail({route, navigation}) {
               <Line />
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('CommentListPage', { id: id })}>
-                <Text style={{marginTop: 15, color: '#61A257', fontFamily: 'NanumSquareR'}}>
+                onPress={() =>
+                  navigation.navigate('CommentListPage', {id: id})
+                }>
+                <Text
+                  style={{
+                    marginTop: 15,
+                    color: '#61A257',
+                    fontFamily: 'NanumSquareR',
+                  }}>
                   댓글 {len}개 전체 보기
                 </Text>
               </TouchableOpacity>
 
-              
               <View>
-                {comments?
-                  comments.map((comment: Comment, index: number)=>(
-                    (index<5?(
+                {comments ? (
+                  comments.map((comment: Comment, index: number) =>
+                    index < 5 ? (
                       <View style={styles.cmtBody} key={index}>
-                    {comment.userId.profileImage ? (
-                        <Image
-                        source={{ uri: comment.userId.profileImage }}
-                        style={styles.cmtUserImg2}
-                        />
-                    ) : (
-                        <Image 
-                        source={basicProfile}
-                        style={styles.cmtUserImg2} />
-                    )}
-                    
-                    <View style={{marginTop: 5}}>
-                      <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                      {comment.userId.userId}
-                      </Text>
-                      <Text style={{fontFamily: 'NanumSquareR', marginRight: 50}}>{comment.content}</Text>
-                    </View>
-                    </View>
-                    ):<View key={index}></View>)
-                  ))
-                  :<View/> 
-              }
-              </View>
+                        {comment.userId.profileImage ? (
+                          <Image
+                            source={{uri: comment.userId.profileImage}}
+                            style={styles.cmtUserImg2}
+                          />
+                        ) : (
+                          <Image
+                            source={basicProfile}
+                            style={styles.cmtUserImg2}
+                          />
+                        )}
 
+                        <View style={{marginTop: 5}}>
+                          <Text
+                            style={{
+                              fontWeight: 'bold',
+                              fontSize: 15,
+                              fontFamily: 'NanumSquareB',
+                            }}>
+                            {comment.userId.userId}
+                          </Text>
+                          <Text
+                            style={{
+                              fontFamily: 'NanumSquareR',
+                              marginRight: 50,
+                            }}>
+                            {comment.content}
+                          </Text>
+                        </View>
+                      </View>
+                    ) : (
+                      <View key={index}></View>
+                    ),
+                  )
+                ) : (
+                  <View />
+                )}
+              </View>
             </View>
           </ScrollView>
 
@@ -325,6 +358,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '75%',
-    fontFamily: 'NanumSquareB'
+    fontFamily: 'NanumSquareB',
   },
 });

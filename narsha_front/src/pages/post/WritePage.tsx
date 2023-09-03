@@ -17,6 +17,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Check from '../../assets/ic-check.svg';
 import ObjectLabel from '../../data/objectLabel.json';
+import Config from 'react-native-config';
 
 type Comment = {
   userId: {
@@ -108,7 +109,7 @@ const WritePage = ({route, navigation}) => {
   const getProfileDetail = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/detail?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -151,7 +152,7 @@ const WritePage = ({route, navigation}) => {
         }),
       );
       formData.append('fileType', 'png');
-      const res = await fetch(`http://localhost:8080/api/post/upload`, {
+      const res = await fetch(`http://${Config.HOST_NAME}/api/post/upload`, {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -186,7 +187,7 @@ const WritePage = ({route, navigation}) => {
   const getAIComment = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/comment/create/chat?postId=${postId}`,
+        `http://${Config.HOST_NAME}/api/comment/create/chat?postId=${postId}`,
         {
           method: 'GET',
           headers: {
@@ -233,7 +234,7 @@ const WritePage = ({route, navigation}) => {
   const updateAchieve = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/check-achieve?userId=${
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
           userData.userId
         }&achieveNum=${1}`,
         {
