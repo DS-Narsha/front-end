@@ -4,7 +4,9 @@
   "private": true,
   "proxy": "http://127.0.0.1:8000",
   "scripts": {
-    "android": "react-native run-android",
+    "android:dev": "react-native run-android --variant=developdebug",
+    "android:prod": "react-native run-android --variant=productdebug",
+    "android:local": "react-native run-android --variant=localdebug",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
