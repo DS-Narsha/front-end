@@ -44,8 +44,8 @@ const MainScreen = ({navigation}) => {
     }
   };
 
-  const postQuery = useQuery({
-    queryKey: ['posting-list'],
+  const mainPostQuery = useQuery({
+    queryKey: ['main-posting-list'],
     queryFn: getPostingList,
   });
 
@@ -54,18 +54,18 @@ const MainScreen = ({navigation}) => {
       <NoticeModal navigation={navigation} />
 
       <View>
-        {!postQuery.isLoading && (
+        {!mainPostQuery.isLoading && (
           <>
-            {postQuery.data ? (
+            {mainPostQuery.data ? (
               <View>
                 <FlatList
                   showsVerticalScrollIndicator={false}
-                  data={postQuery.data.data}
+                  data={mainPostQuery.data.data}
                   contentContainerStyle={{
                     paddingBottom: 170,
                   }}
                   renderItem={({item}) => {
-                    const {content, imageArray, user} = item;
+                    const {postId, content, imageArray, user} = item;
 
                     // imageArray를 문자열 배열로 만듦
                     const str = imageArray.slice(1, -1);
@@ -79,6 +79,7 @@ const MainScreen = ({navigation}) => {
                         content={content}
                         imageArray={arr}
                         user={user}
+                        postId={postId}
                       />
                     );
                   }}

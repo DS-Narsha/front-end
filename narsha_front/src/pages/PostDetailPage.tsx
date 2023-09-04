@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import userImg from '../assets/user-image.png';
 import Line from '../assets/Line.svg';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import images from '../assets/images.jpeg';
 import Heart from '../assets/heart.svg';
+import HeartFill from '../assets/heartFill.svg'
 import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
@@ -72,6 +73,75 @@ export default function PostDetail({route, navigation}) {
       }
   };
 
+  //좋아요 누르기
+  const createLike = useMutation(async () => {
+    try{ 
+      const res = await fetch(`http://localhost:8080/api/like/create`, {
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userData.userId,
+          groupCode: userData.groupCode,
+          postId: id,
+        }),
+      })
+      const data = await res.json();
+      return data;
+    } catch(err){
+      console.log(err);
+    }
+  })
+
+  //좋아요 여부 확인하기
+  const getLike = async () =>{
+    try{
+      const res = await fetch(`http://localhost:8080/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,{
+        method:"GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await res.json();
+      return json;
+    } catch(err){
+      console.log(err);
+    }
+  }
+
+  //좋아요 취소하기
+  const deleteLike = useMutation(async () =>{
+    try{
+      const res = await fetch(`http://localhost:8080/api/like/delete?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,{
+        method:"DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await res.json();
+      return json;
+    } catch(err){
+      console.log(err);
+    }
+  })
+
+  //좋아요 개수
+  const countLike =  useMutation(async () =>{
+    try{
+      const res = await fetch(`http://localhost:8080/api/like/count?groupCode=${userData.groupCode}}&postId=${id}`,{
+        method:"GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const data = await res.json();
+      return data;
+    } catch(err){
+      console.log(err);
+    }
+  })
+
   const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
 
   const len = comments? comments.length:0
@@ -81,6 +151,32 @@ export default function PostDetail({route, navigation}) {
     queryKey: ['post-detail'],
     queryFn: getPostDetail,
   });
+
+  const checkLikeQuery = useQuery({
+    queryKey: ['check-like'],
+    queryFn: getLike,
+  });
+
+  const uploadLike = async () => {
+    try {
+      const data = await createLike.mutateAsync();
+      
+      if(data.status === 200) {
+        checkLikeQuery.refetch();
+        await countLike.mutateAsync();
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const startDeleteLike = async () => {
+    const data = await deleteLike.mutateAsync();
+    checkLikeQuery.refetch();
+    await countLike.mutateAsync();
+  }
 
   const [a, setA] = useState<string[]>([]);
 
@@ -129,7 +225,7 @@ export default function PostDetail({route, navigation}) {
 
   return (
     <View>
-      {!postQuery.isLoading && postQuery.data && (
+      {!postQuery.isLoading && postQuery.data && !checkLikeQuery.isLoading && !countLike.isLoading &&(
         <>
           <ScrollView>
             <View style={styles.txtContainer}>
@@ -164,7 +260,10 @@ export default function PostDetail({route, navigation}) {
             </View>
 
             <View style={styles.txtContainer}>
-              <Heart style={{marginLeft: 10}} />
+              {/* 여기에서 하트 처리 */}
+              {checkLikeQuery.data.data === true
+                  ? <TouchableOpacity onPress={startDeleteLike}><HeartFill style={{marginLeft: 10}} /></TouchableOpacity>
+                  : <TouchableOpacity onPress={uploadLike}><Heart style={{marginLeft: 10}} /></TouchableOpacity>}
               <TouchableOpacity
                 onPress={() => navigation.navigate('LikeListPage', { id: id })}>
                 <Text
