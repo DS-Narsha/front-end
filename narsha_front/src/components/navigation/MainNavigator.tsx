@@ -15,14 +15,78 @@ import MypageStack from './MyPageStack';
 import PostStack from './PostStack';
 import AchieveStack from './AchieveStack';
 import AlarmStack from './AlarmStack';
+import NotAvailable from '../../pages/NotAvailablePage';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 
 const Tab = createBottomTabNavigator();
 
+type UserData = {
+  groupCode: string;
+};
 
 //@ts-ignore
 const MainNavigator = ({route}) => {
+
+  const queryClient = useQueryClient();
+  const {data: userData} = useQuery(['user'], () => {
+    return queryClient.getQueryData(['user']);
+  }) as {data: UserData};
+
+  
+  // get time
+  const getTime = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/group/get-time?groupCode=${userData.groupCode}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const timeQuery = useQuery({
+    queryKey: ['time'],
+    queryFn: getTime,
+  });
+
+  const [bool, setBool] = useState<Boolean>()
+  
+  useEffect(()=>{
+    const makeTime = async () =>{
+      const data = await getTime();
+      if (data){
+        const startTime = timeQuery.data? new Date(timeQuery.data.data.startTime):new Date()
+        const endTime = timeQuery.data? new Date(timeQuery.data.data.endTime):new Date()
+        
+        const now = String(new Date().getHours()).padStart(2, "0") + String(new Date().getMinutes()).padStart(2, "0");
+        const start = String(startTime.getHours()).padStart(2, "0") + String(startTime.getMinutes()).padStart(2, "0");
+        const end = String(endTime.getHours()).padStart(2, "0") + String(endTime.getMinutes()).padStart(2, "0");
+
+        console.log("s:"+start)
+        console.log("n:"+now)
+        console.log("e:"+end)
+        console.log(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+        setBool(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))
+
+        console.log(bool)
+    }
+    };
+
+    makeTime();
+
+  },[timeQuery.data])
+
+
   return (
+    bool? 
     <Tab.Navigator
       initialRouteName="MainStack"
       screenOptions={({route}) => ({
@@ -89,7 +153,8 @@ const MainNavigator = ({route}) => {
         component={MypageStack}
         options={{unmountOnBlur: true, headerShown: false}}
       />
-    </Tab.Navigator>
+    </Tab.Navigator>:
+    <NotAvailable/>
   );
 };
 

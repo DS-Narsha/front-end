@@ -46,7 +46,7 @@ const LoginPage = ({navigation}) => {
         queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType, groupCode: data.data.groupCode.groupCode });
         navigation.reset({
           routes: [{ name: 'MainNavigator' }],
-        });
+        }); 
       } else {
         console.log(data.message);
         Alert.alert('로그인 실패', data.message);

@@ -26,11 +26,9 @@ export default function App() {
         <KeyboardAvoidingView
           behavior={Platform.select({ios: 'padding', android: undefined})}
           style={styles.avoid}>
-            {isLoggedIn? <Loading/>:
-            <NavigationContainer>
-              <AuthStack />
+             <NavigationContainer>
+              {isLoggedIn? <MainNavigator/>:<AuthStack />}
             </NavigationContainer>
-            }
         </KeyboardAvoidingView>
       </QueryClientProvider>
     </View>
