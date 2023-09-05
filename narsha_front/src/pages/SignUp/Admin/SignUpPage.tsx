@@ -15,12 +15,36 @@ import CopyGroup from '../../../assets/copy-group.svg';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Clipboard from '@react-native-clipboard/clipboard'; 
 import { useFocusEffect } from '@react-navigation/native';
-
+import messaging from '@react-native-firebase/messaging';
 
 // 회원가입 완료 페이지_관리자 + 사용자 
 
 //@ts-ignore
 const SignUpPage = ({navigation, route}) => {
+
+  // FCM 토큰 생성 및 서버로 전송하는 함수
+  const generateAndSendFCMToken = async () => {
+    try {
+      const fcmToken = await messaging().getToken(); // FCM 토큰 생성
+      // 생성된 FCM 토큰을 백엔드로 전송
+      await fetch('http://localhost:8080/api/user/save-fcm-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId, // 사용자 ID
+          fcmToken: fcmToken, // 생성된 FCM 토큰
+        }),
+      });
+    } catch (error) {
+      console.error('FCM Token Generation and Sending Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    generateAndSendFCMToken();
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
