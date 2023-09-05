@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import NoticeModal from '../components/modal/NoticeModal';
 import MainPost from '../components/post/MainPost';
-import RecentPost from '../components/post/RecentPost';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import GuidePage from './GuidePage';
 import Config from 'react-native-config';
@@ -101,9 +100,6 @@ const MainScreen = ({navigation}) => {
           onPress={() => navigation.navigate('GuidePage')}>
           <Text style={styles.floatingText}>둥실둥실{'\n'}사용법</Text>
         </TouchableOpacity>
-
-        {/* recent post modal */}
-        <RecentPost />
       </TouchableOpacity>
     </View>
   );
