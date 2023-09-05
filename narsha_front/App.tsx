@@ -15,8 +15,6 @@ import {
   Modal,
 } from 'react-native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {StartTimeContext} from './src/components/StartTimeContext';
-import {EndTimeContext} from './src/components/EndTimeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging, {
   FirebaseMessagingTypes,
