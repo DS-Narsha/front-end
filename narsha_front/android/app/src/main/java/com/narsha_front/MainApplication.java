@@ -10,6 +10,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 import com.reactnativecommunity.cameraroll.CameraRollPackage;
+import com.lugg.RNCConfig.RNCConfigPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -19,18 +20,16 @@ public class MainApplication extends Application implements ReactApplication {
       return BuildConfig.DEBUG;
     }
 
-    @Override
-    protected List<ReactPackage> getPackages() {
-      @SuppressWarnings("UnnecessaryLocalVariable")
-      List<ReactPackage> packages = new PackageList(this).getPackages();
-      // Packages that cannot be autolinked yet can be added manually here, for
-      // example:
-      // packages.add(new MyReactNativePackage());
-      // packages.add(new CameraRollPackage()); // Add new CameraRollPackage();
-      // packages.add(new ReactNativeFirebaseMessagingPackage());
-      // packages.add(new ReactNativeFirebaseAppPackage());
-      return packages;
-    }
+        @Override
+        protected List<ReactPackage> getPackages() {
+          @SuppressWarnings("UnnecessaryLocalVariable")
+          List<ReactPackage> packages = new PackageList(this).getPackages();
+          // Packages that cannot be autolinked yet can be added manually here, for example:
+          // packages.add(new MyReactNativePackage());
+          // packages.add(new CameraRollPackage()); // Add new CameraRollPackage();
+          //new RNCConfigPackage() // Add new RNCConfigPackage()
+          return packages;
+        }
 
     @Override
     protected String getJSMainModuleName() {

@@ -1,31 +1,40 @@
-import React, { useState } from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Alert, TextInput, Modal, Pressable} from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  TextInput,
+  Modal,
+  Pressable,
+} from 'react-native';
 import SingleTextInput from '../components/SingleTextInput';
 import MultiTextInput from '../components/MultiTextInput';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ScrollView } from 'react-native-gesture-handler';
+import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
+import {ScrollView} from 'react-native-gesture-handler';
+import Config from 'react-native-config';
 
 type UserData = {
-  userId:string,
-  groupCode:string
+  userId: string;
+  groupCode: string;
 };
 
 // 공지 작성 페이지
 
 export default function NoticeWritePage({navigation}: any) {
-
   const queryClient = useQueryClient();
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
-  const userId = userData.userId
-  const groupCode = userData.groupCode
+  const userId = userData.userId;
+  const groupCode = userData.groupCode;
 
   const createNotice = useMutation(async () => {
-    try{ 
-      const res = await fetch(`http://localhost:8080/api/notice/create`, {
-        method:"POST",
+    try {
+      const res = await fetch(`http://${Config.HOST_NAME}/api/notice/create`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -33,25 +42,25 @@ export default function NoticeWritePage({navigation}: any) {
           groupCode: groupCode,
           noticeTitle: textTitle,
           noticeContent: textContent,
-          writer: userId
+          writer: userId,
         }),
-      })
+      });
       const data = await res.json();
       return data;
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-  })
+  });
 
   const uploadNotice = async () => {
     try {
       const data = await createNotice.mutateAsync();
 
-      queryClient.setQueryData(["noticeTitle"], textTitle);
-      queryClient.setQueryData(["noticeContent"], textContent);
-      
-      if(data.status === 200) {
-        setModalVisible(!modalVisible)
+      queryClient.setQueryData(['noticeTitle'], textTitle);
+      queryClient.setQueryData(['noticeContent'], textContent);
+
+      if (data.status === 200) {
+        setModalVisible(!modalVisible);
         navigation.reset({routes: [{name: 'Main'}]});
       } else {
         console.log(data.message);
@@ -63,8 +72,8 @@ export default function NoticeWritePage({navigation}: any) {
     }
   };
 
-  const [textTitle, setTextTitle] = useState("");
-  const [textContent, setTextContent] = useState("");
+  const [textTitle, setTextTitle] = useState('');
+  const [textContent, setTextContent] = useState('');
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -80,10 +89,11 @@ export default function NoticeWritePage({navigation}: any) {
             </View>
             <View style={styles.textinput}>
               <View style={styles.titleTextContainer}>
-                <TextInput 
+                <TextInput
                   style={styles.titleInputText}
                   value={textTitle}
-                  onChangeText={setTextTitle}/>
+                  onChangeText={setTextTitle}
+                />
               </View>
             </View>
             <View style={styles.titlecontainer}>
@@ -91,59 +101,63 @@ export default function NoticeWritePage({navigation}: any) {
             </View>
             <View style={styles.textinput}>
               <View style={styles.contentTextContainer}>
-                <TextInput 
+                <TextInput
                   style={styles.contentInputText}
                   multiline={true}
                   value={textContent}
-                  onChangeText={setTextContent} />
+                  onChangeText={setTextContent}
+                />
               </View>
             </View>
           </View>
 
           <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-          setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style={styles.modalHead}>
-                <Text style={styles.btnText}>알림</Text>
-              </View>
-              <View style={styles.modalBody}>
-                <View style={styles.modalText}>
-                  <Text style={styles.contentText}>공지는 등록 후 삭제가 불가능 합니다.</Text>
-                  <Text style={styles.contentText}>정말로 공지를 등록하시겠습니까?</Text>
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View style={styles.modalHead}>
+                  <Text style={styles.btnText}>알림</Text>
+                </View>
+                <View style={styles.modalBody}>
+                  <View style={styles.modalText}>
+                    <Text style={styles.contentText}>
+                      공지는 등록 후 삭제가 불가능 합니다.
+                    </Text>
+                    <Text style={styles.contentText}>
+                      정말로 공지를 등록하시겠습니까?
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.modalEnd}>
+                  <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                    <View style={styles.btn}>
+                      <Text style={styles.strongText}>취소</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable onPress={uploadNotice}>
+                    <View style={styles.btn}>
+                      <Text style={styles.strongText}>공지 올리기</Text>
+                    </View>
+                  </Pressable>
                 </View>
               </View>
-              <View style={styles.modalEnd}>
-                <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                  <View style={styles.btn}>
-                    <Text style={styles.strongText}>취소</Text>
-                  </View>
-                </Pressable>
-                <Pressable onPress={uploadNotice}>
-                  <View style={styles.btn}>
-                    <Text style={styles.strongText}>공지 올리기</Text>
-                  </View>
-                </Pressable>
-              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
 
-        <Pressable onPress={() => setModalVisible(true)}>
-        <View style={styles.updatebtn}>
+          <Pressable onPress={() => setModalVisible(true)}>
+            <View style={styles.updatebtn}>
               <Text style={styles.btntitle}>공지 올리기</Text>
             </View>
-        </Pressable>
+          </Pressable>
 
           {/* <TouchableOpacity onPress={uploadNotice}>
             
           </TouchableOpacity> */}
-
         </View>
       </ScrollView>
     </View>
@@ -181,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 30,
     marginTop: 20,
-    marginBottom:20,
+    marginBottom: 20,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -195,7 +209,7 @@ const styles = StyleSheet.create({
     fontWeight: '200',
   },
   titleTextContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 20,
     width: '100%',
     height: 48,
@@ -207,7 +221,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   contentTextContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 20,
     marginBottom: 30,
     elevation: 5,
@@ -260,7 +274,7 @@ const styles = StyleSheet.create({
   modalBody: {
     flex: 1.5,
     width: '100%',
-    alignItems: 'center',//'flex-start',
+    alignItems: 'center', //'flex-start',
   },
   modalEnd: {
     flex: 1,

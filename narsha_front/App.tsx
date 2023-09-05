@@ -64,52 +64,37 @@ export default function App() {
   }, []);
 
   return (
-    <StartTimeContext.Provider
-      value={{startTime: startTime, setStartTime: setStartTime}}>
-      <EndTimeContext.Provider
-        value={{endTime: endTime, setEndTime: setEndTime}}>
-        <View style={styles.container}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(false);
-            }}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text>푸시 알림 내용:</Text>
-                <Text>{notification ? notification.body : ''}</Text>
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={() => setModalVisible(false)}>
-                  <Text>닫기</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-
-          <QueryClientProvider client={queryClient}>
-            <KeyboardAvoidingView
-              behavior={Platform.select({ios: 'padding', android: undefined})}
-              style={styles.avoid}>
-              <NavigationContainer>
-                {true ? (
-                  // {(startTime.getHours()<endTime.getHours()?(start<now && now<end):(start<now || now<end))?
-                  isLoggedIn ? (
-                    <MainNavigator />
-                  ) : (
-                    <AuthStack />
-                  )
-                ) : (
-                  <NotAvailable />
-                )}
-              </NavigationContainer>
-            </KeyboardAvoidingView>
-          </QueryClientProvider>
+    <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>푸시 알림 내용:</Text>
+            <Text>{notification ? notification.body : ''}</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}>
+              <Text>닫기</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </EndTimeContext.Provider>
-    </StartTimeContext.Provider>
+      </Modal>
+
+      <QueryClientProvider client={queryClient}>
+        <KeyboardAvoidingView
+          behavior={Platform.select({ios: 'padding', android: undefined})}
+          style={styles.avoid}>
+          <NavigationContainer>
+            {isLoggedIn ? <MainNavigator /> : <AuthStack />}
+          </NavigationContainer>
+        </KeyboardAvoidingView>
+      </QueryClientProvider>
+    </View>
   );
 }
 

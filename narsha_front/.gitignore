@@ -62,8 +62,13 @@ yarn-error.log
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check
 
+# firebase notification
 app/google-services.json
-
 ./android/app/google-services.json
-
 android/app/google-services.json
+
+# environment
+.env
+.env.local
+.env.development
+.env.production

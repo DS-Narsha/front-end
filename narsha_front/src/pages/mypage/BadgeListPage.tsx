@@ -13,6 +13,7 @@ import SingleBadge from '../../components/SingleBadge';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import AchieveData from '../../data/AchieveData.json';
 import {badgeSources} from '../../data/BadgeSources';
+import Config from 'react-native-config';
 
 type UserData = {
   userId: string;
@@ -29,7 +30,7 @@ export default function BadgeList({route, navigation}) {
   const getBadgeList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/badge-list?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/user/badge-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -53,21 +54,19 @@ export default function BadgeList({route, navigation}) {
     // console.log(item.title);
     return (
       <View>
-        {!achieveQuery.isLoading && 
-      achieveQuery.data &&
-      (
-        <>
-      <SingleBadge
-        badge={
-          isCompletefunc(achieveQuery.data.data, index)
-            ? badgeSources[index]
-            : require('../../assets/badge/badge-none.png')
-        }
-        content={AchieveData[index]}
-        progress={stringToArray(achieveQuery.data.data, index)}
-      />
-      </>
-      )}
+        {!achieveQuery.isLoading && achieveQuery.data && (
+          <>
+            <SingleBadge
+              badge={
+                isCompletefunc(achieveQuery.data.data, index)
+                  ? badgeSources[index]
+                  : require('../../assets/badge/badge-none.png')
+              }
+              content={AchieveData[index]}
+              progress={stringToArray(achieveQuery.data.data, index)}
+            />
+          </>
+        )}
       </View>
     );
   }, []);
@@ -86,9 +85,7 @@ export default function BadgeList({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      {!achieveQuery.isLoading && 
-      achieveQuery.data &&
-      (
+      {!achieveQuery.isLoading && achieveQuery.data && (
         <>
           <View style={styles.ds_container}>
             <Image style={styles.ds_image} source={DS} />

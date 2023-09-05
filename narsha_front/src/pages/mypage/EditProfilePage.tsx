@@ -18,6 +18,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-picker';
 import CameraIcon from '../../assets/ic-camera.svg';
+import Config from 'react-native-config';
 
 type UserData = {
   userId: string;
@@ -37,7 +38,7 @@ export default function EditProfile({navigation}) {
   const getProfileDetail = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/detail?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -73,7 +74,7 @@ export default function EditProfile({navigation}) {
         }),
       );
 
-      const res = await fetch(`http://localhost:8080/api/user/update`, {
+      const res = await fetch(`http://${Config.HOST_NAME}/api/user/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'multipart/form-data',

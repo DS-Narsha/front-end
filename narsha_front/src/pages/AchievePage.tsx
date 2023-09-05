@@ -5,6 +5,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import AchieveItem from '../components/AchieveItem';
 import AchieveData from '../data/AchieveData.json';
 import {badgeSources} from '../data/BadgeSources';
+import Config from 'react-native-config';
 
 type UserData = {
   userId: string;
@@ -20,7 +21,7 @@ const AchievePage = () => {
   const getBadgeList = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/user/badge-list?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/user/badge-list?userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {

@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import DeleteGroup from '../../assets/teacherMenu/deleteGroup.svg';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import AuthStack from '../navigation/AuthStack';
 import MyPageStack from '../navigation/MyPageStack';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import Config from 'react-native-config';
 
 type UserData = {
   userId: string;
@@ -12,7 +13,7 @@ type UserData = {
   groupCode: string;
 };
 
-export default function GroupCodeModal({navigation}:any) {
+export default function GroupCodeModal({navigation}: any) {
   const [modalVisible, setModalVisible] = useState(false);
   const queryClient = useQueryClient();
 
@@ -21,96 +22,101 @@ export default function GroupCodeModal({navigation}:any) {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
-  const deleteGroup = async () =>{
-    try{
-      const res = await fetch(`http://localhost:8080/api/group/delete?groupCode=${userData.groupCode}`,{
-        method:"DELETE",
-        headers: {
-          'Content-Type': 'application/json',
+  const deleteGroup = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/group/delete?groupCode=${userData.groupCode}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      );
       const json = await res.json();
       return json;
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-
-  }
+  };
 
   const deleteGroupQuery = useQuery({
-    queryKey: ["group-delete"], 
+    queryKey: ['group-delete'],
     queryFn: deleteGroup,
     enabled: false,
-  });  
+  });
 
   const startDeleteGroup = async () => {
     deleteGroupQuery.refetch();
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: 'Start' }],
-      })
+        routes: [{name: 'Start'}],
+      }),
     );
     setModalVisible(!modalVisible);
-  }
+  };
 
   return (
     <View>
       {/* {!isLoading &&(
       <> */}
-        <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+      <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.modalHead}>
+                <Text style={styles.modalTitleText}>그룹 삭제</Text>
+              </View>
 
-            <View style={styles.modalHead}>
-              <Text style={styles.modalTitleText}>그룹 삭제</Text>
-            </View>
+              <View style={styles.modalBody}>
+                <View style={styles.modalText}>
+                  <Text style={styles.boldText}>
+                    정말로 그룹을 삭제하시겠습니까?
+                  </Text>
+                  <Text style={styles.content}>
+                    (그룹을 삭제하면 해당 그룹의 모든 활동
+                  </Text>
+                  <Text style={styles.content}>내역이 삭제되며,</Text>
+                  <Text style={styles.content}>
+                    삭제 후에 복구는 불가능 합니다.)
+                  </Text>
+                </View>
+              </View>
 
-            <View style={styles.modalBody}>
-              <View style={styles.modalText}>
-                <Text style={styles.boldText}>정말로 그룹을 삭제하시겠습니까?</Text>
-                <Text style={styles.content}>(그룹을 삭제하면 해당 그룹의 모든 활동</Text>
-                <Text style={styles.content}>내역이 삭제되며,</Text>
-                <Text style={styles.content}>삭제 후에 복구는 불가능 합니다.)</Text>
+              <View style={styles.modalEnd}>
+                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <View style={styles.btn}>
+                    <Text style={styles.strongText}>닫기</Text>
+                  </View>
+                </Pressable>
+                <Pressable onPress={startDeleteGroup}>
+                  <View style={styles.btn}>
+                    <Text style={styles.strongText}>삭제하기</Text>
+                  </View>
+                </Pressable>
               </View>
             </View>
-
-            <View style={styles.modalEnd}>
-              <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                <View style={styles.btn}>
-                  <Text style={styles.strongText}>닫기</Text>
-                </View>
-              </Pressable>
-              <Pressable onPress={startDeleteGroup}>
-                <View style={styles.btn}>
-                  <Text style={styles.strongText}>삭제하기</Text>
-                </View>
-              </Pressable>
-            </View>
-
           </View>
-        </View>
-      </Modal>
+        </Modal>
 
-      <Pressable onPress={() => setModalVisible(true)}>
-        <View>
+        <Pressable onPress={() => setModalVisible(true)}>
           <View>
-            <DeleteGroup />
+            <View>
+              <DeleteGroup />
+            </View>
           </View>
-        </View>
-      </Pressable>
-    </View>
+        </Pressable>
+      </View>
       {/* </>
       )} */}
     </View>
-    
   );
 }
 
@@ -187,8 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '200',
   },
-  container: {
-  },
+  container: {},
   strongText: {
     fontFamily: 'NanumSquareB',
     fontSize: 14,

@@ -5,14 +5,14 @@ import Line from '../assets/Line.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import images from '../assets/images.jpeg';
 import Heart from '../assets/heart.svg';
-import HeartFill from '../assets/heartFill.svg'
+import HeartFill from '../assets/heartFill.svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
-import BackSvg from "../assets/back.svg";
+import BackSvg from '../assets/back.svg';
 import basicProfile from '../assets/graphic/basic-profile.jpg';
-
+import Config from 'react-native-config';
 
 type Comment = {
   userId: {
@@ -30,10 +30,8 @@ type UserData = {
 
 //@ts-ignore
 export default function PostDetail({route, navigation}) {
-
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
-
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -42,7 +40,7 @@ export default function PostDetail({route, navigation}) {
   const getPostDetail = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/post/detail?postId=${id}&groupCode=${userData.groupCode}&userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/post/detail?postId=${id}&groupCode=${userData.groupCode}&userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
@@ -57,27 +55,29 @@ export default function PostDetail({route, navigation}) {
     }
   };
 
-     // 포스트에 해당되는 댓글 목록 불러오기        
-     const fetchComments = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/api/comment/list?postId=${id}`);
-        const data = await response.json();
-        if (data.status === 200) {
-          return data.data;
-        } else {
-          throw new Error(data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-        throw error;
+  // 포스트에 해당되는 댓글 목록 불러오기
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/comment/list?postId=${id}`,
+      );
+      const data = await response.json();
+      if (data.status === 200) {
+        return data.data;
+      } else {
+        throw new Error(data.message);
       }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
   };
 
   //좋아요 누르기
   const createLike = useMutation(async () => {
-    try{ 
+    try {
       const res = await fetch(`http://localhost:8080/api/like/create`, {
-        method:"POST",
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -86,65 +86,78 @@ export default function PostDetail({route, navigation}) {
           groupCode: userData.groupCode,
           postId: id,
         }),
-      })
+      });
       const data = await res.json();
       return data;
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-  })
+  });
 
   //좋아요 여부 확인하기
-  const getLike = async () =>{
-    try{
-      const res = await fetch(`http://localhost:8080/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,{
-        method:"GET",
-        headers: {
-          'Content-Type': 'application/json',
+  const getLike = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      );
       const json = await res.json();
       return json;
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   //좋아요 취소하기
-  const deleteLike = useMutation(async () =>{
-    try{
-      const res = await fetch(`http://localhost:8080/api/like/delete?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,{
-        method:"DELETE",
-        headers: {
-          'Content-Type': 'application/json',
+  const deleteLike = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/like/delete?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      );
       const json = await res.json();
       return json;
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-  })
+  });
 
   //좋아요 개수
-  const countLike =  useMutation(async () =>{
-    try{
-      const res = await fetch(`http://localhost:8080/api/like/count?groupCode=${userData.groupCode}}&postId=${id}`,{
-        method:"GET",
-        headers: {
-          'Content-Type': 'application/json',
+  const countLike = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/like/count?groupCode=${userData.groupCode}}&postId=${id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      })
+      );
       const data = await res.json();
       return data;
-    } catch(err){
+    } catch (err) {
       console.log(err);
     }
-  })
+  });
 
-  const { data: comments, error, isLoading } = useQuery(["comments"], fetchComments);
+  const {
+    data: comments,
+    error,
+    isLoading,
+  } = useQuery(['comments'], fetchComments);
 
-  const len = comments? comments.length:0
+  const len = comments ? comments.length : 0;
 
   // query
   const postQuery = useQuery({
@@ -160,8 +173,8 @@ export default function PostDetail({route, navigation}) {
   const uploadLike = async () => {
     try {
       const data = await createLike.mutateAsync();
-      
-      if(data.status === 200) {
+
+      if (data.status === 200) {
         checkLikeQuery.refetch();
         await countLike.mutateAsync();
       } else {
@@ -176,7 +189,7 @@ export default function PostDetail({route, navigation}) {
     const data = await deleteLike.mutateAsync();
     checkLikeQuery.refetch();
     await countLike.mutateAsync();
-  }
+  };
 
   const [a, setA] = useState<string[]>([]);
 
@@ -191,14 +204,12 @@ export default function PostDetail({route, navigation}) {
           arr[i] = arr[i].toString();
         }
 
-        setA(arr); 
+        setA(arr);
       }
     };
 
     makeArr();
-
   }, [postQuery.data]);
-
 
   const dateToStr = date => {
     var week = new Array('일', '월', '화', '수', '목', '금', '토');
@@ -225,132 +236,172 @@ export default function PostDetail({route, navigation}) {
 
   return (
     <View>
-      {!postQuery.isLoading && postQuery.data && !checkLikeQuery.isLoading && !countLike.isLoading &&(
-        <>
-          <ScrollView>
-            <View style={styles.txtContainer}>
-              <Image
-                source={{uri: postQuery.data.data.writer.profileImage}}
-                style={styles.userImg}
-              />
-              <Text style={{fontWeight: '600', fontSize: 18, fontFamily: 'NanumSquareB'}}>
-                {postQuery.data.data.writer.userId}
-              </Text>
-            </View>
-
-            <View style={styles.imgContainer}>
-              {a.length>0?(
-                <Swiper
-                loop
-                controlsEnabled={false}
-                containerStyle={{width: 300, height: 325}}>
-                {a.map((item, index) => (
-                  <View key={index}>
-                    <Image
-                      key={index}
-                      source={{uri: item}}
-                      style={styles.pickImg}
-                    />
-                  </View>
-                ))}
-                </Swiper>
-              ):<View/>
-            }
-              
-            </View>
-
-            <View style={styles.txtContainer}>
-              {/* 여기에서 하트 처리 */}
-              {checkLikeQuery.data.data === true
-                  ? <TouchableOpacity onPress={startDeleteLike}><HeartFill style={{marginLeft: 10}} /></TouchableOpacity>
-                  : <TouchableOpacity onPress={uploadLike}><Heart style={{marginLeft: 10}} /></TouchableOpacity>}
-              <TouchableOpacity
-                onPress={() => navigation.navigate('LikeListPage', { id: id })}>
+      {!postQuery.isLoading &&
+        postQuery.data &&
+        !checkLikeQuery.isLoading &&
+        !countLike.isLoading && (
+          <>
+            <ScrollView>
+              <View style={styles.txtContainer}>
+                <Image
+                  source={{uri: postQuery.data.data.writer.profileImage}}
+                  style={styles.userImg}
+                />
                 <Text
                   style={{
-                    fontSize: 13,
+                    fontWeight: '600',
+                    fontSize: 18,
+                    fontFamily: 'NanumSquareB',
+                  }}>
+                  {postQuery.data.data.writer.userId}
+                </Text>
+              </View>
+
+              <View style={styles.imgContainer}>
+                {a.length > 0 ? (
+                  <Swiper
+                    loop
+                    controlsEnabled={false}
+                    containerStyle={{width: 300, height: 325}}>
+                    {a.map((item, index) => (
+                      <View key={index}>
+                        <Image
+                          key={index}
+                          source={{uri: item}}
+                          style={styles.pickImg}
+                        />
+                      </View>
+                    ))}
+                  </Swiper>
+                ) : (
+                  <View />
+                )}
+              </View>
+
+              <View style={styles.txtContainer}>
+                {/* 여기에서 하트 처리 */}
+                {checkLikeQuery.data.data === true ? (
+                  <TouchableOpacity onPress={startDeleteLike}>
+                    <HeartFill style={{marginLeft: 10}} />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={uploadLike}>
+                    <Heart style={{marginLeft: 10}} />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('LikeListPage', {id: id})}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: '#909090',
+                      marginTop: 0,
+                      margin: 10,
+                      fontFamily: 'NanumSquareR',
+                    }}>
+                    Narsha님 외 56명이 좋아합니다
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.contentContainer}>
+                <Text
+                  style={{
+                    fontSize: 15,
+                    marginTop: 0,
+                    margin: 10,
+                    fontFamily: 'NanumSquareR',
+                  }}>
+                  {postQuery.data.data.content}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 10,
                     color: '#909090',
                     marginTop: 0,
                     margin: 10,
-                    fontFamily: 'NanumSquareR'
+                    fontFamily: 'NanumSquareR',
                   }}>
-                  Narsha님 외 56명이 좋아합니다
+                  {dateToStr(new Date(postQuery.data.data.createAt))}
                 </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.contentContainer}>
-              <Text style={{fontSize: 15, marginTop: 0, margin: 10, fontFamily: 'NanumSquareR'}}>
-                {postQuery.data.data.content}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 10,
-                  color: '#909090',
-                  marginTop: 0,
-                  margin: 10,
-                  fontFamily: 'NanumSquareR'
-                }}>
-                {dateToStr(new Date(postQuery.data.data.createAt))}
-              </Text>
-            </View>
-
-            <View style={{margin: 15, marginLeft: 35, marginBottom: 200}}>
-              <Line />
-
-              <TouchableOpacity
-                onPress={() => navigation.navigate('CommentListPage', { id: id })}>
-                <Text style={{marginTop: 15, color: '#61A257', fontFamily: 'NanumSquareR'}}>
-                  댓글 {len}개 전체 보기
-                </Text>
-              </TouchableOpacity>
-
-              
-              <View>
-                {comments?
-                  comments.map((comment: Comment, index: number)=>(
-                    (index<5?(
-                      <View style={styles.cmtBody} key={index}>
-                    {comment.userId.profileImage ? (
-                        <Image
-                        source={{ uri: comment.userId.profileImage }}
-                        style={styles.cmtUserImg2}
-                        />
-                    ) : (
-                        <Image 
-                        source={basicProfile}
-                        style={styles.cmtUserImg2} />
-                    )}
-                    
-                    <View style={{marginTop: 5}}>
-                      <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                      {comment.userId.userId}
-                      </Text>
-                      <Text style={{fontFamily: 'NanumSquareR', marginRight: 50}}>{comment.content}</Text>
-                    </View>
-                    </View>
-                    ):<View key={index}></View>)
-                  ))
-                  :<View/> 
-              }
               </View>
 
-            </View>
-          </ScrollView>
+              <View style={{margin: 15, marginLeft: 35, marginBottom: 200}}>
+                <Line />
 
-          <View style={styles.inputBody}>
-            <Image
-              source={{uri: postQuery.data.data.writer.profileImage}}
-              style={styles.cmtUserImg3}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="@아이디 로 글 남기기"
-            />
-            <SEND style={{top: 5}} />
-          </View>
-        </>
-      )}
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('CommentListPage', {id: id})
+                  }>
+                  <Text
+                    style={{
+                      marginTop: 15,
+                      color: '#61A257',
+                      fontFamily: 'NanumSquareR',
+                    }}>
+                    댓글 {len}개 전체 보기
+                  </Text>
+                </TouchableOpacity>
+
+                <View>
+                  {comments ? (
+                    comments.map((comment: Comment, index: number) =>
+                      index < 5 ? (
+                        <View style={styles.cmtBody} key={index}>
+                          {comment.userId.profileImage ? (
+                            <Image
+                              source={{uri: comment.userId.profileImage}}
+                              style={styles.cmtUserImg2}
+                            />
+                          ) : (
+                            <Image
+                              source={basicProfile}
+                              style={styles.cmtUserImg2}
+                            />
+                          )}
+
+                          <View style={{marginTop: 5}}>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: 15,
+                                fontFamily: 'NanumSquareB',
+                              }}>
+                              {comment.userId.userId}
+                            </Text>
+                            <Text
+                              style={{
+                                fontFamily: 'NanumSquareR',
+                                marginRight: 50,
+                              }}>
+                              {comment.content}
+                            </Text>
+                          </View>
+                        </View>
+                      ) : (
+                        <View key={index}></View>
+                      ),
+                    )
+                  ) : (
+                    <View />
+                  )}
+                </View>
+              </View>
+            </ScrollView>
+
+            <View style={styles.inputBody}>
+              <Image
+                source={{uri: postQuery.data.data.writer.profileImage}}
+                style={styles.cmtUserImg3}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="@아이디 로 글 남기기"
+              />
+              <SEND style={{top: 5}} />
+            </View>
+          </>
+        )}
     </View>
   );
 }
@@ -424,6 +475,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '75%',
-    fontFamily: 'NanumSquareB'
+    fontFamily: 'NanumSquareB',
   },
 });

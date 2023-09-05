@@ -11,7 +11,8 @@ import {
 import AppLogo from '../../../assets/app-logo.svg';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import BackSvg from '../../../assets/back.svg';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import Config from 'react-native-config';
 
 //@ts-ignore
 const LoginPage = ({navigation}) => {
@@ -21,7 +22,8 @@ const LoginPage = ({navigation}) => {
 
   // DB에 저장된 유효한 사용자인지 확인하기 위한 정보 넘기기
   const loginMutation = useMutation(async () => {
-    const response = await fetch(`http://localhost:8080/api/user/login`, {
+    console.log(Config.HOST_NAME);
+    const response = await fetch(`http://${Config.HOST_NAME}/api/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -43,10 +45,14 @@ const LoginPage = ({navigation}) => {
       if (data.status === 200) {
         // 로그인 성공시 캐시에 로그인 성공을 저장
         queryClient.setQueryData(['isLoggedIn'], true);
-        queryClient.setQueryData(['user'], { userId: data.data.userId, userType: data.data.userType, groupCode: data.data.groupCode.groupCode });
+        queryClient.setQueryData(['user'], {
+          userId: data.data.userId,
+          userType: data.data.userType,
+          groupCode: data.data.groupCode.groupCode,
+        });
         navigation.reset({
-          routes: [{ name: 'MainNavigator' }],
-        }); 
+          routes: [{name: 'MainNavigator'}],
+        });
       } else {
         console.log(data.message);
         Alert.alert('로그인 실패', data.message);
@@ -59,49 +65,49 @@ const LoginPage = ({navigation}) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <View style={styles.logo}>
-        <AppLogo />
-        <Text style={styles.logoText}>로그인</Text>
-      </View>
-      <View style={styles.content}>
-      <View style={styles.formArea}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputText}
-            placeholder="아이디"
-            value={userId}
-            onChangeText={(text: React.SetStateAction<string>) =>
-              setUserId(text)
-            }
-          />
+      <View style={styles.container}>
+        <View style={styles.logo}>
+          <AppLogo />
+          <Text style={styles.logoText}>로그인</Text>
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.inputText}
-            placeholder="비밀번호"
-            value={password}
-            onChangeText={(text: React.SetStateAction<string>) =>
-              setPassword(text)
-            }
-            secureTextEntry
-          />
+        <View style={styles.content}>
+          <View style={styles.formArea}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="아이디"
+                value={userId}
+                onChangeText={(text: React.SetStateAction<string>) =>
+                  setUserId(text)
+                }
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="비밀번호"
+                value={password}
+                onChangeText={(text: React.SetStateAction<string>) =>
+                  setPassword(text)
+                }
+                secureTextEntry
+              />
+            </View>
+          </View>
+          <View style={styles.textArea}>
+            <Text style={styles.textContent}>뭉게뭉게 회원이 아니신가요?</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('UserType');
+              }}>
+              <Text style={styles.textContent}>회원가입 하기</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.btnText}>확인!</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.textArea}>
-        <Text style={styles.textContent}>뭉게뭉게 회원이 아니신가요?</Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('UserType');
-          }}>
-          <Text style={styles.textContent}>회원가입 하기</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.btnText}>확인!</Text>
-      </TouchableOpacity>
-      </View>
-    </View>
     </TouchableWithoutFeedback>
   );
 };
@@ -113,7 +119,7 @@ const styles = StyleSheet.create({
     padding: 25,
   },
   content: {
-    padding: 5
+    padding: 5,
   },
   logo: {
     justifyContent: 'center',
@@ -126,7 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: '#35562F',
     fontWeight: 'bold',
-    fontFamily: 'NanumSquareB'
+    fontFamily: 'NanumSquareB',
   },
   formArea: {
     marginTop: 40,
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     marginBottom: 110,
   },
   textContent: {
-    fontFamily: 'NanumSquareR'
+    fontFamily: 'NanumSquareR',
   },
   inputContainer: {
     backgroundColor: '#ffffff',
@@ -167,7 +173,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 18,
     color: '#000000',
-    fontFamily: 'NanumSquareB'
+    fontFamily: 'NanumSquareB',
   },
 });
 

@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
-  Text, 
-  View, 
-  TouchableOpacity, 
+  Text,
+  View,
+  TouchableOpacity,
   Alert,
   Platform,
   ToastAndroid,
-  BackHandler
- } from 'react-native';
+  BackHandler,
+} from 'react-native';
 import AppLogo from '../../../assets/app-logo.svg';
 import CustomButton from '../../../components/CustomButton';
 import CopyGroup from '../../../assets/copy-group.svg';
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Clipboard from '@react-native-clipboard/clipboard'; 
-import { useFocusEffect } from '@react-navigation/native';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
+import Clipboard from '@react-native-clipboard/clipboard';
+import {useFocusEffect} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import Config from 'react-native-config';
 
-// 회원가입 완료 페이지_관리자 + 사용자 
+// 회원가입 완료 페이지_관리자 + 사용자
 
 //@ts-ignore
 const SignUpPage = ({navigation, route}) => {
-
   // FCM 토큰 생성 및 서버로 전송하는 함수
   const generateAndSendFCMToken = async () => {
     try {
       const fcmToken = await messaging().getToken(); // FCM 토큰 생성
       // 생성된 FCM 토큰을 백엔드로 전송
-      await fetch('http://localhost:8080/api/user/save-fcm-token', {
+      await fetch(`http://${Config.HOST_NAME}/api/user/save-fcm-token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,21 +62,23 @@ const SignUpPage = ({navigation, route}) => {
         // 뒤로가기 이벤트 리스너 제거
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
       };
-    }, [])
+    }, []),
   );
 
-
-  const { userType, userId } = route.params;
+  const {userType, userId} = route.params;
   const [groupCode, setGroupCode] = useState('');
   const queryClient = useQueryClient();
-  
+
   const signUpMutation = useMutation(async () => {
-    const response = await fetch(`http://localhost:8080/api/group/group-code?userId=${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `http://${Config.HOST_NAME}/api/group/group-code?userId=${userId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    });
+    );
 
     const data = await response.json();
     return data;
@@ -87,14 +89,17 @@ const SignUpPage = ({navigation, route}) => {
     const fetchGroupCode = async () => {
       try {
         const data = await signUpMutation.mutateAsync();
-        if(data.status === 200) {
+        if (data.status === 200) {
           setGroupCode(data.data);
-          queryClient.setQueryData(['user'], { userId: userId, userType: userType, groupCode: data.data });
+          queryClient.setQueryData(['user'], {
+            userId: userId,
+            userType: userType,
+            groupCode: data.data,
+          });
         } else {
           console.log(data.message);
           Alert.alert('그룹 코드 가져오기 실패', data.message);
         }
-        
       } catch (error) {
         console.log(error);
         Alert.alert('오류', '그룹 생성 중 오류가 발생했습니다.');
@@ -123,21 +128,21 @@ const SignUpPage = ({navigation, route}) => {
       <View style={styles.textArea}>
         <Text style={styles.title}>가입을 완료했습니다!</Text>
         {userType === 'teacher' && (
-        <>
-          <Text style={styles.textTitle}>그룹 코드는</Text>
-          <View style={styles.CodeContainer}>
-            <Text style={styles.textBody}>{groupCode}</Text>
-            <TouchableOpacity onPress={handleCopyCode}>
-            <CopyGroup />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.textTitle}>입니다!</Text>
-        </>
+          <>
+            <Text style={styles.textTitle}>그룹 코드는</Text>
+            <View style={styles.CodeContainer}>
+              <Text style={styles.textBody}>{groupCode}</Text>
+              <TouchableOpacity onPress={handleCopyCode}>
+                <CopyGroup />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.textTitle}>입니다!</Text>
+          </>
         )}
       </View>
       <TouchableOpacity
-        style={[styles.button, userType === 'student' && { marginTop: 90 }]}
-        onPress={() => navigation.reset({routes: [{name: 'MainNavigator'}]})}>   
+        style={[styles.button, userType === 'student' && {marginTop: 90}]}
+        onPress={() => navigation.reset({routes: [{name: 'MainNavigator'}]})}>
         <Text style={styles.btnText}>확인!</Text>
       </TouchableOpacity>
     </View>
