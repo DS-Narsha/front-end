@@ -227,10 +227,10 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   contentInputText: {
-    width: 250,
+    width: '100%',
     height: 250,
     fontSize: 14,
-    marginLeft: 10,
+    padding: 15,
     textAlignVertical: 'top',
   },
   content: {
