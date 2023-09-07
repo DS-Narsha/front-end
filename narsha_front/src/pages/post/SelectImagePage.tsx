@@ -271,8 +271,9 @@ export default function SelectImage({navigation}) {
             contentContainerStyle={{
               paddingBottom: 100,
               flexGrow: 1,
-              justifyContent: 'space-around',
-              alignSelf: 'center',
+              marginHorizontal: 30,
+              justifyContent: 'flex-start',
+              alignContent: 'flex-start',
             }}
             numColumns={3}
           />
