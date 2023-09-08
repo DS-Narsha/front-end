@@ -46,10 +46,16 @@ const MainScreen = ({navigation}) => {
     }
   };
 
+  const [postId, setpostId] = useState(0);
+
   const mainPostQuery = useQuery({
     queryKey: ['main-posting-list'],
     queryFn: getPostingList,
   });
+
+  const _RenderItem = useCallback(({item}: any) => {
+    return <MainPost item={item}/>;
+  }, []);
 
   return (
     <View style={{height: '100%'}}>
@@ -66,25 +72,7 @@ const MainScreen = ({navigation}) => {
                   contentContainerStyle={{
                     paddingBottom: 170,
                   }}
-                  renderItem={({item}) => {
-                    const {postId, content, imageArray, user} = item;
-
-                    // imageArray를 문자열 배열로 만듦
-                    const str = imageArray.slice(1, -1);
-                    const arr = str.split(', ');
-                    for (let i = 0; i < arr.length; i++) {
-                      arr[i] = arr[i].toString();
-                    }
-
-                    return (
-                      <MainPost
-                        content={content}
-                        imageArray={arr}
-                        user={user}
-                        postId={postId}
-                      />
-                    );
-                  }}
+                  renderItem={_RenderItem}
                 />
               </View>
             ) : (
