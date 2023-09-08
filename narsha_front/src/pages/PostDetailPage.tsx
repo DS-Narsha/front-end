@@ -83,7 +83,7 @@ export default function PostDetail({route, navigation}) {
   //좋아요 누르기
   const createLike = useMutation(async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/like/create`, {
+      const res = await fetch(`http://${Config.HOST_NAME}/api/like/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export default function PostDetail({route, navigation}) {
   const getLike = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,
+        `http://${Config.HOST_NAME}/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,
         {
           method: 'GET',
           headers: {
