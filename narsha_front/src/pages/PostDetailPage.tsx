@@ -495,7 +495,7 @@ export default function PostDetail({route, navigation}) {
                 }
                 value={commentContent}
                 style={styles.input}
-                placeholder="@아이디 로 글 남기기"
+                placeholder={'@' + userData.userId + '로 댓글 남기기'}
               />
               <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <SEND style={{top: 5}} />

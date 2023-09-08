@@ -238,21 +238,20 @@ const CommentListPage = ({route, navigation}) => {
         </View>
       </Modal>
 
-      <View style={styles.bottomContainer}>
-        {profileImage ? (
-          <Image source={{uri: profileImage}} style={styles.commentImage} />
+      <View style={styles.inputBody}>
+        {profileImage !== '' && profileImage ? (
+          <Image source={{uri: profileImage}} style={styles.userProfileImage} />
         ) : (
-          <Image source={basicProfile} style={styles.commentImage} />
+          <Image source={basicProfile} style={styles.userProfileImage} />
         )}
-        <View style={styles.bottomInputText}>
-          <TextInput
-            onChangeText={(text: React.SetStateAction<string>) =>
-              setCommentContent(text)
-            }
-            value={commentContent}
-            placeholder="@아이디로 글 남기기"
-          />
-        </View>
+        <TextInput
+          onChangeText={(text: React.SetStateAction<string>) =>
+            setCommentContent(text)
+          }
+          value={commentContent}
+          style={styles.input}
+          placeholder={'@' + userData.userId + '로 댓글 남기기'}
+        />
         <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
           <CommentSendSvg />
         </TouchableOpacity>
@@ -270,7 +269,20 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
   },
-
+  inputBody: {
+    width: '100%',
+    height: 60,
+    padding: 10,
+    flexDirection: 'row',
+    borderRadius: 10,
+    bottom: 0,
+    backgroundColor: '#ffffff',
+    position: 'absolute',
+  },
+  input: {
+    width: '80%',
+    fontFamily: 'NanumSquareB',
+  },
   commentContainer: {
     height: '92%',
     marginBottom: 0,
@@ -282,14 +294,20 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   commentImage: {
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 40,
     backgroundColor: '#D9D9D9',
     borderRadius: 10,
   },
+  userProfileImage: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#D9D9D9',
+    marginRight: 10,
+    marginLeft: 10,
+  },
   commentTextBox: {
     marginLeft: 20,
-    flexShrink: 1,
   },
   commentID: {
     color: '#000000',
