@@ -13,6 +13,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@notifee/react-native": "^7.8.0",
     "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-native-camera-roll/camera-roll": "^5.6.1",
     "@react-native-clipboard/clipboard": "^1.11.2",

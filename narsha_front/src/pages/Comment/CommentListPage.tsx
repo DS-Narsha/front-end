@@ -59,7 +59,7 @@ const CommentListPage = ({route, navigation}) => {
       );
       const data = await response.json();
       if (response.ok) {
-        setProfileImage(data.profileImage);
+        setProfileImage(data.data.profileImage);
       } else {
         throw new Error(data.message);
       }

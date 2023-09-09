@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
+import pushNoti from './src/utils/pushNoti';
 
 const isLoggedIn = false;
 
@@ -38,16 +39,11 @@ export const getData = async (key: string) => {
   }
 };
 export default function App() {
-  const [notification, setNotification] = useState<any>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-
   const foregroundListener = useCallback(() => {
     messaging().onMessage(async message => {
       if (message.notification) {
-        // 모달 표시
-        setModalVisible(true);
-        setNotification(message.notification);
         console.log(message);
+        pushNoti.displayNoti(message);
       }
     });
   }, []);
@@ -65,26 +61,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text>푸시 알림 내용:</Text>
-            <Text>{notification ? notification.body : ''}</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}>
-              <Text>닫기</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
       <QueryClientProvider client={queryClient}>
         <KeyboardAvoidingView
           behavior={Platform.select({ios: 'padding', android: undefined})}
