@@ -21,13 +21,28 @@ type UserData = {
 };
 
 
-const MainPost = ({postId, content, imageArray, user}: any) => {
+const MainPost = ({item}: any) => {
+
+  const itemQueryKey = ['itemData', item.postId];
+  const itemLikeQueryKey = ['itemLikeData', item.postId];
+  const [isLiked, setIsLiked] = useState(false);
 
   const queryClient = useQueryClient();
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
+
+  const [postId, setpostId] = useState(item.postId);
+  console.log("이게 기준점입니다.");
+  console.log(postId);
+  
+
+  const str = item.imageArray.slice(1, -1);
+  const imageArray = str.split(', ');
+  for (let i = 0; i < imageArray.length; i++) {
+    imageArray[i] = imageArray[i].toString();
+  }
 
   //좋아요 누르기
   const createLike = useMutation(async () => {
@@ -82,6 +97,22 @@ const MainPost = ({postId, content, imageArray, user}: any) => {
     }
   })
 
+  //최신 댓글 1개 가져오기
+  const getrecentComment = async () => {
+    try{
+      const res = await fetch(`http://localhost:8080/api/comment/recent?postId=${postId}`,{
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      const json = await res.json();
+      return json;
+    }catch(err){
+      console.log(err);
+    }
+  }
+
   const checkLikeQuery = useQuery({
     queryKey: ['check-like'],
     queryFn: getLike,
@@ -92,7 +123,7 @@ const MainPost = ({postId, content, imageArray, user}: any) => {
       const data = await createLike.mutateAsync();
       
       if(data.status === 200) {
-        checkLikeQuery.refetch();
+        setIsLiked(true);
       } else {
         console.log(data.message);
       }
@@ -102,25 +133,57 @@ const MainPost = ({postId, content, imageArray, user}: any) => {
   };
 
   const startDeleteLike = async () => {
-    const data = await deleteLike.mutateAsync();
-    checkLikeQuery.refetch();
+    try {
+      const data = await deleteLike.mutateAsync();
+      setIsLiked(false);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  const recentCommentQuery = useQuery({
+    queryKey: ['recentComment'],
+    queryFn: getrecentComment,
+  })
+
+  const { data: itemData } = useQuery(itemQueryKey, () => {
+    // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
+    // 예: API 호출 등
+    // console.log("=================");
+    // console.log(itemData);
+
+    return getrecentComment();
+
+  });
+
+  const { data: itemLikeData } =  useQuery(itemLikeQueryKey, () => {
+    // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
+    // 예: API 호출 등
+    // console.log("+++++++좋아요+++++++++++");
+    // console.log(itemLikeData);
+    // console.log(itemLikeData.data);
+    // setIsLiked(itemLikeData.data);
+
+    return getLike();
+  });  
+  
+  
+  
   return (
     <View>
-      {user && !checkLikeQuery.isLoading && checkLikeQuery.data &&(
+      {item.user && !checkLikeQuery.isLoading && checkLikeQuery.data &&itemData && itemLikeData &&(
         <View style={styles.container}>
           <View style={styles.userInfo}>
             <Image
               source={
-                user.profileImage
-                  ? {uri: user.profileImage}
+                item.user.profileImage
+                  ? {uri: item.user.profileImage}
                   : userImg
               }
               style={styles.userImg}
             />
             <Text style={{fontWeight: '600', fontSize: 18, fontFamily: 'NanumSquareR'}}>
-              {user.userId}
+              {item.user.userId}
             </Text>
           </View>
 
@@ -139,7 +202,7 @@ const MainPost = ({postId, content, imageArray, user}: any) => {
 
           <View style={{flexDirection: 'row'}}>
             {/* 하트 작업 */}
-            {checkLikeQuery.data.data === true
+            {isLiked === true
                   ? <TouchableOpacity onPress={startDeleteLike}><HeartFill style={{marginLeft: 10}} /></TouchableOpacity>
                   : <TouchableOpacity onPress={uploadLike}><Heart style={{marginLeft: 10}} /></TouchableOpacity>}
             <Chat style={{marginLeft: 20}} />
@@ -150,17 +213,20 @@ const MainPost = ({postId, content, imageArray, user}: any) => {
           </Text>
 
           <Text style={{fontSize: 16, marginTop: 5, margin: 10, fontFamily: 'NanumSquareR'}}>
-            {content}
+            {item.content}
           </Text>
-          <View style={{flexDirection: 'row', marginTop: 15}}>
-            <Image source={userImg} style={styles.cmtUserImg} />
-            <View style={{marginTop: -5}}>
-              <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
-                comment_User
-              </Text>
-              <Text style={{fontFamily: 'NanumSquareR'}}>댓글 내용</Text>
-            </View>
-          </View>
+          {itemData.data === null
+                  ? <View style={{flexDirection: 'row', marginTop: 15}}></View>
+                  : <View style={{flexDirection: 'row', marginTop: 15}}>
+                  <Image source={{uri: itemData.data.userId.profileImage.substring(0, itemData.data.userId.profileImage.length)}} 
+                    style={styles.cmtUserImg} />
+                  <View style={{marginTop: -5}}>
+                    <Text style={{fontWeight: 'bold', fontSize: 15, fontFamily: 'NanumSquareB'}}>
+                      {itemData.data.userId.userId}
+                    </Text>
+                    <Text style={{fontFamily: 'NanumSquareR'}}>{itemData.data.content}</Text>
+                  </View>
+                </View>}
           <View style={{flexDirection: 'row'}}>
             <View style={styles.line} />
           </View>

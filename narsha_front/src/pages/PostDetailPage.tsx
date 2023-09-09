@@ -94,8 +94,8 @@ export default function PostDetail({route, navigation}) {
           postId: id,
         }),
       });
-      const data = await res.json();
-      return data;
+      const json = await res.json();
+      return json;
     } catch (err) {
       console.log(err);
     }
