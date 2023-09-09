@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
-import userImg from '../assets/user-image.png';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from 'react-native';
 import Line from '../assets/Line.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import images from '../assets/images.jpeg';
 import Heart from '../assets/heart.svg';
 import HeartFill from '../assets/heartFill.svg';
 import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
-import BackSvg from '../assets/back.svg';
 import basicProfile from '../assets/graphic/basic-profile.jpg';
 import Config from 'react-native-config';
 
@@ -32,6 +37,8 @@ type UserData = {
 export default function PostDetail({route, navigation}) {
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [commentContent, setCommentContent] = useState('');
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -76,7 +83,7 @@ export default function PostDetail({route, navigation}) {
   //좋아요 누르기
   const createLike = useMutation(async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/like/create`, {
+      const res = await fetch(`http://${Config.HOST_NAME}/api/like/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +105,7 @@ export default function PostDetail({route, navigation}) {
   const getLike = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,
+        `http://${Config.HOST_NAME}/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${id}`,
         {
           method: 'GET',
           headers: {
@@ -150,6 +157,44 @@ export default function PostDetail({route, navigation}) {
       console.log(err);
     }
   });
+
+  const commentMutation = useMutation(async () => {
+    const response = await fetch(
+      `http://${Config.HOST_NAME}/api/comment/create`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId: id,
+          userId: userData.userId,
+          content: commentContent,
+        }),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  });
+
+  // 댓글 생성
+  const handleCommentSubmit = async () => {
+    try {
+      //setLoadingModalVisible(true);
+      await commentMutation.mutateAsync();
+
+      // setLoadingModalVisible(false);
+      setModalVisible(false);
+      queryClient.invalidateQueries(['comments']);
+
+      setCommentContent('');
+    } catch (error) {
+      Alert.alert('오류');
+
+      setModalVisible(false);
+    }
+  };
 
   const {
     data: comments,
@@ -389,16 +434,72 @@ export default function PostDetail({route, navigation}) {
               </View>
             </ScrollView>
 
+            {/* 모달창 */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <View style={styles.modalTitleArea}>
+                    <Text style={styles.modalTitleText}>
+                      여러분들의 댓글을 수정해주세요!
+                    </Text>
+                  </View>
+                  <Text style={styles.modalText}>
+                    색깔로 표시된 글자를 모두 수정해야
+                  </Text>
+                  <Text style={styles.modalText}>
+                    SNS에 게시글을 올릴 수 있어요.
+                  </Text>
+                  <Text style={styles.modalText}>
+                    여러분의 댓글을 수정해볼까요?
+                  </Text>
+
+                  <View style={styles.modalAlertArea}>
+                    <View style={styles.alertBody}>
+                      <Text style={styles.red}></Text>
+                      <Text style={styles.alertText}>
+                        개인정보, 민간한 정보가 포함되었을 경우
+                      </Text>
+                    </View>
+                    <View style={styles.alertBody}>
+                      <Text style={styles.blue}></Text>
+                      <Text style={styles.alertText}>
+                        욕설, 비속어의 말이 포함되었을 경우
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.modalBtnArea}>
+                    <TouchableOpacity
+                      style={[styles.button]}
+                      onPress={handleCommentSubmit}>
+                      <Text style={styles.textStyle}>확인</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+
             <View style={styles.inputBody}>
               <Image
                 source={{uri: postQuery.data.data.writer.profileImage}}
                 style={styles.cmtUserImg3}
               />
               <TextInput
+                onChangeText={(text: React.SetStateAction<string>) =>
+                  setCommentContent(text)
+                }
+                value={commentContent}
                 style={styles.input}
-                placeholder="@아이디 로 글 남기기"
+                placeholder={'@' + userData.userId + '로 댓글 남기기'}
               />
-              <SEND style={{top: 5}} />
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <SEND style={{top: 5}} />
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -476,5 +577,104 @@ const styles = StyleSheet.create({
   input: {
     width: '75%',
     fontFamily: 'NanumSquareB',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+  },
+  modalTitleArea: {
+    backgroundColor: '#AADF98',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 17,
+    width: '121%',
+    height: 60,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  modalTitleText: {
+    color: 'black',
+    fontSize: 17,
+    fontFamily: 'NanumSquareB',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    width: '75%',
+    borderRadius: 20,
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingBottom: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalBtnArea: {
+    flexDirection: 'row',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#AADF98',
+    width: 115,
+    marginTop: 20,
+    marginRight: 15,
+  },
+  button2: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#D9D9D9',
+    width: 115,
+    marginTop: 20,
+  },
+  textStyle: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingBottom: 2,
+    fontFamily: 'NanumSquareB',
+  },
+  modalText: {
+    marginBottom: 3,
+    textAlign: 'center',
+    color: 'black',
+    fontFamily: 'NanumSquareR',
+  },
+  modalAlertArea: {
+    marginTop: 25,
+  },
+  alertBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  red: {
+    backgroundColor: 'red',
+    width: 14,
+    height: 14,
+    borderRadius: 50,
+  },
+  blue: {
+    backgroundColor: 'blue',
+    width: 14,
+    height: 14,
+    borderRadius: 50,
+  },
+  alertText: {
+    color: 'black',
+    fontSize: 12,
+    marginLeft: 7,
+    paddingBottom: 5,
+    fontFamily: 'NanumSquareR',
   },
 });
