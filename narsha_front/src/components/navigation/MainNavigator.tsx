@@ -32,6 +32,9 @@ const MainNavigator = ({route}) => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
+  // alarm-list count 바로 반영
+  queryClient.invalidateQueries(['alarm-list']);
+
   // get alarm count
   const getAlarmList = async () => {
     try {
