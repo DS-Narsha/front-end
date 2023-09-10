@@ -32,6 +32,24 @@ const MainNavigator = ({route}) => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
+  // get alarm count
+  const getAlarmList = async () => {
+    try {
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/alarm/list?userId=${userData.userId}&groupCode=${userData.groupCode}`,
+      );
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('알람 목록 가져오는 중 오류가 발생했습니다.', error);
+    }
+  };
+
+  const alarmQuery = useQuery({
+    queryKey: ['alarm-list'],
+    queryFn: getAlarmList,
+  });
+
   // get time
   const getTime = async () => {
     try {
@@ -160,7 +178,18 @@ const MainNavigator = ({route}) => {
       <Tab.Screen
         name="AlarmStack"
         component={AlarmStack}
-        options={{tabBarBadge: '30', unmountOnBlur: true, headerShown: false}}
+        options={
+          alarmQuery.data.data.length == 0
+            ? {
+                unmountOnBlur: true,
+                headerShown: false,
+              }
+            : {
+                tabBarBadge: alarmQuery.data.data.length,
+                unmountOnBlur: true,
+                headerShown: false,
+              }
+        }
       />
       <Tab.Screen
         name="MyPageStack"
