@@ -44,6 +44,27 @@ export default function PostDetail({route, navigation}) {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
+  // get like list
+  const getLikeList = async () => {
+    try {
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/like/list?postId=${id}`,
+      );
+      const data = await response.json();
+      if (data.status === 200) {
+        return data.data;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
+  };
+
+  const likeQuery = useQuery(['likes'], getLikeList);
+
+  // get post detail
   const getPostDetail = async () => {
     try {
       const res = await fetch(
@@ -336,16 +357,34 @@ export default function PostDetail({route, navigation}) {
                 )}
                 <TouchableOpacity
                   onPress={() => navigation.navigate('LikeListPage', {id: id})}>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      color: '#909090',
-                      marginTop: 0,
-                      margin: 10,
-                      fontFamily: 'NanumSquareR',
-                    }}>
-                    Narsha님 외 56명이 좋아합니다
-                  </Text>
+                  {likeQuery.data && likeQuery.data.length !== 0 ? (
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        color: '#909090',
+                        margin: 10,
+                        fontFamily: 'NanumSquareR',
+                      }}>
+                      {likeQuery.data[likeQuery.data.length - 1].userId.userId}
+                      님
+                      {likeQuery.data.length - 1 == 0 ? (
+                        <Text>이 좋아합니다.</Text>
+                      ) : (
+                        <Text>
+                          외 {likeQuery.data.length - 1}명이 좋아합니다.{' '}
+                        </Text>
+                      )}
+                    </Text>
+                  ) : (
+                    <Text
+                      style={{
+                        color: '#909090',
+                        margin: 10,
+                        fontFamily: 'NanumSquareR',
+                      }}>
+                      좋아요를 눌러주세요!
+                    </Text>
+                  )}
                 </TouchableOpacity>
               </View>
 
@@ -510,8 +549,9 @@ export default function PostDetail({route, navigation}) {
 const styles = StyleSheet.create({
   txtContainer: {
     flexDirection: 'row',
-    marginLeft: 35,
-    marginTop: 15,
+    alignItems: 'center',
+    marginHorizontal: 30,
+    marginTop: 20,
   },
   imgContainer: {
     // display:'flex',
@@ -523,7 +563,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-    marginLeft: 35,
+    marginHorizontal: 30,
     marginTop: 15,
   },
   userImg: {
