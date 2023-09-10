@@ -242,7 +242,9 @@ export default function PostDetail({route, navigation}) {
 
       if (data.status === 200) {
         checkLikeQuery.refetch();
-        await countLike.mutateAsync();
+        queryClient.invalidateQueries(['likes']);
+        // likeQuery.refetch(); // refetch
+        //await countLike.mutateAsync();
       } else {
         console.log(data.message);
       }
@@ -254,7 +256,9 @@ export default function PostDetail({route, navigation}) {
   const startDeleteLike = async () => {
     const data = await deleteLike.mutateAsync();
     checkLikeQuery.refetch();
-    await countLike.mutateAsync();
+    queryClient.invalidateQueries(['likes']);
+    // likeQuery.refetch(); // refetch
+    //await countLike.mutateAsync();
   };
 
   const [a, setA] = useState<string[]>([]);
@@ -307,7 +311,7 @@ export default function PostDetail({route, navigation}) {
         !checkLikeQuery.isLoading &&
         !countLike.isLoading && (
           <>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.txtContainer}>
                 <Image
                   source={{uri: postQuery.data.data.writer.profileImage}}
@@ -596,6 +600,7 @@ const styles = StyleSheet.create({
   cmtBody: {
     flexDirection: 'row',
     marginTop: 15,
+    alignItems: 'center',
   },
   inputBody: {
     width: '100%',
