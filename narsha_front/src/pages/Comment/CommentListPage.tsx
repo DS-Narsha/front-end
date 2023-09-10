@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
     marginRight: 10,
     marginLeft: 10,
+    borderRadius: 10,
   },
   commentTextBox: {
     marginLeft: 20,
