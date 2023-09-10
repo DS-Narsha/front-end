@@ -179,13 +179,13 @@ const MainNavigator = ({route}) => {
         name="AlarmStack"
         component={AlarmStack}
         options={
-          alarmQuery.data.data.length == 0
+          alarmQuery.data && alarmQuery.data.data.length !== 0
             ? {
+                tabBarBadge: alarmQuery.data.data.length,
                 unmountOnBlur: true,
                 headerShown: false,
               }
             : {
-                tabBarBadge: alarmQuery.data.data.length,
                 unmountOnBlur: true,
                 headerShown: false,
               }
