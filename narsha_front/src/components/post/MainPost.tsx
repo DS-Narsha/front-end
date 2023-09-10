@@ -22,8 +22,8 @@ type UserData = {
 };
 
 const MainPost = ({item}: any) => {
-  const itemQueryKey = ['itemData', item.postId];
-  const itemLikeQueryKey = ['itemLikeData', item.postId];
+  //const itemQueryKey = ['itemData', item.postId];
+  //const itemLikeQueryKey = ['itemLikeData', item.postId];
   const [isLiked, setIsLiked] = useState(false);
 
   const queryClient = useQueryClient();
@@ -153,132 +153,125 @@ const MainPost = ({item}: any) => {
     queryFn: getrecentComment,
   });
 
-  const {data: itemData} = useQuery(itemQueryKey, () => {
-    // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
-    // 예: API 호출 등
-    // console.log("=================");
-    // console.log(itemData);
+  // const {data: itemData} = useQuery(itemQueryKey, () => {
+  //   // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
+  //   // 예: API 호출 등
+  //   // console.log("=================");
 
-    return getrecentComment();
-  });
+  //   return getrecentComment();
+  // });
 
-  const {data: itemLikeData} = useQuery(itemLikeQueryKey, () => {
-    // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
-    // 예: API 호출 등
-    // console.log("+++++++좋아요+++++++++++");
-    // console.log(itemLikeData);
-    // console.log(itemLikeData.data);
-    // setIsLiked(itemLikeData.data);
+  // const {data: itemLikeData} = useQuery(itemLikeQueryKey, () => {
+  //   // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
+  //   // 예: API 호출 등
+  //   // console.log("+++++++좋아요+++++++++++");
+  //   // console.log(itemLikeData);
+  //   // console.log(itemLikeData.data);
+  //   // setIsLiked(itemLikeData.data);
 
-    return getLike();
-  });
+  //   return getLike();
+  // });
 
   return (
     <View>
-      {item.user &&
-        !checkLikeQuery.isLoading &&
-        checkLikeQuery.data &&
-        itemData &&
-        itemLikeData && (
-          <View style={styles.container}>
-            <View style={styles.userInfo}>
-              <Image
-                source={
-                  item.user.profileImage
-                    ? {uri: item.user.profileImage}
-                    : userImg
-                }
-                style={styles.userImg}
-              />
-              <Text
-                style={{
-                  fontWeight: '600',
-                  fontSize: 18,
-                  fontFamily: 'NanumSquareR',
-                }}>
-                {item.user.userId}
-              </Text>
-            </View>
-
-            <View style={styles.pickImg}>
-              <Swiper
-                loop
-                controlsEnabled={false}
-                containerStyle={{width: 350, height: 350}}>
-                {imageArray.map((item, index) => (
-                  <View key={index}>
-                    <Image source={{uri: item}} style={styles.pickImg} />
-                  </View>
-                ))}
-              </Swiper>
-            </View>
-
-            <View style={{flexDirection: 'row'}}>
-              {/* 하트 작업 */}
-              {isLiked === true ? (
-                <TouchableOpacity onPress={startDeleteLike}>
-                  <HeartFill style={{marginLeft: 10}} />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={uploadLike}>
-                  <Heart style={{marginLeft: 10}} />
-                </TouchableOpacity>
-              )}
-              <Chat style={{marginLeft: 20}} />
-            </View>
+      {item.user && !checkLikeQuery.isLoading && checkLikeQuery.data && (
+        <View style={styles.container}>
+          <View style={styles.userInfo}>
+            <Image
+              source={
+                item.user.profileImage ? {uri: item.user.profileImage} : userImg
+              }
+              style={styles.userImg}
+            />
             <Text
               style={{
-                fontSize: 13,
-                color: '#909090',
-                marginTop: 5,
-                margin: 10,
+                fontWeight: '600',
+                fontSize: 18,
                 fontFamily: 'NanumSquareR',
               }}>
-              Narsha님 외 56명이 좋아합니다
+              {item.user.userId}
             </Text>
-
-            <Text
-              style={{
-                fontSize: 16,
-                marginTop: 5,
-                margin: 10,
-                fontFamily: 'NanumSquareR',
-              }}>
-              {item.content}
-            </Text>
-            {itemData.data === null ? (
-              <View style={{flexDirection: 'row', marginTop: 15}}></View>
-            ) : (
-              <View style={{flexDirection: 'row', marginTop: 15}}>
-                <Image
-                  source={{
-                    uri: itemData.data.userId.profileImage.substring(
-                      0,
-                      itemData.data.userId.profileImage.length,
-                    ),
-                  }}
-                  style={styles.cmtUserImg}
-                />
-                <View style={{marginTop: -5}}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: 15,
-                      fontFamily: 'NanumSquareB',
-                    }}>
-                    {itemData.data.userId.userId}
-                  </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>
-                    {itemData.data.content}
-                  </Text>
-                </View>
-              </View>
-            )}
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.line} />
-            </View>
           </View>
-        )}
+
+          <View style={styles.pickImg}>
+            <Swiper
+              loop
+              controlsEnabled={false}
+              containerStyle={{width: 350, height: 350}}>
+              {imageArray.map((item, index) => (
+                <View key={index}>
+                  <Image source={{uri: item}} style={styles.pickImg} />
+                </View>
+              ))}
+            </Swiper>
+          </View>
+
+          <View style={{flexDirection: 'row'}}>
+            {/* 하트 작업 */}
+            {isLiked === true ? (
+              <TouchableOpacity onPress={startDeleteLike}>
+                <HeartFill style={{marginLeft: 10}} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={uploadLike}>
+                <Heart style={{marginLeft: 10}} />
+              </TouchableOpacity>
+            )}
+            <Chat style={{marginLeft: 20}} />
+          </View>
+          <Text
+            style={{
+              fontSize: 13,
+              color: '#909090',
+              marginTop: 5,
+              margin: 10,
+              fontFamily: 'NanumSquareR',
+            }}>
+            Narsha님 외 56명이 좋아합니다
+          </Text>
+
+          <Text
+            style={{
+              fontSize: 16,
+              marginTop: 5,
+              margin: 10,
+              fontFamily: 'NanumSquareR',
+            }}>
+            {item.content}
+          </Text>
+          {item === null ? (
+            <View style={{flexDirection: 'row', marginTop: 15}}></View>
+          ) : (
+            <View style={{flexDirection: 'row', marginTop: 15}}>
+              <Image
+                source={{
+                  uri: item.user.profileImage.substring(
+                    0,
+                    item.user.profileImage.length,
+                  ),
+                }}
+                style={styles.cmtUserImg}
+              />
+              <View style={{marginTop: -5}}>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    fontFamily: 'NanumSquareB',
+                  }}>
+                  {item.user.userId.userId}
+                </Text>
+                <Text style={{fontFamily: 'NanumSquareR'}}>
+                  {item.user.content}
+                </Text>
+              </View>
+            </View>
+          )}
+          <View style={{flexDirection: 'row'}}>
+            <View style={styles.line} />
+          </View>
+        </View>
+      )}
     </View>
   );
 };
