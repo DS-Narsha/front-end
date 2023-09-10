@@ -11,6 +11,7 @@ import NoticeWritePage from '../../pages/NoticeWritePage';
 import Write from '../../assets/write.svg';
 import GuidePage from '../../pages/GuidePage';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
+import CommentListPage from '../../pages/comment/CommentListPage';
 
 type UserData = {
   userId: string;
@@ -40,6 +41,9 @@ export default function MainStack({route, navigation}) {
     switch (routeName) {
       case 'GuidePage':
         navigation.setOptions({tabBarStyle: {display: 'none'}});
+        break;
+      case 'CommentListPage':
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       default:
         navigation.setOptions({tabBarStyle: tabBarStyle});
@@ -137,6 +141,16 @@ export default function MainStack({route, navigation}) {
           },
           cardStyle: {
             backgroundColor: '#F9FAC8',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CommentListPage"
+        component={CommentListPage}
+        options={{
+          title: '댓글 목록',
+          cardStyle: {
+            backgroundColor: '#ffffff',
           },
         }}
       />

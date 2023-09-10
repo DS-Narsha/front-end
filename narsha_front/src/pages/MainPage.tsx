@@ -54,7 +54,7 @@ const MainScreen = ({navigation}) => {
   });
 
   const _RenderItem = useCallback(({item}: any) => {
-    return <MainPost item={item} />;
+    return <MainPost item={item} navigation={navigation} />;
   }, []);
 
   return (

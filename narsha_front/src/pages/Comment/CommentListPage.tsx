@@ -167,28 +167,35 @@ const CommentListPage = ({route, navigation}) => {
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
           showsVerticalScrollIndicator={false}>
-          {comments.map((comment: Comment, index: number) => (
-            <View style={styles.commentItem} key={index}>
-              {comment.userId.profileImage ? (
-                <Image
-                  source={{uri: comment.userId.profileImage}}
-                  style={styles.commentImage}
-                />
-              ) : (
-                <Image source={basicProfile} style={styles.commentImage} />
-              )}
+          {comments.length !== 0 ? (
+            comments.map((comment: Comment, index: number) => (
+              <View style={styles.commentItem} key={index}>
+                {comment.userId.profileImage ? (
+                  <Image
+                    source={{uri: comment.userId.profileImage}}
+                    style={styles.commentImage}
+                  />
+                ) : (
+                  <Image source={basicProfile} style={styles.commentImage} />
+                )}
 
-              <View style={styles.commentTextBox}>
-                <Text style={styles.commentID}>{comment.userId.userId}</Text>
-                <View style={{marginRight: 35}}>
-                  <Text style={styles.commentText}>{comment.content}</Text>
+                <View style={styles.commentTextBox}>
+                  <Text style={styles.commentID}>{comment.userId.userId}</Text>
+                  <View style={{marginRight: 35}}>
+                    <Text style={styles.commentText}>{comment.content}</Text>
+                  </View>
+                  <Text style={styles.commentDay}>
+                    {comment.createAt.replace('T', ' ').slice(0, 16)}
+                  </Text>
                 </View>
-                <Text style={styles.commentDay}>
-                  {comment.createAt.replace('T', ' ').slice(0, 16)}
-                </Text>
               </View>
-            </View>
-          ))}
+            ))
+          ) : (
+            <Text style={styles.nonComment}>
+              아직 댓글이 없네요~!{'\n'}여러분이 게시글에 첫 번째 댓글을
+              작성해볼까요?
+            </Text>
+          )}
         </ScrollView>
       </View>
 
@@ -268,6 +275,10 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     flexGrow: 1,
+  },
+  nonComment: {
+    fontFamily: 'NanumSquareB',
+    textAlign: 'center',
   },
   inputBody: {
     width: '100%',
