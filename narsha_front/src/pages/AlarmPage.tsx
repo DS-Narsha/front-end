@@ -92,7 +92,7 @@ const AlarmPage = ({navigation}) => {
   const deleteAlarm = async (alarmId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/alarm/delete?alarmId=${alarmId}`,
+        `http://${Config.HOST_NAME}/api/alarm/delete?alarmId=${alarmId}`,
         {
           method: 'DELETE',
         },
