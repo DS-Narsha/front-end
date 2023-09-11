@@ -100,7 +100,7 @@ export default function MyPage({navigation}) {
 
   return (
     <View style={styles.container}>
-      {!profileQuery.isLoading && (
+      {!profileQuery.isLoading && !PostQuery.isLoading && (
         <>
           <View style={styles.profileContainer}>
             <View style={styles.profileImageContianer}>
