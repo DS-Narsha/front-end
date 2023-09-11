@@ -156,6 +156,9 @@ const MainPost = ({item}: any) => {
 
   });
 
+  console.log(itemData);
+  
+
   const { data: itemLikeData } =  useQuery(itemLikeQueryKey, () => {
     // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
     // 예: API 호출 등

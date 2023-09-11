@@ -44,7 +44,11 @@ const CommentListPage = ({route, navigation}) => {
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
   const [profileImage, setProfileImage] = useState('');
   const [commentContent, setCommentContent] = useState('');
+  const [filteredText, setFilteredText] = useState('');
   const queryClient = useQueryClient();
+  let textFilterArray: string[] = [];
+  let textIndexArray: any[] = [];
+  const [textColor, setTextColor] = useState('black');
 
   // queryClient에서 userId와 userType을 가져오는 로직
   const {data: userData} = useQuery(['user'], () => {
@@ -112,20 +116,135 @@ const CommentListPage = ({route, navigation}) => {
     return data;
   });
 
+    //텍스트 필터링
+    const textFilter = useMutation(async () => {
+      try {
+        const res = await fetch(
+          `http://${Config.HOST_NAME}/api/ai-flask/text-filter?text=${commentContent}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const json = await res.json();
+        console.log(json);
+        return json;
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
   const handleCommentSubmit = async () => {
     try {
-      //setLoadingModalVisible(true);
-      await commentMutation.mutateAsync();
+      // setLoadingModalVisible(true);
+      // await commentMutation.mutateAsync();
+      startTextFilter();
 
       // setLoadingModalVisible(false);
       setModalVisible(false);
-      queryClient.invalidateQueries(['comments']);
+      // queryClient.invalidateQueries(['comments']);
 
-      setCommentContent('');
+      // setCommentContent('');
     } catch (error) {
       Alert.alert('오류');
 
       setModalVisible(false);
+    }
+  };
+
+  // const textFilterQuery = useQuery({
+  //   queryKey: ['text-filtering'],
+  //   queryFn: textFilter,
+  //   enabled: false,
+  // });
+
+  const colorChange = async () => {
+    // const res = commentContent.slice(0, 2) + "[color=ff3333]" + commentContent.slice(2, 5) + "[/color]" + commentContent.slice(5)
+    // setCommentContent(res);
+    setModalVisible(false);
+    const tempt = [0, 6];
+    let sentence="";
+    let num=0;
+    for(let i=0;i<tempt.length;i++){
+      sentence += commentContent.slice(num, tempt[i]) + "(" + commentContent.slice(tempt[i], tempt[i]+2) + ")";
+      num += tempt[i] + 2;
+      
+      if(i == tempt.length-1){
+        sentence += commentContent.slice(tempt[i]+2, commentContent.length);
+      }
+    }
+    setCommentContent(sentence);
+  }
+
+
+  const startTextFilter = async () => {
+    try {
+
+      console.log(commentContent);
+      setLoadingModalVisible(true);
+      const data = await textFilter.mutateAsync();
+      console.log(data);
+
+      // await textFilterQuery.refetch();
+      // await queryClient.invalidateQueries(['text-filtering'])
+      // await queryClient.fetchQuery(['text-filtering']);
+
+      if (data.data.status === 200) {
+        setLoadingModalVisible(false); //로딩 끝
+        
+        // clean한 문장
+        if (data.data.data === true || data.data.data.trim() === "true") { 
+          await commentMutation.mutateAsync();
+          queryClient.invalidateQueries(['comments']);
+          setCommentContent('');
+        } 
+        else { // bad 문장
+          console.log(data.data.data);
+          setFilteredText(data.data.data);
+          console.log(filteredText);
+
+          const res = filteredText.substring(1,filteredText.length-2);
+          const arr = res.replace(/"/g, '').split(',');
+          arr.forEach(text => {
+            textFilterArray.push(text.trim());
+          });
+
+          console.log(textFilterArray); //필터링된 단어 배열
+          for(let i=0;i<textFilterArray.length;i++){
+            console.log(textFilterArray[i]);
+            // textIndexArray.push(commentContent.indexOf(textFilterArray[i]));
+            const index = commentContent.indexOf(textFilterArray[i]);
+            textIndexArray.push(index);
+          }
+          console.log(textIndexArray); //인덱스
+
+          let sentence="";
+          let num=0;
+          for(let i=0;i<textIndexArray.length;i++){
+            sentence += commentContent.slice(num, textIndexArray[i]) + "(" + commentContent.slice(textIndexArray[i], textIndexArray[i]+textFilterArray[i].length) + ")";
+            num += textIndexArray[i] + textFilterArray[i].length;
+            if(i == textIndexArray.length-1){
+              sentence += commentContent.slice(textIndexArray[i]+textFilterArray[i].length, commentContent.length);
+            }
+          }
+
+          setCommentContent(sentence);
+          setTextColor('red');
+        }
+        
+        // console.log(res);
+
+      } else {
+        setLoadingModalVisible(false);
+        console.log(data.data.message);
+        Alert.alert('텍스트 필터링 실패', data.data.message);
+      }
+    } catch (error) {
+      setLoadingModalVisible(false);
+      console.log(error);
+      Alert.alert('오류', '텍스트 필터링 중 오류 발생');
     }
   };
 
@@ -238,6 +357,10 @@ const CommentListPage = ({route, navigation}) => {
         </View>
       </Modal>
 
+        <View>
+          
+        </View>
+
       <View style={styles.inputBody}>
         {profileImage !== '' && profileImage ? (
           <Image source={{uri: profileImage}} style={styles.userProfileImage} />
@@ -251,7 +374,7 @@ const CommentListPage = ({route, navigation}) => {
           value={commentContent}
           style={styles.input}
           placeholder={'@' + userData.userId + '로 댓글 남기기'}
-        />
+          />
         <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
           <CommentSendSvg />
         </TouchableOpacity>
@@ -443,6 +566,10 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     paddingBottom: 5,
     fontFamily: 'NanumSquareR',
+  },
+  coloredText: {
+    fontFamily: 'NanumSquareB',
+    color: "#FF0000",
   },
 });
 
