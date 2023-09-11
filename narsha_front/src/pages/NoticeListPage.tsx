@@ -60,11 +60,14 @@ export default function NoticeList({navigation}) {
       {!noticeQuery.isLoading && (
         <>
           <View style={styles.ds_container}>
-            <Image style={styles.ds_image} source={DS} />
+            <Image
+              style={styles.ds_image}
+              source={require('../assets//graphic/applogo.png')}
+            />
             <Text
               style={
                 styles.ds_text
-              }>{`선생님이 여러분 모두에게 알리기 위한 내용들은 이 곳에 올라온답니다.`}</Text>
+              }>{`선생님이 여러분 모두에게 알리기 위한 내용들은 \n이 곳에 올라온답니다.`}</Text>
           </View>
           <View style={{backgroundColor: '#FCFDE1'}}>
             {noticeQuery.data ? (
@@ -123,7 +126,8 @@ const styles = StyleSheet.create({
     marginLeft: 7,
     backgroundColor: '#FFF',
     borderRadius: 20,
-    padding: 8,
+    padding: 12,
+    fontSize: 13,
     fontFamily: 'NanumSquareB',
     color: '#61A257',
     shadowOffset: {

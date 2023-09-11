@@ -8,7 +8,6 @@ import {
   Platform,
   FlatList,
 } from 'react-native';
-import DS from '../../assets/DS.png';
 import SingleBadge from '../../components/SingleBadge';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import AchieveData from '../../data/AchieveData.json';
@@ -88,12 +87,14 @@ export default function BadgeList({route, navigation}) {
       {!achieveQuery.isLoading && achieveQuery.data && (
         <>
           <View style={styles.ds_container}>
-            <Image style={styles.ds_image} source={DS} />
+            <Image
+              style={styles.ds_image}
+              source={require('../../assets//graphic/applogo.png')}
+            />
             <Text
               style={
                 styles.ds_text
-              }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요?
-  여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
+              }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요? 여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
           </View>
           <View
             style={{
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   ds_container: {
     flexDirection: 'row',
     marginTop: 30,
-    marginLeft: 20,
+    marginHorizontal: 20,
     marginBottom: 30,
   },
   ds_image: {
@@ -149,12 +150,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   ds_text: {
-    marginTop: -3,
+    flex: 1,
     marginLeft: 7,
-    backgroundColor: '#fbffe1',
+    backgroundColor: '#FFF',
+    fontSize: 13,
     borderRadius: 20,
-    padding: 8,
+    padding: 12,
+    fontFamily: 'NanumSquareB',
     color: '#61A257',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   gridView: {
     flexDirection: 'row',

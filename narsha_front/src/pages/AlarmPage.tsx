@@ -8,7 +8,6 @@ import {
   FlatList,
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import DS from '../assets/DS.png';
 import LikeSvg from '../assets/alarm/like.svg';
 import NoticeSvg from '../assets/alarm/notice.svg';
 import CommentSvg from '../assets/alarm/comment.svg';
@@ -92,7 +91,7 @@ const AlarmPage = ({navigation}) => {
   const deleteAlarm = async (alarmId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/alarm/delete?alarmId=${alarmId}`,
+        `http://${Config.HOST_NAME}/api/alarm/delete?alarmId=${alarmId}`,
         {
           method: 'DELETE',
         },
@@ -162,7 +161,10 @@ const AlarmPage = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.ds_container}>
-        <Image style={styles.ds_image} source={DS} />
+        <Image
+          style={styles.ds_image}
+          source={require('../assets//graphic/applogo.png')}
+        />
         <View style={styles.ds_text_container}>
           <Text style={styles.ds_text}>
             좋아요, 공지, 댓글, 생일 등등의 여러가지 알림이{'\n'}오는

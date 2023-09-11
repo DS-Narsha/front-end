@@ -47,7 +47,10 @@ export default function FriendList({navigation}) {
   return (
     <View style={{height: '100%'}}>
       <View style={styles.ds_container}>
-        <Image style={styles.ds_image} source={DS} />
+        <Image
+          style={styles.ds_image}
+          source={require('../../assets//graphic/applogo.png')}
+        />
         <Text
           style={
             styles.ds_text
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
   ds_container: {
     flexDirection: 'row',
     marginTop: 30,
-    marginLeft: 20,
+    marginHorizontal: 20,
     marginBottom: 30,
   },
   ds_image: {
@@ -110,13 +113,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   ds_text: {
-    marginTop: -3,
+    flex: 1,
     marginLeft: 7,
-    backgroundColor: '#fbffe1',
+    backgroundColor: '#FFF',
     borderRadius: 20,
-    padding: 8,
+    padding: 12,
+    fontSize: 13,
+    fontFamily: 'NanumSquareB',
     color: '#61A257',
-    fontFamily: 'NanumSquareR',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    elevation: 5,
   },
   container: {
     padding: 15,
