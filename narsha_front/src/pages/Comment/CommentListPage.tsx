@@ -44,7 +44,7 @@ const CommentListPage = ({route, navigation}) => {
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
   const [profileImage, setProfileImage] = useState('');
   const [commentContent, setCommentContent] = useState('');
-  const [filteredText, setFilteredText] = useState('');
+  // const [filteredText, setFilteredText] = useState('');
   const queryClient = useQueryClient();
   let textFilterArray: string[] = [];
   let textIndexArray: any[] = [];
@@ -117,7 +117,7 @@ const CommentListPage = ({route, navigation}) => {
   });
 
   //텍스트 필터링
-  const textFilter = useMutation(async () => {
+  const textFilter = async () => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/ai-flask/text-filter?text=${commentContent}`,
@@ -134,7 +134,7 @@ const CommentListPage = ({route, navigation}) => {
     } catch (err) {
       console.log(err);
     }
-  });
+  };
 
   const handleCommentSubmit = async () => {
     try {
@@ -154,11 +154,11 @@ const CommentListPage = ({route, navigation}) => {
     }
   };
 
-  // const textFilterQuery = useQuery({
-  //   queryKey: ['text-filtering'],
-  //   queryFn: textFilter,
-  //   enabled: false,
-  // });
+  const textFilterQuery = useQuery({
+    queryKey: ['text-filtering'],
+    queryFn: textFilter,
+    enabled: false,
+  });
 
   const colorChange = async () => {
     // const res = commentContent.slice(0, 2) + "[color=ff3333]" + commentContent.slice(2, 5) + "[/color]" + commentContent.slice(5)
@@ -186,25 +186,26 @@ const CommentListPage = ({route, navigation}) => {
     try {
       console.log(commentContent);
       setLoadingModalVisible(true);
-      const data = await textFilter.mutateAsync();
-      console.log(data);
+      // const data = await textFilter.mutateAsync();
+      // console.log(data);
 
-      // await textFilterQuery.refetch();
+      const resData = await textFilterQuery.refetch();
       // await queryClient.invalidateQueries(['text-filtering'])
       // await queryClient.fetchQuery(['text-filtering']);
 
-      if (data.data.status === 200) {
+      if (resData.data.status === 200) {
         setLoadingModalVisible(false); //로딩 끝
 
         // clean한 문장
-        if (data.data.data === true || data.data.data.trim() === 'true') {
+        if (resData.data.data === true || resData.data.data.trim() === 'true') {
           await commentMutation.mutateAsync();
           queryClient.invalidateQueries(['comments']);
           setCommentContent('');
         } else {
           // bad 문장
-          console.log(data.data.data);
-          setFilteredText(data.data.data);
+          console.log(resData.data.data);
+          const filteredText = resData.data.data;
+          // setFilteredText(resData.data.data);
           console.log(filteredText);
 
           const res = filteredText.substring(1, filteredText.length - 2);
@@ -249,8 +250,8 @@ const CommentListPage = ({route, navigation}) => {
         // console.log(res);
       } else {
         setLoadingModalVisible(false);
-        console.log(data.data.message);
-        Alert.alert('텍스트 필터링 실패', data.data.message);
+        console.log(resData.data.message);
+        Alert.alert('텍스트 필터링 실패', resData.data.message);
       }
     } catch (error) {
       setLoadingModalVisible(false);
