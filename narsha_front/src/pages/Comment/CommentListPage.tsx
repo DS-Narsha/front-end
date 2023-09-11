@@ -116,25 +116,25 @@ const CommentListPage = ({route, navigation}) => {
     return data;
   });
 
-    //텍스트 필터링
-    const textFilter = useMutation(async () => {
-      try {
-        const res = await fetch(
-          `http://${Config.HOST_NAME}/api/ai-flask/text-filter?text=${commentContent}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+  //텍스트 필터링
+  const textFilter = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/ai-flask/text-filter?text=${commentContent}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
-        const json = await res.json();
-        console.log(json);
-        return json;
-      } catch (err) {
-        console.log(err);
-      }
-    });
+        },
+      );
+      const json = await res.json();
+      console.log(json);
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
 
   const handleCommentSubmit = async () => {
     try {
@@ -165,23 +165,25 @@ const CommentListPage = ({route, navigation}) => {
     // setCommentContent(res);
     setModalVisible(false);
     const tempt = [0, 6];
-    let sentence="";
-    let num=0;
-    for(let i=0;i<tempt.length;i++){
-      sentence += commentContent.slice(num, tempt[i]) + "(" + commentContent.slice(tempt[i], tempt[i]+2) + ")";
+    let sentence = '';
+    let num = 0;
+    for (let i = 0; i < tempt.length; i++) {
+      sentence +=
+        commentContent.slice(num, tempt[i]) +
+        '(' +
+        commentContent.slice(tempt[i], tempt[i] + 2) +
+        ')';
       num += tempt[i] + 2;
-      
-      if(i == tempt.length-1){
-        sentence += commentContent.slice(tempt[i]+2, commentContent.length);
+
+      if (i == tempt.length - 1) {
+        sentence += commentContent.slice(tempt[i] + 2, commentContent.length);
       }
     }
     setCommentContent(sentence);
-  }
-
+  };
 
   const startTextFilter = async () => {
     try {
-
       console.log(commentContent);
       setLoadingModalVisible(true);
       const data = await textFilter.mutateAsync();
@@ -193,26 +195,26 @@ const CommentListPage = ({route, navigation}) => {
 
       if (data.data.status === 200) {
         setLoadingModalVisible(false); //로딩 끝
-        
+
         // clean한 문장
-        if (data.data.data === true || data.data.data.trim() === "true") { 
+        if (data.data.data === true || data.data.data.trim() === 'true') {
           await commentMutation.mutateAsync();
           queryClient.invalidateQueries(['comments']);
           setCommentContent('');
-        } 
-        else { // bad 문장
+        } else {
+          // bad 문장
           console.log(data.data.data);
           setFilteredText(data.data.data);
           console.log(filteredText);
 
-          const res = filteredText.substring(1,filteredText.length-2);
+          const res = filteredText.substring(1, filteredText.length - 2);
           const arr = res.replace(/"/g, '').split(',');
           arr.forEach(text => {
             textFilterArray.push(text.trim());
           });
 
           console.log(textFilterArray); //필터링된 단어 배열
-          for(let i=0;i<textFilterArray.length;i++){
+          for (let i = 0; i < textFilterArray.length; i++) {
             console.log(textFilterArray[i]);
             // textIndexArray.push(commentContent.indexOf(textFilterArray[i]));
             const index = commentContent.indexOf(textFilterArray[i]);
@@ -220,22 +222,31 @@ const CommentListPage = ({route, navigation}) => {
           }
           console.log(textIndexArray); //인덱스
 
-          let sentence="";
-          let num=0;
-          for(let i=0;i<textIndexArray.length;i++){
-            sentence += commentContent.slice(num, textIndexArray[i]) + "(" + commentContent.slice(textIndexArray[i], textIndexArray[i]+textFilterArray[i].length) + ")";
+          let sentence = '';
+          let num = 0;
+          for (let i = 0; i < textIndexArray.length; i++) {
+            sentence +=
+              commentContent.slice(num, textIndexArray[i]) +
+              '(' +
+              commentContent.slice(
+                textIndexArray[i],
+                textIndexArray[i] + textFilterArray[i].length,
+              ) +
+              ')';
             num += textIndexArray[i] + textFilterArray[i].length;
-            if(i == textIndexArray.length-1){
-              sentence += commentContent.slice(textIndexArray[i]+textFilterArray[i].length, commentContent.length);
+            if (i == textIndexArray.length - 1) {
+              sentence += commentContent.slice(
+                textIndexArray[i] + textFilterArray[i].length,
+                commentContent.length,
+              );
             }
           }
 
           setCommentContent(sentence);
           setTextColor('red');
         }
-        
-        // console.log(res);
 
+        // console.log(res);
       } else {
         setLoadingModalVisible(false);
         console.log(data.data.message);
@@ -364,9 +375,7 @@ const CommentListPage = ({route, navigation}) => {
         </View>
       </Modal>
 
-        <View>
-          
-        </View>
+      <View></View>
 
       <View style={styles.inputBody}>
         {profileImage !== '' && profileImage ? (
@@ -381,7 +390,7 @@ const CommentListPage = ({route, navigation}) => {
           value={commentContent}
           style={styles.input}
           placeholder={'@' + userData.userId + '로 댓글 남기기'}
-          />
+        />
         <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
           <CommentSendSvg />
         </TouchableOpacity>
@@ -581,7 +590,7 @@ const styles = StyleSheet.create({
   },
   coloredText: {
     fontFamily: 'NanumSquareB',
-    color: "#FF0000",
+    color: '#FF0000',
   },
 });
 

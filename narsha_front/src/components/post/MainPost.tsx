@@ -47,7 +47,7 @@ const MainPost = ({item, navigation}: any) => {
   //좋아요 누르기
   const createLike = useMutation(async () => {
     try {
-      const res = await fetch(`http://localhost:8080/api/like/create`, {
+      const res = await fetch(`http://${Config.HOST_NAME}/api/like/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ const MainPost = ({item, navigation}: any) => {
   const getLike = async () => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${postId}`,
+        `http://${Config.HOST_NAME}/api/like/check?userId=${userData.userId}&groupCode=${userData.groupCode}&postId=${postId}`,
         {
           method: 'GET',
           headers: {
@@ -163,8 +163,6 @@ const MainPost = ({item, navigation}: any) => {
 
     return getrecentComment();
   });
-
-  console.log('itemData: ', itemData);
 
   const {data: itemLikeData} = useQuery(itemLikeQueryKey, () => {
     // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
