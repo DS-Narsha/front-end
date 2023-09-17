@@ -10,16 +10,16 @@ import {
 } from 'react-native';
 import Line from '../assets/Line.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import Heart from '../assets/heart.svg';
-import HeartFill from '../assets/heartFill.svg';
+import heartDesel from '../assets/heart-desel.png';
+import heartSel from '../assets/heart-sel.png';
 import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
 import basicProfile from '../assets/graphic/basic-profile.jpg';
 import Config from 'react-native-config';
-import store, { turn } from '../../Achievement'
-import { useDispatch } from "react-redux";
+import store, {turn} from '../../Achievement';
+import {useDispatch} from 'react-redux';
 
 type Comment = {
   userId: {
@@ -103,7 +103,7 @@ export default function PostDetail({route, navigation}) {
     }
   };
 
-  const ac = store.getState().achieve
+  const ac = store.getState().achieve;
   const dispatch = useDispatch();
 
   //좋아요 누르기
@@ -121,9 +121,9 @@ export default function PostDetail({route, navigation}) {
         }),
       });
       const json = await res.json();
-      console.log("like"+ac)
+      console.log('like' + ac);
       // !(ac.include(2))? handleLikeAchi():null;
-      console.log("done")
+      console.log('done');
       return json;
     } catch (err) {
       console.log(err);
@@ -147,7 +147,7 @@ export default function PostDetail({route, navigation}) {
     } catch (err) {
       console.log(err);
     }
-  }; 
+  };
 
   //좋아요 취소하기
   const deleteLike = useMutation(async () => {
@@ -219,7 +219,6 @@ export default function PostDetail({route, navigation}) {
 
       setCommentContent('');
       // !(ac.include(3))? console.log("none 3"):null;
-
     } catch (error) {
       Alert.alert('오류');
 
@@ -314,32 +313,31 @@ export default function PostDetail({route, navigation}) {
     );
   };
 
+  // update comment achievement
+  const updateCmtAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${3}`,
+        {
+          method: 'PUT',
+        },
+      );
 
-    // update comment achievement
-    const updateCmtAchi = useMutation(async () => {
-      try {
-        const res = await fetch(
-          `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-            userData.userId
-          }&achieveNum=${3}`,
-          {
-            method: 'PUT',
-          },
-        );
-  
-        const json = await res.json();
-        dispatch(turn(3));
-        return json;
-      } catch (err) {
-        console.log(err);
-      }
-    });
-  
-    const handleCmtAchi = async () => {
-      try {
-        await updateCmtAchi.mutateAsync();
-      } catch (error) {}
-    };
+      const json = await res.json();
+      dispatch(turn(3));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleCmtAchi = async () => {
+    try {
+      await updateCmtAchi.mutateAsync();
+    } catch (error) {}
+  };
 
   // update Like achievement
   const updateLikeAchi = useMutation(async () => {
@@ -366,7 +364,6 @@ export default function PostDetail({route, navigation}) {
       await updateLikeAchi.mutateAsync();
     } catch (error) {}
   };
-  
 
   return (
     <View>
@@ -416,11 +413,11 @@ export default function PostDetail({route, navigation}) {
                 {/* 여기에서 하트 처리 */}
                 {checkLikeQuery.data.data === true ? (
                   <TouchableOpacity onPress={startDeleteLike}>
-                    <HeartFill style={{marginLeft: 10}} />
+                    <Image source={heartSel} />
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={uploadLike}>
-                    <Heart style={{marginLeft: 10}} />
+                    <Image source={heartDesel} />
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity

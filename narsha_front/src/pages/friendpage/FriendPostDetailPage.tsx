@@ -10,15 +10,15 @@ import {
 } from 'react-native';
 import Line from '../../assets/Line.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import Heart from '../../assets/heart.svg';
-import HeartFill from '../../assets/heartFill.svg';
+import heartDesel from '../../assets/heart-desel.png';
+import heartSel from '../../assets/heart-sel.png';
 import {ScrollView} from 'react-native-gesture-handler';
 import SEND from '../../assets/send-btn.svg';
 import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
 import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import Config from 'react-native-config';
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 
 type Comment = {
   userId: {
@@ -40,12 +40,11 @@ interface RouteParams {
 
 //@ts-ignore
 export default function FriendPostDetail({route, navigation}) {
-
   const friendRoute = useRoute();
-  const { friendId } = friendRoute.params as RouteParams;
-  console.log("여기는 포스트 디테일");
+  const {friendId} = friendRoute.params as RouteParams;
+  console.log('여기는 포스트 디테일');
   console.log(friendId);
-  
+
   const id = route.params.detail.postId;
   const queryClient = useQueryClient();
   const [modalVisible, setModalVisible] = useState(false);
@@ -389,15 +388,17 @@ export default function FriendPostDetail({route, navigation}) {
                 {/* 여기에서 하트 처리 */}
                 {checkLikeQuery.data.data === true ? (
                   <TouchableOpacity onPress={startDeleteLike}>
-                    <HeartFill style={{marginLeft: 10}} />
+                    <Image source={heartSel} />
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity onPress={uploadLike}>
-                    <Heart style={{marginLeft: 10}} />
+                    <Image source={heartDesel} />
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('FriendLikeListPage', {id: id})}>
+                  onPress={() =>
+                    navigation.navigate('FriendLikeListPage', {id: id})
+                  }>
                   {likeQuery.data && likeQuery.data.length !== 0 ? (
                     <Text
                       style={{

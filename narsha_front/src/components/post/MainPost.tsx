@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 import userImg from '../../assets/user-image.png';
 import images from '../../assets/images.jpeg';
-import Heart from '../../assets/heart.svg';
-import HeartFill from '../../assets/heartFill.svg';
 import Chat from '../../assets/chat.svg';
+import heartDesel from '../../assets/heart-desel.png';
+import heartSel from '../../assets/heart-sel.png';
 import Swiper from 'react-native-web-swiper';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
@@ -255,11 +255,11 @@ const MainPost = ({item, navigation}: any) => {
               {/* 하트 작업 */}
               {isLiked === true ? (
                 <TouchableOpacity onPress={startDeleteLike}>
-                  <HeartFill />
+                  <Image source={heartSel} />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity onPress={uploadLike}>
-                  <Heart />
+                  <Image source={heartDesel} />
                 </TouchableOpacity>
               )}
               {/* comment page */}
