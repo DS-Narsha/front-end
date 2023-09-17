@@ -113,7 +113,7 @@ const MainScreen = ({navigation}) => {
       <View>
         {!mainPostQuery.isLoading && (
           <>
-            {mainPostQuery.data ? (
+            {mainPostQuery.data && mainPostQuery.data.data.length !== 0 ? (
               <View>
                 <FlatList
                   showsVerticalScrollIndicator={false}
@@ -125,7 +125,9 @@ const MainScreen = ({navigation}) => {
                 />
               </View>
             ) : (
-              <View></View>
+              <View style={styles.nonPostContainer}>
+                <Text>~ 아직 다른 친구들이 올린 게시글이 없어요~</Text>
+              </View>
             )}
           </>
         )}
@@ -143,6 +145,13 @@ const MainScreen = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  nonPostContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
+  },
   absolute: {
     position: 'absolute',
     right: 10,
