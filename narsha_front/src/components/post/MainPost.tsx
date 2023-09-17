@@ -299,6 +299,7 @@ const MainPost = ({item, navigation}: any) => {
                     marginTop: 15,
                     color: '#61A257',
                     fontFamily: 'NanumSquareR',
+                    marginHorizontal: 10,
                   }}>
                   댓글 {len}개 전체 보기
                 </Text>
@@ -362,7 +363,6 @@ const styles = StyleSheet.create({
     height: 350,
     width: 350,
     borderRadius: 10,
-    marginBottom: 20,
   },
   cmtUserImg: {
     width: 30,
@@ -382,14 +382,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 5,
+    marginTop: 10,
   },
   likeText: {
     color: '#909090',
     marginLeft: 5,
+    margin: 10,
     fontFamily: 'NanumSquareR',
+    fontSize: 13,
   },
   postContent: {
-    fontSize: 16,
+    fontSize: 15,
     marginTop: 10,
     margin: 10,
     fontFamily: 'NanumSquareR',
@@ -398,6 +401,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginTop: 15,
+    marginHorizontal: 10,
     alignItems: 'flex-start',
   },
   commentBox: {

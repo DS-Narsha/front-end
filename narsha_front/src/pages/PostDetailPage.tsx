@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import Line from '../assets/Line.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import heartDesel from '../assets/heart-desel.png';
 import heartSel from '../assets/heart-sel.png';
@@ -371,9 +370,9 @@ export default function PostDetail({route, navigation}) {
         postQuery.data &&
         !checkLikeQuery.isLoading &&
         !countLike.isLoading && (
-          <>
+          <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={styles.txtContainer}>
+              <View style={styles.userInfo}>
                 <Image
                   source={{uri: postQuery.data.data.writer.profileImage}}
                   style={styles.userImg}
@@ -393,7 +392,7 @@ export default function PostDetail({route, navigation}) {
                   <Swiper
                     loop
                     controlsEnabled={false}
-                    containerStyle={{width: 300, height: 325}}>
+                    containerStyle={{width: 350, height: 350}}>
                     {a.map((item, index) => (
                       <View key={index}>
                         <Image
@@ -409,7 +408,7 @@ export default function PostDetail({route, navigation}) {
                 )}
               </View>
 
-              <View style={styles.txtContainer}>
+              <View style={styles.likeContainer}>
                 {/* 여기에서 하트 처리 */}
                 {checkLikeQuery.data.data === true ? (
                   <TouchableOpacity onPress={startDeleteLike}>
@@ -423,13 +422,7 @@ export default function PostDetail({route, navigation}) {
                 <TouchableOpacity
                   onPress={() => navigation.navigate('LikeListPage', {id: id})}>
                   {likeQuery.data && likeQuery.data.length !== 0 ? (
-                    <Text
-                      style={{
-                        fontSize: 13,
-                        color: '#909090',
-                        margin: 10,
-                        fontFamily: 'NanumSquareR',
-                      }}>
+                    <Text style={styles.likeText}>
                       {likeQuery.data[likeQuery.data.length - 1].userId.userId}
                       님
                       {likeQuery.data.length - 1 == 0 ? (
@@ -454,13 +447,7 @@ export default function PostDetail({route, navigation}) {
               </View>
 
               <View style={styles.contentContainer}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    marginTop: 0,
-                    margin: 10,
-                    fontFamily: 'NanumSquareR',
-                  }}>
+                <Text style={styles.postContent}>
                   {postQuery.data.data.content}
                 </Text>
                 <Text
@@ -475,16 +462,15 @@ export default function PostDetail({route, navigation}) {
                 </Text>
               </View>
 
-              <View style={{margin: 15, marginLeft: 35, marginBottom: 200}}>
-                <Line />
-
+              <View style={styles.commentContainer}>
+                <View style={styles.line} />
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('CommentListPage', {id: id})
                   }>
                   <Text
                     style={{
-                      marginTop: 15,
+                      marginTop: 5,
                       color: '#61A257',
                       fontFamily: 'NanumSquareR',
                     }}>
@@ -509,7 +495,7 @@ export default function PostDetail({route, navigation}) {
                             />
                           )}
 
-                          <View style={{marginTop: 5}}>
+                          <View>
                             <Text
                               style={{
                                 fontWeight: 'bold',
@@ -605,18 +591,40 @@ export default function PostDetail({route, navigation}) {
                 <SEND style={{top: 5}} />
               </TouchableOpacity>
             </View>
-          </>
+          </View>
         )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  txtContainer: {
+  container: {
+    marginHorizontal: 20,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  likeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 30,
-    marginTop: 20,
+    marginLeft: 5,
+    marginTop: 10,
+  },
+  commentContainer: {
+    marginHorizontal: 10,
+    marginBottom: 200,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
+    fontFamily: 'NanumSquareR',
+    marginTop: 15,
+  },
+  likeText: {
+    fontSize: 13,
+    color: '#909090',
+    margin: 10,
+    fontFamily: 'NanumSquareR',
   },
   imgContainer: {
     // display:'flex',
@@ -628,7 +636,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentContainer: {
-    marginHorizontal: 30,
+    marginHorizontal: 5,
     marginTop: 15,
   },
   userImg: {
@@ -636,21 +644,23 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 10,
     marginRight: 10,
-    marginLeft: 10,
   },
   pickImg: {
-    height: 300,
-    width: 300,
+    height: 350,
+    width: 350,
     borderRadius: 10,
-    marginTop: 20,
-    marginBottom: 20,
+  },
+  postContent: {
+    fontSize: 15,
+    marginTop: 0,
+    margin: 10,
+    fontFamily: 'NanumSquareR',
   },
   cmtUserImg1: {
     width: 30,
     height: 30,
     borderRadius: 10,
     marginRight: 10,
-    marginLeft: 10,
   },
   cmtUserImg2: {
     width: 30,
@@ -659,9 +669,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   cmtBody: {
+    display: 'flex',
     flexDirection: 'row',
     marginTop: 15,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   inputBody: {
     width: '100%',
@@ -678,11 +689,18 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 10,
     marginRight: 10,
-    marginLeft: 10,
   },
   input: {
     width: '75%',
     fontFamily: 'NanumSquareB',
+  },
+  line: {
+    flex: 1,
+    backgroundColor: 'black',
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: '#c0c0c0',
+    marginVertical: 10,
   },
   centeredView: {
     flex: 1,
