@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -7,13 +7,16 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import DS from '../assets/DS.png';
 import SingleInfo from '../components/SingleInfo';
 import {ScrollView} from 'react-native-gesture-handler';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
+import store, { turn } from '../../Achievement'
+import { useSelector, useDispatch } from "react-redux";
+
 
 type UserData = {
+  userId:String,
   groupCode: string;
 };
 
@@ -54,6 +57,42 @@ export default function NoticeList({navigation}) {
     queryKey: ['notice-list'],
     queryFn: getNoticeList,
   });
+
+  // get Achievement
+  const ac = store.getState().achieve
+  const dispatch = useDispatch();
+
+  // update achievement
+  const updateAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${9}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      dispatch(turn(9));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleAchi = async () => {
+    try {
+      await updateAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  // handleAchi();
+  useEffect(()=> {
+    !(ac.includes(9))?
+    handleAchi():null;
+  }, [])
 
   return (
     <View style={styles.body}>

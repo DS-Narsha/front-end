@@ -1,11 +1,15 @@
-import {useQuery, useQueryClient} from '@tanstack/react-query';
-import React from 'react';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import React, {useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import AchieveItem from '../components/AchieveItem';
 import AchieveData from '../data/AchieveData.json';
 import {badgeSources} from '../data/BadgeSources';
 import Config from 'react-native-config';
+import { useSelector, useDispatch } from "react-redux";
+import store, { turn } from '../../Achievement'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 type UserData = {
   userId: string;
@@ -56,6 +60,67 @@ const AchievePage = () => {
     else return true;
   };
 
+  // get Achievement
+  const ac = store.getState().achieve
+  const dispatch = useDispatch();
+   
+  // get profile
+  const getProfileDetail = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const profileQuery = useQuery({
+    queryKey: ['profile-detail'],
+    queryFn: getProfileDetail,
+  });
+
+  // update achievement
+  const updateBirthAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${4}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      dispatch(turn(4));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleBirthAchi = async () => {
+    try {
+      await updateBirthAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  // handleAchi();
+  useEffect(()=> {
+    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null)?
+    handleBirthAchi():null;
+    console.log(ac)
+  }, [])
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -94,6 +159,7 @@ const AchievePage = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {flex: 1},
   textContainer: {
@@ -112,4 +178,19 @@ const styles = StyleSheet.create({
   },
 });
 
+// // Reducer 데이터를 props로 변환
+// function mapStateToProps(state){
+//   return {
+//     achieve: state.achieve
+//   };
+// }
+
+// // Actions을 props로 변환
+// function matchDispatchToProps(dispatch){
+//   return bindActionCreators({
+//     turn:turn
+//   }, dispatch);
+// }
+
+// export default connect(mapStateToProps, matchDispatchToProps)(AchievePage);
 export default AchievePage;

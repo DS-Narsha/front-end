@@ -18,6 +18,8 @@ import {TextInput} from 'react-native-gesture-handler';
 import Swiper from 'react-native-web-swiper';
 import basicProfile from '../assets/graphic/basic-profile.jpg';
 import Config from 'react-native-config';
+import store, { turn } from '../../Achievement'
+import { useDispatch } from "react-redux";
 
 type Comment = {
   userId: {
@@ -101,6 +103,9 @@ export default function PostDetail({route, navigation}) {
     }
   };
 
+  const ac = store.getState().achieve
+  const dispatch = useDispatch();
+
   //좋아요 누르기
   const createLike = useMutation(async () => {
     try {
@@ -116,6 +121,9 @@ export default function PostDetail({route, navigation}) {
         }),
       });
       const json = await res.json();
+      console.log("like"+ac)
+      // !(ac.include(2))? handleLikeAchi():null;
+      console.log("done")
       return json;
     } catch (err) {
       console.log(err);
@@ -139,7 +147,7 @@ export default function PostDetail({route, navigation}) {
     } catch (err) {
       console.log(err);
     }
-  };
+  }; 
 
   //좋아요 취소하기
   const deleteLike = useMutation(async () => {
@@ -210,6 +218,8 @@ export default function PostDetail({route, navigation}) {
       queryClient.invalidateQueries(['comments']);
 
       setCommentContent('');
+      // !(ac.include(3))? console.log("none 3"):null;
+
     } catch (error) {
       Alert.alert('오류');
 
@@ -303,6 +313,60 @@ export default function PostDetail({route, navigation}) {
       localTime.substring(0, 5)
     );
   };
+
+
+    // update comment achievement
+    const updateCmtAchi = useMutation(async () => {
+      try {
+        const res = await fetch(
+          `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+            userData.userId
+          }&achieveNum=${3}`,
+          {
+            method: 'PUT',
+          },
+        );
+  
+        const json = await res.json();
+        dispatch(turn(3));
+        return json;
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  
+    const handleCmtAchi = async () => {
+      try {
+        await updateCmtAchi.mutateAsync();
+      } catch (error) {}
+    };
+
+  // update Like achievement
+  const updateLikeAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${2}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      dispatch(turn(2));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleLikeAchi = async () => {
+    try {
+      await updateLikeAchi.mutateAsync();
+    } catch (error) {}
+  };
+  
 
   return (
     <View>

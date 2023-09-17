@@ -12,6 +12,8 @@ import MainPost from '../components/post/MainPost';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import GuidePage from './GuidePage';
 import Config from 'react-native-config';
+import store, { turn } from '../../Achievement'
+import { useSelector, useDispatch } from "react-redux";
 
 type UserData = {
   userId: string;
@@ -26,6 +28,45 @@ const MainScreen = ({navigation}) => {
   }) as {data: UserData};
 
   //console.log(Config.APP_ID, Config.HOST_NAME);
+
+  // get user badgeList
+  const getBadgeList = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/badge-list?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const achieveQuery = useQuery({
+    queryKey: ['badge-list'],
+    queryFn: getBadgeList,
+  });
+
+  // get Achievement
+  const ac = store.getState().achieve
+  const dispatch = useDispatch();
+     
+  useEffect(() => {
+    if (!achieveQuery.isLoading) {
+      const arr = JSON.parse(achieveQuery.data.data.replace(/'/g, "\""));
+      for (let i = 0; i < 10; i++) {
+        if (arr[i]==true && !ac.includes(i+1)) {
+          dispatch(turn(i + 1));
+        }
+      }
+    }
+  }, []);
 
   // get post listd
   const getPostingList = async () => {

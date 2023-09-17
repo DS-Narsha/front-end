@@ -262,7 +262,7 @@ const WritePage = ({route, navigation}) => {
 
   // useMutation: post
   const AchieveMutateFunc = useMutation(['update-badge'], {
-    mutationFn: () => updateAchieve(),
+    mutationFn: () => (updateAchieve()),
     onMutate: mutateAchieve,
     onError: (error, variable, rollback) => {
       if (rollback) rollback();
