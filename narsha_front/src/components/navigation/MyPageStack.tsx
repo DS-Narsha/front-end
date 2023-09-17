@@ -1,4 +1,4 @@
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import {getFocusedRouteNameFromRoute, useRoute} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TouchableOpacity, View} from 'react-native';
 import {useEffect} from 'react';
@@ -13,11 +13,13 @@ import NoticeWritePage from '../../pages/NoticeWritePage';
 import PostDetailPage from '../../pages/PostDetailPage';
 import CommentListPage from '../../pages/comment/CommentListPage';
 import LikeListPage from '../../pages/like/LikeListPage';
+import FriendPage from '../../pages/friendpage/FriendPage';
 import BackSvg from '../../assets/back.svg';
 import BadgeList from '../../pages/mypage/BadgeListPage';
 import Write from '../../assets/write.svg';
 import Setting from '../../assets/teacher-setting.svg';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
+import FriendStack from './FriendStack';
 
 type UserData = {
   userId: string;
@@ -38,6 +40,7 @@ const tabBarStyle = {
 };
 //@ts-ignore
 export default function MyPageStack({route, navigation}) {
+
   const queryClient = useQueryClient();
 
   // queryClient에서 userId와 userType을 가져오는 로직
@@ -77,6 +80,9 @@ export default function MyPageStack({route, navigation}) {
         navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       case 'LikeListPage':
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
+        break;
+      case 'FriendStack':
         navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       default:
@@ -270,6 +276,26 @@ export default function MyPageStack({route, navigation}) {
         component={LikeListPage}
         options={{
           title: '좋아요 목록',
+          cardStyle: {
+            backgroundColor: '#ffffff',
+          },
+        }}
+      />
+      {/* <Stack.Screen
+        name="FriendPage"
+        component={FriendPage}
+        options={{
+          title: '친구 페이지(추후 아이디로 수정)',
+          cardStyle: {
+            backgroundColor: '#ffffff',
+          },
+        }}
+      /> */}
+      <Stack.Screen
+        name="FriendStack"
+        component={FriendStack}
+        options={{
+          headerShown: false,
           cardStyle: {
             backgroundColor: '#ffffff',
           },

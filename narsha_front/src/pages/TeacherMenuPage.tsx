@@ -45,11 +45,11 @@ export default function TeacherMenu({navigation}: any) {
             <GroupDeleteModal navigation={navigation}/>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View style={{padding: 15}}>
             <Undefinedfunc />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

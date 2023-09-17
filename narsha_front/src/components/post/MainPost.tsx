@@ -23,26 +23,40 @@ type UserData = {
 
 // @ts-ignore
 const MainPost = ({item, navigation}: any) => {
-  console.log('navigation:', navigation);
-  const itemQueryKey = ['itemData', item.postId];
-  const itemLikeQueryKey = ['itemLikeData', item.postId];
-  const [isLiked, setIsLiked] = useState(false);
-
+  const postId = item.postId;
+  const image = item.imageArray;
+  const str = image.slice(1, -1);
+  const imageArray = str.split(', ');
+  for (let i = 0; i < imageArray.length; i++) {
+    imageArray[i] = imageArray[i].toString();
+  }
   const queryClient = useQueryClient();
+  const itemQueryKey = ['itemData', postId];
+  const itemLikeQueryKey = ['itemLikeData', postId];
+  const itemCountLikeQueryKey = ['itemCountLikeData', postId];
+  const [isLiked, setIsLiked] = useState(false);
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
-  const [postId, setpostId] = useState(item.postId);
-  console.log('이게 기준점입니다.');
-  console.log(postId);
-
-  const str = item.imageArray.slice(1, -1);
-  const imageArray = str.split(', ');
-  for (let i = 0; i < imageArray.length; i++) {
-    imageArray[i] = imageArray[i].toString();
-  }
+  // get like list
+  const getLikeList = async () => {
+    try {
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/like/list?postId=${postId}`,
+      );
+      const data = await response.json();
+      if (data.status === 200) {
+        return data.data;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
+  };
 
   //좋아요 누르기
   const createLike = useMutation(async () => {
@@ -122,17 +136,49 @@ const MainPost = ({item, navigation}: any) => {
     }
   };
 
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/comment/list?postId=${postId}`,
+      );
+      const data = await response.json();
+      if (data.status === 200) {
+        return data.data;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      throw error;
+    }
+  };
+
+  // const likeQuery = useQuery(['likes'], getLikeList);
+
   const checkLikeQuery = useQuery({
     queryKey: ['check-like'],
     queryFn: getLike,
   });
+
+  const {
+    data: comments,
+    error,
+    isLoading,
+  } = useQuery(['comments'], fetchComments);
+
+  const len = comments ? comments.length : 0;
+
+  // const mainLikeQuery = useQuery(['mainLikes'], getLikeList);
 
   const uploadLike = async () => {
     try {
       const data = await createLike.mutateAsync();
 
       if (data.status === 200) {
+        // checkLikeQuery.refetch();
         setIsLiked(true);
+        // queryClient.invalidateQueries(['likes']);
+        queryClient.invalidateQueries(['itemCountLikeData', postId]);
       } else {
         console.log(data.message);
       }
@@ -145,35 +191,26 @@ const MainPost = ({item, navigation}: any) => {
     try {
       const data = await deleteLike.mutateAsync();
       setIsLiked(false);
+      // queryClient.invalidateQueries(['mainLikes']);
+      queryClient.invalidateQueries(['itemCountLikeData', postId]);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const recentCommentQuery = useQuery({
-    queryKey: ['recentComment'],
-    queryFn: getrecentComment,
-  });
-
   const {data: itemData} = useQuery(itemQueryKey, () => {
-    // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
-    // 예: API 호출 등
-    // console.log("=================");
-    // console.log(itemData);
-
     return getrecentComment();
   });
 
   const {data: itemLikeData} = useQuery(itemLikeQueryKey, () => {
-    // 여기서 item.id를 사용하여 해당 아이템에 대한 데이터를 가져옴
-    // 예: API 호출 등
-    // console.log("+++++++좋아요+++++++++++");
-    // console.log(itemLikeData);
-    // console.log(itemLikeData.data);
-    // setIsLiked(itemLikeData.data);
-
     return getLike();
   });
+
+  const {data: itemCountLikeData} = useQuery(itemCountLikeQueryKey, () => {
+    return getLikeList();
+  });
+  
+  
 
   return (
     <View>
@@ -181,7 +218,8 @@ const MainPost = ({item, navigation}: any) => {
         !checkLikeQuery.isLoading &&
         checkLikeQuery.data &&
         itemData &&
-        itemLikeData && (
+        itemLikeData &&
+        itemCountLikeData && (
           <View style={styles.container}>
             <View style={styles.userInfo}>
               <Image
@@ -228,22 +266,37 @@ const MainPost = ({item, navigation}: any) => {
               )}
               {/* comment page */}
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('CommentListPage', {id: postId})
-                }>
-                <Chat style={{marginLeft: 20}} />
+                onPress={() => navigation.navigate('LikeListPage', {id: postId})}>
+                {itemCountLikeData && itemCountLikeData.length !== 0 ? (
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: '#909090',
+                      margin: 10,
+                      fontFamily: 'NanumSquareR',
+                    }}>
+                    {itemCountLikeData[itemCountLikeData.length - 1].userId.userId}
+                    님
+                    {itemCountLikeData.length - 1 == 0 ? (
+                      <Text>이 좋아합니다.</Text>
+                    ) : (
+                      <Text>
+                        외 {itemCountLikeData.length - 1}명이 좋아합니다.{' '}
+                      </Text>
+                    )}
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      color: '#909090',
+                      margin: 10,
+                      fontFamily: 'NanumSquareR',
+                    }}>
+                    좋아요를 눌러주세요!
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
-            <Text
-              style={{
-                fontSize: 13,
-                color: '#909090',
-                marginTop: 5,
-                margin: 10,
-                fontFamily: 'NanumSquareR',
-              }}>
-              Narsha님 외 56명이 좋아합니다
-            </Text>
 
             <Text
               style={{
@@ -254,6 +307,21 @@ const MainPost = ({item, navigation}: any) => {
               }}>
               {item.content}
             </Text>
+            <View style={{marginLeft: 10,}}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('CommentListPage', {id: postId})
+                }>
+                <Text
+                  style={{
+                    marginTop: 15,
+                    color: '#61A257',
+                    fontFamily: 'NanumSquareR',
+                  }}>
+                  댓글 {len}개 전체 보기
+                </Text>
+              </TouchableOpacity>
+            </View>
             {itemData.data === null ? (
               <View style={{flexDirection: 'row', marginTop: 15}}></View>
             ) : (

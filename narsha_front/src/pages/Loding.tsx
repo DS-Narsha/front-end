@@ -86,7 +86,7 @@ const Loding = () => {
     makeTime();
   }, [timeQuery.data]);
 
-  // return <View>{bool ? <NotAvailable /> : <NotAvailable />}</View>;
+  return <View>{bool ? <NotAvailable /> : <NotAvailable />}</View>;
 };
 
 export default Loding;

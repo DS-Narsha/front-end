@@ -12,6 +12,7 @@ import Write from '../../assets/write.svg';
 import GuidePage from '../../pages/GuidePage';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import CommentListPage from '../../pages/comment/CommentListPage';
+import LikeListPage from '../../pages/like/LikeListPage';
 
 type UserData = {
   userId: string;
@@ -43,6 +44,9 @@ export default function MainStack({route, navigation}) {
         navigation.setOptions({tabBarStyle: {display: 'none'}});
         break;
       case 'CommentListPage':
+        navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
+        break;
+      case 'LikeListPage':
         navigation.setOptions({tabBarStyle: {display: 'none', zIndex: -1}});
         break;
       default:
@@ -149,6 +153,16 @@ export default function MainStack({route, navigation}) {
         component={CommentListPage}
         options={{
           title: '댓글 목록',
+          cardStyle: {
+            backgroundColor: '#ffffff',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="LikeListPage"
+        component={LikeListPage}
+        options={{
+          title: '좋아요 목록',
           cardStyle: {
             backgroundColor: '#ffffff',
           },

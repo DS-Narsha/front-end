@@ -13,6 +13,7 @@ import FriendList from '../../assets/friend-list.svg';
 import BadgeList from '../../assets/badge-list.svg';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
+import { useRoute } from '@react-navigation/native';
 
 type UserData = {
   userId: string;
@@ -20,8 +21,19 @@ type UserData = {
   groupCode: string;
 };
 
+interface RouteParams {
+  friendId: string;
+}
+
 //@ts-ignore
-export default function MyPage({navigation}) {
+export default function FriendPage({navigation}: any) {
+
+  const route = useRoute();
+  const { friendId } = route.params as RouteParams;
+
+  console.log("이거 아이디야");
+  console.log(friendId);
+  
   const [pageSize, setPageSize] = useState(24);
   const queryClient = useQueryClient();
 
@@ -34,7 +46,7 @@ export default function MyPage({navigation}) {
   const getProfileDetail = async () => {
     try {
       const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${friendId}`,
         {
           method: 'GET',
           headers: {
@@ -53,7 +65,7 @@ export default function MyPage({navigation}) {
   const getPostingList = async () => {
     try {
       const res = await fetch(
-        `http://${Config.HOST_NAME}/api/post/user-post-list?userId=${userData.userId}`,
+        `http://${Config.HOST_NAME}/api/post/user-post-list?userId=${friendId}`,
         {
           method: 'GET',
           headers: {
@@ -76,7 +88,7 @@ export default function MyPage({navigation}) {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('PostDetailPage', {detail: item});
+          navigation.navigate('FriendPostDetailPage', {detail: item, friendId: friendId});
         }}
         style={styles.imgShadow}>
         <ImageBackground
@@ -89,12 +101,12 @@ export default function MyPage({navigation}) {
   }, []);
 
   const profileQuery = useQuery({
-    queryKey: ['profile-detail'],
+    queryKey: ['friend-profile-detail'],
     queryFn: getProfileDetail,
   });
 
   const PostQuery = useQuery({
-    queryKey: ['posting-list'],
+    queryKey: ['friend-posting-list'],
     queryFn: getPostingList,
   });
 
@@ -146,32 +158,15 @@ export default function MyPage({navigation}) {
                 ? '소개글을 아직 쓰지 않았어요.'
                 : profileQuery.data.data.intro}
             </Text>
-            <TouchableOpacity
-              style={{flexDirection: 'row', marginTop: 5}}
-              onPress={() => navigation.navigate('EditProfile')}>
-              <Text
-                style={{
-                  fontFamily: 'NanumSquareB',
-                  color: '#000000',
-                  fontWeight: 'bold',
-                  fontSize: 10,
-                  padding: 2,
-                }}>
-                프로필 수정
-              </Text>
-              <View style={{paddingTop: 3}}>
-                <PencilIcon />
-              </View>
-            </TouchableOpacity>
           </View>
           <View style={{height: 10}} />
           <View style={styles.btnbox}>
-            <TouchableOpacity onPress={() => navigation.navigate('FriendList', { navigation })}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('FriendList')}>
               <View style={styles.btn}>
                 <FriendList />
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('BadgeList')}>
+            </TouchableOpacity> */}
+            <TouchableOpacity onPress={() => navigation.navigate('FriendBadgeList', {friendId: friendId})}>
               <View style={styles.btn}>
                 <BadgeList />
               </View>
