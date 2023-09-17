@@ -118,7 +118,6 @@ const AchievePage = () => {
   useEffect(()=> {
     !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null)?
     handleBirthAchi():null;
-
     console.log(ac)
   }, [])
 

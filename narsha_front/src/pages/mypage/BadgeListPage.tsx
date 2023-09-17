@@ -9,10 +9,12 @@ import {
   FlatList,
 } from 'react-native';
 import SingleBadge from '../../components/SingleBadge';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
 import AchieveData from '../../data/AchieveData.json';
 import {badgeSources} from '../../data/BadgeSources';
 import Config from 'react-native-config';
+import { useSelector, useDispatch } from "react-redux";
+import store, { turn } from '../../../Achievement'
 
 type UserData = {
   userId: string;
@@ -48,6 +50,70 @@ export default function BadgeList({route, navigation}) {
     queryKey: ['badge-list'],
     queryFn: getBadgeList,
   });
+
+  
+
+  // get Achievement
+  const ac = store.getState().achieve
+  const dispatch = useDispatch();
+   
+  // get profile
+  const getProfileDetail = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const profileQuery = useQuery({
+    queryKey: ['profile-detail'],
+    queryFn: getProfileDetail,
+  });
+
+  // update achievement
+  const updateBirthAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${4}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      dispatch(turn(4));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleBirthAchi = async () => {
+    try {
+      await updateBirthAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  // handleAchi();
+  useEffect(()=> {
+    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null)?
+    handleBirthAchi():null;
+    console.log(ac)
+  }, [])
+
 
   const _RenderItem = useCallback(({item, index}: any) => {
     // console.log(item.title);

@@ -122,7 +122,7 @@ export default function PostDetail({route, navigation}) {
       });
       const json = await res.json();
       console.log("like"+ac)
-      !(ac.include(2))? handleLikeAchi():null;
+      // !(ac.include(2))? handleLikeAchi():null;
       console.log("done")
       return json;
     } catch (err) {
@@ -218,7 +218,7 @@ export default function PostDetail({route, navigation}) {
       queryClient.invalidateQueries(['comments']);
 
       setCommentContent('');
-      !(ac.include(3))? handleCmtAchi():null;
+      // !(ac.include(3))? console.log("none 3"):null;
 
     } catch (error) {
       Alert.alert('오류');
