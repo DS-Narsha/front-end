@@ -268,13 +268,7 @@ const MainPost = ({item, navigation}: any) => {
                   navigation.navigate('LikeListPage', {id: postId})
                 }>
                 {itemCountLikeData && itemCountLikeData.length !== 0 ? (
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      color: '#909090',
-                      margin: 10,
-                      fontFamily: 'NanumSquareR',
-                    }}>
+                  <Text style={styles.likeText}>
                     {
                       itemCountLikeData[itemCountLikeData.length - 1].userId
                         .userId
