@@ -63,7 +63,7 @@ const AchievePage = () => {
   // get Achievement
   const ac = store.getState().achieve
   const dispatch = useDispatch();
-  
+   
   // get profile
   const getProfileDetail = async () => {
     try {
