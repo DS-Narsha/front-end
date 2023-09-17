@@ -209,8 +209,6 @@ const MainPost = ({item, navigation}: any) => {
   const {data: itemCountLikeData} = useQuery(itemCountLikeQueryKey, () => {
     return getLikeList();
   });
-  
-  
 
   return (
     <View>
@@ -253,20 +251,22 @@ const MainPost = ({item, navigation}: any) => {
               </Swiper>
             </View>
 
-            <View style={{flexDirection: 'row'}}>
+            <View style={styles.likeContainer}>
               {/* 하트 작업 */}
               {isLiked === true ? (
                 <TouchableOpacity onPress={startDeleteLike}>
-                  <HeartFill style={{marginLeft: 10}} />
+                  <HeartFill />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity onPress={uploadLike}>
-                  <Heart style={{marginLeft: 10}} />
+                  <Heart />
                 </TouchableOpacity>
               )}
               {/* comment page */}
               <TouchableOpacity
-                onPress={() => navigation.navigate('LikeListPage', {id: postId})}>
+                onPress={() =>
+                  navigation.navigate('LikeListPage', {id: postId})
+                }>
                 {itemCountLikeData && itemCountLikeData.length !== 0 ? (
                   <Text
                     style={{
@@ -275,7 +275,10 @@ const MainPost = ({item, navigation}: any) => {
                       margin: 10,
                       fontFamily: 'NanumSquareR',
                     }}>
-                    {itemCountLikeData[itemCountLikeData.length - 1].userId.userId}
+                    {
+                      itemCountLikeData[itemCountLikeData.length - 1].userId
+                        .userId
+                    }
                     님
                     {itemCountLikeData.length - 1 == 0 ? (
                       <Text>이 좋아합니다.</Text>
@@ -286,28 +289,13 @@ const MainPost = ({item, navigation}: any) => {
                     )}
                   </Text>
                 ) : (
-                  <Text
-                    style={{
-                      color: '#909090',
-                      margin: 10,
-                      fontFamily: 'NanumSquareR',
-                    }}>
-                    좋아요를 눌러주세요!
-                  </Text>
+                  <Text style={styles.likeText}>좋아요를 눌러주세요!</Text>
                 )}
               </TouchableOpacity>
             </View>
 
-            <Text
-              style={{
-                fontSize: 16,
-                marginTop: 5,
-                margin: 10,
-                fontFamily: 'NanumSquareR',
-              }}>
-              {item.content}
-            </Text>
-            <View style={{marginLeft: 10,}}>
+            <Text style={styles.postContent}>{item.content}</Text>
+            <View>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('CommentListPage', {id: postId})
@@ -325,7 +313,7 @@ const MainPost = ({item, navigation}: any) => {
             {itemData.data === null ? (
               <View style={{flexDirection: 'row', marginTop: 15}}></View>
             ) : (
-              <View style={{flexDirection: 'row', marginTop: 15}}>
+              <View style={styles.commentContainer}>
                 <Image
                   source={{
                     uri: itemData.data.userId.profileImage.substring(
@@ -335,16 +323,14 @@ const MainPost = ({item, navigation}: any) => {
                   }}
                   style={styles.cmtUserImg}
                 />
-                <View style={{marginTop: -5}}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: 15,
-                      fontFamily: 'NanumSquareB',
-                    }}>
+                <View style={styles.commentBox}>
+                  <Text style={styles.commentUserId}>
                     {itemData.data.userId.userId}
                   </Text>
-                  <Text style={{fontFamily: 'NanumSquareR'}}>
+                  <Text
+                    numberOfLines={3}
+                    ellipsizeMode="tail"
+                    style={styles.commentContent}>
                     {itemData.data.content}
                   </Text>
                 </View>
@@ -361,10 +347,9 @@ const MainPost = ({item, navigation}: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 10,
+    marginHorizontal: 20,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'flex-start',
   },
   userInfo: {
     flexDirection: 'row',
@@ -377,7 +362,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 10,
     marginRight: 10,
-    marginLeft: 10,
   },
   pickImg: {
     alignSelf: 'center',
@@ -391,7 +375,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 10,
     marginRight: 10,
-    marginLeft: 10,
   },
   line: {
     flex: 1,
@@ -400,6 +383,39 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#c0c0c0',
     marginVertical: 15,
+  },
+  likeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 5,
+  },
+  likeText: {
+    color: '#909090',
+    marginLeft: 5,
+    fontFamily: 'NanumSquareR',
+  },
+  postContent: {
+    fontSize: 16,
+    marginTop: 10,
+    margin: 10,
+    fontFamily: 'NanumSquareR',
+  },
+  commentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 15,
+    alignItems: 'flex-start',
+  },
+  commentBox: {
+    flex: 1,
+  },
+  commentUserId: {
+    fontSize: 16,
+    fontFamily: 'NanumSquareB',
+    marginBottom: 3,
+  },
+  commentContent: {
+    fontFamily: 'NanumSquareR',
   },
 });
 
