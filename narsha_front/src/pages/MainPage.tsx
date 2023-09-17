@@ -87,15 +87,23 @@ const MainScreen = ({navigation}) => {
     }
   };
 
-  const [postId, setpostId] = useState(0);
-
   const mainPostQuery = useQuery({
     queryKey: ['main-posting-list'],
     queryFn: getPostingList,
   });
 
+  useEffect(() => {
+    // 데이터 업데이트 후 잠시 대기
+    if (!mainPostQuery.isLoading) {
+      setTimeout(() => {
+        // 데이터를 표시하는 코드
+      }, 100); // 100ms 딜레이 예시
+    }
+  }, [mainPostQuery.data]);
+
   const _RenderItem = useCallback(({item}: any) => {
-    return <MainPost item={item} navigation={navigation} />;
+    const keyId = item.postId; 
+    return <MainPost key={keyId} item={item} navigation={navigation}/>;
   }, []);
 
   return (

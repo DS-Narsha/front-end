@@ -8,13 +8,16 @@ import {ScrollView} from 'react-native-gesture-handler';
 import userImg from '../../assets/user-image.png';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
+import { CommonActions } from '@react-navigation/native';
+import FriendStack from '../../components/navigation/FriendStack';
+
 
 type UserData = {
   groupCode: string;
 };
 
 //@ts-ignore
-export default function FriendList({navigation}) {
+export default function FriendList({navigation}: any) {
   const queryClient = useQueryClient();
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -44,6 +47,59 @@ export default function FriendList({navigation}) {
     queryFn: getFriendsList,
   });
 
+  const moveToFriendStack = (userId: any) => {
+    console.log("스택 존");
+    console.log(userId);
+    
+
+    // navigation.dispatch(
+    //   CommonActions.navigate({
+    //     name: 'FriendStack', 
+    //     params: {
+    //       screen: 'FriendPage',
+    //       friendId: userId,
+    //     },
+    //   })
+    // );
+
+    // navigation.navigate('MyPageStack', {
+    //   screen: 'FriendStack',
+    //   params: {
+    //     screen: 'FriendPage', // 이동하려는 스크린 이름
+    //     params: {
+    //       friendId: userId, // 스크린에 전달할 매개 변수
+    //     },
+    //   },
+    // });
+    navigation.navigate('FriendStack', {
+      screen: 'FriendPage',
+      params: {
+        friendId: userId,
+      },
+    });
+    // navigation.reset({
+    //   routes: [{name: 'FriendStack'}],
+    // });
+    // navigation.dispatch(
+    //   CommonActions.navigate({
+    //     name: 'FriendPage',
+    //     params: {
+    //       screen: 'FriendPage',
+    //       userId: userId,
+    //     },
+    //   }));
+    navigation.navigate('FriendStack', {
+      friendId: String(userId),
+    });
+    // navigation.navigate('FriendPage');
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{name: 'FriendPage'}],
+    //   }),
+    // );
+  };
+
   return (
     <View style={{height: '100%'}}>
       <View style={styles.ds_container}>
@@ -68,7 +124,8 @@ export default function FriendList({navigation}) {
                   renderItem={({item}) => {
                     const {userId, nikname, profileImage} = item;
                     return (
-                      <TouchableOpacity style={styles.container}>
+                      <TouchableOpacity style={styles.container}
+                      onPress={() => moveToFriendStack(userId)}>
                         <Image
                           source={profileImage ? {uri: profileImage} : userImg}
                           style={styles.image}

@@ -51,8 +51,6 @@ export default function BadgeList({route, navigation}) {
     queryFn: getBadgeList,
   });
 
-  
-
   // get Achievement
   const ac = store.getState().achieve
   const dispatch = useDispatch();
@@ -194,35 +192,29 @@ export default function BadgeList({route, navigation}) {
     console.log(ac)
   }, [])
 
-
-  const _RenderItem = useCallback(({item, index}: any) => {
+  const _RenderItem = ({item, index}: any) => {
     // console.log(item.title);
     return (
       <View>
-        {!achieveQuery.isLoading && achieveQuery.data && (
-          <>
-            <SingleBadge
-              badge={
-                isCompletefunc(achieveQuery.data.data, index)
-                  ? badgeSources[index]
-                  : require('../../assets/badge/badge-none.png')
-              }
-              content={AchieveData[index]}
-              progress={stringToArray(achieveQuery.data.data, index)}
-            />
-          </>
-        )}
+        <SingleBadge
+          badge={
+            isCompletefunc(item)
+              ? badgeSources[index]
+              : require('../../assets/badge/badge-none.png')
+          }
+          content={AchieveData[index]}
+          progress={item}
+        />
       </View>
     );
-  }, []);
+  };
 
-  const isCompletefunc = (data: any, index: number) => {
-    const badgeArray = data.substring(1, data.length - 1).split(', ');
-    if (badgeArray[index] === 'false') return false;
+  const isCompletefunc = (data: any) => {
+    if (data === 'false') return false;
     else return true;
   };
 
-  const stringToArray = (data: any, index: number) => {
+  const stringToArray = (data: any) => {
     const badgeArray = data.substring(1, data.length - 1).split(', ');
 
     return badgeArray;
@@ -230,41 +222,46 @@ export default function BadgeList({route, navigation}) {
 
   return (
     <View style={styles.container}>
-      {!achieveQuery.isLoading && achieveQuery.data && (
-        <>
-          <View style={styles.ds_container}>
-            <Image
-              style={styles.ds_image}
-              source={require('../../assets//graphic/applogo.png')}
-            />
-            <Text
-              style={
-                styles.ds_text
-              }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요? 여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
-          </View>
-          <View
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignSelf: 'center',
-            }}>
-            <FlatList
-              data={AchieveData}
-              renderItem={_RenderItem}
-              key={'#'}
-              keyExtractor={(item, index) => '#' + index.toString()}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingBottom: 100,
-                marginHorizontal: 20,
-                flexGrow: 0.5,
-                justifyContent: 'flex-start',
-                alignSelf: 'flex-start',
-              }}
-              numColumns={3}
-            />
-          </View>
-        </>
+      {!achieveQuery.isLoading ? (
+        achieveQuery.data && (
+          <>
+            <View style={styles.ds_container}>
+              <Image
+                style={styles.ds_image}
+                source={require('../../assets//graphic/applogo.png')}
+              />
+              <Text
+                style={
+                  styles.ds_text
+                }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요? 여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}>
+              <FlatList
+                data={stringToArray(achieveQuery.data.data)}
+                renderItem={_RenderItem}
+                key={'#'}
+                keyExtractor={(item, index) => '#' + index.toString()}
+                showsVerticalScrollIndicator={false}
+                initialNumToRender={10}
+                contentContainerStyle={{
+                  paddingBottom: 100,
+                  marginHorizontal: 20,
+                  flexGrow: 0.5,
+                  justifyContent: 'flex-start',
+                  alignSelf: 'flex-start',
+                }}
+                numColumns={3}
+              />
+            </View>
+          </>
+        )
+      ) : (
+        <Text>뱃지 데이터를 불러오는 중이에요..</Text>
       )}
     </View>
   );
