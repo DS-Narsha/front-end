@@ -231,7 +231,7 @@ const WritePage = ({route, navigation}) => {
 
   // achieve mutate //
   // uploading post
-  const updateAchieve = async () => {
+  const updateWriteAchieve = async () => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
@@ -262,7 +262,7 @@ const WritePage = ({route, navigation}) => {
 
   // useMutation: post
   const AchieveMutateFunc = useMutation(['update-badge'], {
-    mutationFn: () => (updateAchieve()),
+    mutationFn: () => (updateWriteAchieve()),
     onMutate: mutateAchieve,
     onError: (error, variable, rollback) => {
       if (rollback) rollback();

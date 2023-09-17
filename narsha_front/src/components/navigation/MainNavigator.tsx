@@ -121,7 +121,7 @@ const MainNavigator = ({route}) => {
     makeTime();
   }, [timeQuery.data]);
 
-  return !bool ? (
+  return bool ? (
     <Tab.Navigator
       initialRouteName="MainStack"
       screenOptions={({route}) => ({
