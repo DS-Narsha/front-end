@@ -5,12 +5,11 @@ import Arrow from '../../assets/arrow-left.svg';
 import SingleFriend from '../../components/SingleFriend';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {ScrollView} from 'react-native-gesture-handler';
-import userImg from '../../assets/user-image.png';
+import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import FriendStack from '../../components/navigation/FriendStack';
-
 
 type UserData = {
   groupCode: string;
@@ -48,13 +47,12 @@ export default function FriendList({navigation}: any) {
   });
 
   const moveToFriendStack = (userId: any) => {
-    console.log("스택 존");
+    console.log('스택 존');
     console.log(userId);
-    
 
     // navigation.dispatch(
     //   CommonActions.navigate({
-    //     name: 'FriendStack', 
+    //     name: 'FriendStack',
     //     params: {
     //       screen: 'FriendPage',
     //       friendId: userId,
@@ -124,10 +122,13 @@ export default function FriendList({navigation}: any) {
                   renderItem={({item}) => {
                     const {userId, nikname, profileImage} = item;
                     return (
-                      <TouchableOpacity style={styles.container}
-                      onPress={() => moveToFriendStack(userId)}>
+                      <TouchableOpacity
+                        style={styles.container}
+                        onPress={() => moveToFriendStack(userId)}>
                         <Image
-                          source={profileImage ? {uri: profileImage} : userImg}
+                          source={
+                            profileImage ? {uri: profileImage} : basicProfile
+                          }
                           style={styles.image}
                         />
                         <View style={styles.item}>

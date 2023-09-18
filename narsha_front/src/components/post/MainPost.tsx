@@ -7,7 +7,7 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import userImg from '../../assets/user-image.png';
+import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import images from '../../assets/images.jpeg';
 import Chat from '../../assets/chat.svg';
 import heartDesel from '../../assets/heart-desel.png';
@@ -224,7 +224,7 @@ const MainPost = ({item, navigation}: any) => {
                 source={
                   item.user.profileImage
                     ? {uri: item.user.profileImage}
-                    : userImg
+                    : basicProfile
                 }
                 style={styles.userImg}
               />
