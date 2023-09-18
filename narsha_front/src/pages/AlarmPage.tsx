@@ -172,12 +172,17 @@ const AlarmPage = ({navigation}) => {
           </Text>
         </View>
       </View>
-
-      <FlatList
-        data={alarmData}
-        renderItem={renderAlarmItem}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      {alarmData.length !== 0 ? (
+        <FlatList
+          data={alarmData}
+          renderItem={renderAlarmItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      ) : (
+        <View style={styles.nonPostContainer}>
+          <Text>~ 아직 다른 친구들이 올린 게시글이 없어요~</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -186,6 +191,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
     flex: 1,
+  },
+  nonPostContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
   },
   ds_container: {
     flexDirection: 'row',
