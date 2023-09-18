@@ -40,6 +40,8 @@ export default function PostDetail({route, navigation}) {
   const queryClient = useQueryClient();
   const [modalVisible, setModalVisible] = useState(false);
   const [commentContent, setCommentContent] = useState('');
+  const [profileImage, setProfileImage] = useState('');
+  const [userProfileImage, setUserProfileImage] = useState('');
 
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -77,8 +79,11 @@ export default function PostDetail({route, navigation}) {
           },
         },
       );
-      const json = await res.json();
-      return json;
+      const data = await res.json();
+      if (res.ok) {
+        setProfileImage(data.data.writer.profileImage);
+        return data;
+      } else throw new Error(data.message);
     } catch (err) {
       console.log(err);
     }
@@ -143,6 +148,28 @@ export default function PostDetail({route, navigation}) {
       );
       const json = await res.json();
       return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // get profile
+  const getProfileDetail = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const data = await res.json();
+      if (data.status == 200) {
+        setUserProfileImage(data.data.profileImage);
+        return data;
+      } else throw new Error(data.message);
     } catch (err) {
       console.log(err);
     }
@@ -242,6 +269,11 @@ export default function PostDetail({route, navigation}) {
   const checkLikeQuery = useQuery({
     queryKey: ['check-like'],
     queryFn: getLike,
+  });
+
+  const profileQuery = useQuery({
+    queryKey: ['profile-detail'],
+    queryFn: getProfileDetail,
   });
 
   const uploadLike = async () => {
@@ -373,10 +405,11 @@ export default function PostDetail({route, navigation}) {
           <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.userInfo}>
-                <Image
-                  source={{uri: postQuery.data.data.writer.profileImage}}
-                  style={styles.userImg}
-                />
+                {profileImage !== '' && profileImage ? (
+                  <Image source={{uri: profileImage}} style={styles.userImg} />
+                ) : (
+                  <Image source={basicProfile} style={styles.userImg} />
+                )}
                 <Text
                   style={{
                     fontWeight: '600',
@@ -575,10 +608,14 @@ export default function PostDetail({route, navigation}) {
             </Modal>
 
             <View style={styles.inputBody}>
-              <Image
-                source={{uri: postQuery.data.data.writer.profileImage}}
-                style={styles.cmtUserImg3}
-              />
+              {userProfileImage !== '' && userProfileImage ? (
+                <Image
+                  source={{uri: userProfileImage}}
+                  style={styles.cmtUserImg3}
+                />
+              ) : (
+                <Image source={basicProfile} style={styles.cmtUserImg3} />
+              )}
               <TextInput
                 onChangeText={(text: React.SetStateAction<string>) =>
                   setCommentContent(text)
