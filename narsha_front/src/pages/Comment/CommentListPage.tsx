@@ -20,6 +20,8 @@ import Loading from './Loading';
 import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import {useNavigationState} from '@react-navigation/native';
 import Config from 'react-native-config';
+import store, { turn } from '../../../Achievement'
+import { useDispatch } from "react-redux";
 
 // 댓글 목록 페이지
 
@@ -136,6 +138,9 @@ const CommentListPage = ({route, navigation}) => {
     }
   };
 
+  const ac = store.getState().achieve
+  const dispatch = useDispatch();
+
   const handleCommentSubmit = async () => {
     try {
       // setLoadingModalVisible(true);
@@ -147,11 +152,39 @@ const CommentListPage = ({route, navigation}) => {
       // queryClient.invalidateQueries(['comments']);
 
       // setCommentContent('');
+      !(ac.includes(3))? handleCmtAchi():null;
+
     } catch (error) {
       Alert.alert('오류');
 
       setModalVisible(false);
     }
+  };
+
+  // update comment achievement
+  const updateCmtAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${3}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleCmtAchi = async () => {
+    try {
+      dispatch(turn(3));
+      await updateCmtAchi.mutateAsync();
+    } catch (error) {}
   };
 
   const textFilterQuery = useQuery({

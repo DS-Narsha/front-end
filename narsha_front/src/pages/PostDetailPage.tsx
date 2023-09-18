@@ -121,8 +121,6 @@ export default function PostDetail({route, navigation}) {
         }),
       });
       const json = await res.json();
-      console.log("like"+ac)
-      console.log("done")
       return json;
     } catch (err) {
       console.log(err);
@@ -211,14 +209,13 @@ export default function PostDetail({route, navigation}) {
     try {
       //setLoadingModalVisible(true);
       await commentMutation.mutateAsync();
-      !(ac.include(3))? await updateCmtAchi.mutateAsync():null
 
       // setLoadingModalVisible(false);
       setModalVisible(false);
       queryClient.invalidateQueries(['comments']);
 
       setCommentContent('');
-
+      !(ac.includes(3))? handleCmtAchi():null;
     } catch (error) {
       Alert.alert('오류');
 
@@ -248,11 +245,11 @@ export default function PostDetail({route, navigation}) {
   const uploadLike = async () => {
     try {
       const data = await createLike.mutateAsync();
-      !(ac.include(2))? await updateLikeAchi.mutateAsync():null;
 
       if (data.status === 200) {
         checkLikeQuery.refetch();
         queryClient.invalidateQueries(['likes']);
+        !(ac.includes(2))?handleLikeAchi():null;
         // likeQuery.refetch(); // refetch
         //await countLike.mutateAsync();
       } else {
@@ -327,7 +324,6 @@ export default function PostDetail({route, navigation}) {
       );
 
       const json = await res.json();
-      dispatch(turn(2));
       return json;
     } catch (err) {
       console.log(err);
@@ -347,13 +343,25 @@ export default function PostDetail({route, navigation}) {
       );
 
       const json = await res.json();
-      dispatch(turn(3));
       return json;
     } catch (err) {
       console.log(err);
     }
   });
-  
+
+  const handleLikeAchi = async () => {
+    try {
+      dispatch(turn(2));
+      await updateLikeAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  const handleCmtAchi = async () => {
+    try {
+      dispatch(turn(3));
+      await updateCmtAchi.mutateAsync();
+    } catch (error) {}
+  };
 
   return (
     <View>
