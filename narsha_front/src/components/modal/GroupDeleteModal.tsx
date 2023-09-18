@@ -63,7 +63,7 @@ export default function GroupCodeModal({navigation}: any) {
       <> */}
       <View style={styles.container}>
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+    backgroundColor: '#00000044',
   },
   modalView: {
     margin: 20,

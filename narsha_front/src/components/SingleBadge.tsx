@@ -17,7 +17,7 @@ const SingleBadge = props => {
   return (
     <View>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
-    fontFamily: 'NanumSquareR'
+    fontFamily: 'NanumSquareR',
   },
   container: {
     margin: 10,
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '200',
     color: '#000000',
-    fontFamily: 'NanumSquareB'
+    fontFamily: 'NanumSquareB',
   },
 });
 

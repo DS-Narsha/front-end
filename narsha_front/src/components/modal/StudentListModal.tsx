@@ -1,8 +1,15 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View, ImageBackground} from 'react-native';
+import {
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  ImageBackground,
+} from 'react-native';
 
-
-export default function StudentListModal({ item }: any) {
+export default function StudentListModal({item}: any) {
   const [modalVisible, setModalVisible] = useState(false);
   // const length = item.profileImage.length;
   // const profileImage = item.profileImage.substring(0,length);
@@ -11,7 +18,7 @@ export default function StudentListModal({ item }: any) {
   return (
     <View style={styles.container}>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
@@ -55,11 +62,19 @@ export default function StudentListModal({ item }: any) {
         <View style={styles.studentContentContainer}>
           <View>
             <ImageBackground
-                  source={item.profileImage !== null
-                    ? {uri: item.profileImage.substring(0,item.profileImage.length)}
-                    : require('../../assets/graphic/basic-profile.jpg')}
-                  style={[styles.img]}
-                  imageStyle={{ borderRadius: 10 }} />
+              source={
+                item.profileImage !== null
+                  ? {
+                      uri: item.profileImage.substring(
+                        0,
+                        item.profileImage.length,
+                      ),
+                    }
+                  : require('../../assets/graphic/basic-profile.jpg')
+              }
+              style={[styles.img]}
+              imageStyle={{borderRadius: 10}}
+            />
           </View>
           <View>
             <View style={styles.textcontainer}>
@@ -84,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+    backgroundColor: '#00000044',
   },
   modalView: {
     margin: 20,
