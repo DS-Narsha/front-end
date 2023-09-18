@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
   commentItem: {
     flexDirection: 'row',
     marginBottom: 5,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     padding: 10,
   },
   commentImage: {
