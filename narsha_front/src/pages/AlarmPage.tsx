@@ -180,7 +180,7 @@ const AlarmPage = ({navigation}) => {
         />
       ) : (
         <View style={styles.nonPostContainer}>
-          <Text>~ 아직 다른 친구들이 올린 게시글이 없어요~</Text>
+          <Text>~ 아직 알림이 없어요 ~</Text>
         </View>
       )}
     </View>
