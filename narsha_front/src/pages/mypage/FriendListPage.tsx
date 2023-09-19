@@ -49,53 +49,18 @@ export default function FriendList({navigation}: any) {
   const moveToFriendStack = (userId: any) => {
     console.log('스택 존');
     console.log(userId);
+    const friendId = userId.toString();
 
-    // navigation.dispatch(
-    //   CommonActions.navigate({
-    //     name: 'FriendStack',
-    //     params: {
-    //       screen: 'FriendPage',
-    //       friendId: userId,
-    //     },
-    //   })
-    // );
-
-    // navigation.navigate('MyPageStack', {
-    //   screen: 'FriendStack',
-    //   params: {
-    //     screen: 'FriendPage', // 이동하려는 스크린 이름
-    //     params: {
-    //       friendId: userId, // 스크린에 전달할 매개 변수
-    //     },
-    //   },
-    // });
     navigation.navigate('FriendStack', {
       screen: 'FriendPage',
       params: {
-        friendId: userId,
+        friendId: friendId,
       },
     });
-    // navigation.reset({
-    //   routes: [{name: 'FriendStack'}],
+
+    // navigation.navigate('FriendStack', {
+    //   friendId: String(userId),
     // });
-    // navigation.dispatch(
-    //   CommonActions.navigate({
-    //     name: 'FriendPage',
-    //     params: {
-    //       screen: 'FriendPage',
-    //       userId: userId,
-    //     },
-    //   }));
-    navigation.navigate('FriendStack', {
-      friendId: String(userId),
-    });
-    // navigation.navigate('FriendPage');
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [{name: 'FriendPage'}],
-    //   }),
-    // );
   };
 
   return (

@@ -46,10 +46,10 @@ export default function App() {
     const fcmToken = await messaging().getToken();
     console.log('[FCM Token] ', fcmToken);
   };
-  
+
   const foregroundListener = useCallback(() => {
     messaging().onMessage(async message => {
-      console.log(message)
+      console.log(message);
       // if (message.notification) {
       //   console.log(message);
       //   pushNoti.displayNoti(message);

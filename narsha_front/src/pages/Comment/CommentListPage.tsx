@@ -11,6 +11,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import BackSvg from '../../assets/back.svg';
 import CommentSendSvg from '../../assets/comment-send.svg';
@@ -20,7 +21,7 @@ import Loading from './Loading';
 import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import {useNavigationState} from '@react-navigation/native';
 import Config from 'react-native-config';
-
+import Arrow from '../../assets/text-arrow.svg';
 // 댓글 목록 페이지
 
 type Comment = {
@@ -48,7 +49,11 @@ const CommentListPage = ({route, navigation}) => {
   const queryClient = useQueryClient();
   let textFilterArray: string[] = [];
   let textIndexArray: any[] = [];
-  const [textColor, setTextColor] = useState('black');
+  let totalIndexArray: any[] = [];
+  let personalIndexArray: any[] = [];
+  let curseData: any;
+  const [replaceWord, setReplaceWord] = useState('');
+  const [replaceWordVisible, setReplaceWordVisible] = useState(false);
 
   // queryClient에서 userId와 userType을 가져오는 로직
   const {data: userData} = useQuery(['user'], () => {
@@ -130,6 +135,8 @@ const CommentListPage = ({route, navigation}) => {
       );
       const json = await res.json();
       console.log(json);
+      console.log(JSON.parse(JSON.stringify(json)));
+      
       return json;
     } catch (err) {
       console.log(err);
@@ -138,19 +145,9 @@ const CommentListPage = ({route, navigation}) => {
 
   const handleCommentSubmit = async () => {
     try {
-      // setLoadingModalVisible(true);
-      // await commentMutation.mutateAsync();
       startTextFilter();
-
-      // setLoadingModalVisible(false);
-      setModalVisible(false);
-      // queryClient.invalidateQueries(['comments']);
-
-      // setCommentContent('');
     } catch (error) {
       Alert.alert('오류');
-
-      setModalVisible(false);
     }
   };
 
@@ -160,91 +157,183 @@ const CommentListPage = ({route, navigation}) => {
     enabled: false,
   });
 
-  const colorChange = async () => {
-    // const res = commentContent.slice(0, 2) + "[color=ff3333]" + commentContent.slice(2, 5) + "[/color]" + commentContent.slice(5)
-    // setCommentContent(res);
-    setModalVisible(false);
-    const tempt = [0, 6];
-    let sentence = '';
-    let num = 0;
-    for (let i = 0; i < tempt.length; i++) {
-      sentence +=
-        commentContent.slice(num, tempt[i]) +
-        '(' +
-        commentContent.slice(tempt[i], tempt[i] + 2) +
-        ')';
-      num += tempt[i] + 2;
-
-      if (i == tempt.length - 1) {
-        sentence += commentContent.slice(tempt[i] + 2, commentContent.length);
-      }
-    }
-    setCommentContent(sentence);
-  };
-
   const startTextFilter = async () => {
     try {
       console.log(commentContent);
-      setLoadingModalVisible(true);
-      // const data = await textFilter.mutateAsync();
-      // console.log(data);
-
+      setLoadingModalVisible(true); 
       const resData = await textFilterQuery.refetch();
-      // await queryClient.invalidateQueries(['text-filtering'])
-      // await queryClient.fetchQuery(['text-filtering']);
+      setLoadingModalVisible(false);
+      
+      const status = 200;
 
+      // if (status === 200) {
       if (resData.data.status === 200) {
-        setLoadingModalVisible(false); //로딩 끝
+        const inputData =JSON.parse(resData['data']['data'])[
+          'input'
+        ];
+        console.log(inputData);
+        const resultData = JSON.parse(resData['data']['data'])[
+          'result'
+        ];
+        console.log(resultData);
+        curseData = resultData.curse;
+        console.log(curseData);
+        const totalData = resultData.total;
+        console.log(totalData);
+        const personalData = resultData.personal;
+        console.log(personalData);
 
-        // clean한 문장
-        if (resData.data.data === true || resData.data.data.trim() === 'true') {
+        let sentence = "";
+        let midSentence = "";
+        let lastSentence = "";
+        
+        //clean한 문장
+        if ( resultData === true ) {
+          setReplaceWordVisible(false);
           await commentMutation.mutateAsync();
           queryClient.invalidateQueries(['comments']);
           setCommentContent('');
         } else {
-          // bad 문장
-          console.log(resData.data.data);
-          const filteredText = resData.data.data;
-          // setFilteredText(resData.data.data);
-          console.log(filteredText);
-
-          const res = filteredText.substring(1, filteredText.length - 2);
-          const arr = res.replace(/"/g, '').split(',');
-          arr.forEach(text => {
-            textFilterArray.push(text.trim());
-          });
-
-          console.log(textFilterArray); //필터링된 단어 배열
-          for (let i = 0; i < textFilterArray.length; i++) {
-            console.log(textFilterArray[i]);
-            // textIndexArray.push(commentContent.indexOf(textFilterArray[i]));
-            const index = commentContent.indexOf(textFilterArray[i]);
-            textIndexArray.push(index);
-          }
-          console.log(textIndexArray); //인덱스
-
-          let sentence = '';
-          let num = 0;
-          for (let i = 0; i < textIndexArray.length; i++) {
-            sentence +=
-              commentContent.slice(num, textIndexArray[i]) +
-              '(' +
-              commentContent.slice(
-                textIndexArray[i],
-                textIndexArray[i] + textFilterArray[i].length,
-              ) +
-              ')';
-            num += textIndexArray[i] + textFilterArray[i].length;
-            if (i == textIndexArray.length - 1) {
-              sentence += commentContent.slice(
-                textIndexArray[i] + textFilterArray[i].length,
-                commentContent.length,
-              );
+          //bad한 문장
+          
+          // curse에 대한 처리
+          if(curseData !== null){
+            const curseKeys = Object.keys(curseData);
+            console.log(curseKeys);
+            //시작 인덱스 가져오기
+            for (let i = 0; i < curseKeys.length; i++) {
+              console.log(curseKeys[i]);
+              const index = inputData.indexOf(curseKeys[i]);
+              textIndexArray.push(index);
             }
+  
+            console.log(textIndexArray); //인덱스
+  
+            //문자열 위치에 맞게 정렬
+            const combinedArray = curseKeys.map((item, index) => ({
+              curseKeysItem: item,
+              textIndexArrayItem: textIndexArray[index]
+            }));
+            combinedArray.sort((a, b) => a.textIndexArrayItem - b.textIndexArrayItem);
+            const sortedcurseKeys = combinedArray.map(item => item.curseKeysItem);
+            const sortedtextIndexArray = combinedArray.map(item => item.textIndexArrayItem);
+  
+            
+            let num = 0;
+            for (let i = 0; i < sortedtextIndexArray.length; i++) {
+              sentence +=
+                inputData.slice(num, sortedtextIndexArray[i]) +
+                '{' +
+                inputData.slice(
+                  sortedtextIndexArray[i],
+                  sortedtextIndexArray[i] + sortedcurseKeys[i].length,
+                ) +
+                '}';
+              num += sortedtextIndexArray[i] + sortedcurseKeys[i].length;
+              if (i == sortedtextIndexArray.length - 1) {
+                sentence += inputData.slice(
+                  sortedtextIndexArray[i] + sortedcurseKeys[i].length,
+                  inputData.length,
+                );
+              }
+            }
+          } else {
+            sentence = inputData;
           }
+          if(totalData[0] !== null){
+            
+            //문장의 시작 인덱스 가져오기
+            for (let i = 0; i < totalData.length; i++) {
+              console.log(totalData[i]);
+              const index = sentence.indexOf(totalData[i]);
+              totalIndexArray.push(index);
+            }
 
-          setCommentContent(sentence);
-          setTextColor('red');
+            console.log(totalIndexArray);
+
+            //문장 배열들 정렬
+            const combinedArray = totalData.map((item, index) => ({
+              totalDataItem: item,
+              totalIndexArrayItem: totalIndexArray[index]
+            }));
+            combinedArray.sort((a, b) => a.totalIndexArrayItem - b.totalIndexArrayItem);
+            const sortedtotalData = combinedArray.map(item => item.totalDataItem);
+            const sortedtotalIndexArray = combinedArray.map(item => item.totalIndexArrayItem);
+
+            //문자 삽입
+            let num = 0;
+            for (let i = 0; i < sortedtotalIndexArray.length; i++) {
+              midSentence +=
+                sentence.slice(num, sortedtotalIndexArray[i]) +
+                '{' +
+                sentence.slice(
+                  sortedtotalIndexArray[i],
+                  sortedtotalIndexArray[i] + sortedtotalData[i].length,
+                ) +
+                '}';
+              num += sortedtotalIndexArray[i] + sortedtotalData[i].length;
+              if (i == sortedtotalIndexArray.length - 1) {
+                midSentence += sentence.slice(
+                  sortedtotalIndexArray[i] + sortedtotalData[i].length,
+                  sentence.length,
+                );
+              }
+            }
+          } else {
+            midSentence = sentence;
+          }
+          if(personalData[0] !== null){
+
+            //개인정보 시작 인덱스 가져오기
+            for (let i = 0; i < personalData.length; i++) {
+              console.log(personalData[i]);
+              const index = midSentence.indexOf(personalData[i]);
+              personalIndexArray.push(index);
+            }
+
+            console.log(personalIndexArray);
+
+            //개인정보 배열 정렬
+            const combinedArray = personalData.map((item, index) => ({
+              personalDataItem: item,
+              personalIndexArrayItem: personalIndexArray[index]
+            }));
+            combinedArray.sort((a, b) => a.personalIndexArrayItem - b.personalIndexArrayItem);
+            const sortedpersonalData = combinedArray.map(item => item.personalDataItem);
+            const sortedpersonalIndexArray = combinedArray.map(item => item.personalIndexArrayItem);
+
+            //문자 삽입
+            let num = 0;
+            for (let i = 0; i < sortedpersonalIndexArray.length; i++) {
+              lastSentence +=
+                midSentence.slice(num, sortedpersonalIndexArray[i]) +
+                '*' +
+                midSentence.slice(
+                  sortedpersonalIndexArray[i],
+                  sortedpersonalIndexArray[i] + sortedpersonalData[i].length,
+                ) +
+                '*';
+              num += sortedpersonalIndexArray[i] + sortedpersonalData[i].length;
+              if (i == sortedpersonalIndexArray.length - 1) {
+                lastSentence += midSentence.slice(
+                  sortedpersonalIndexArray[i] + sortedpersonalData[i].length,
+                  midSentence.length,
+                );
+              }
+            }
+          } else {
+            lastSentence = midSentence;
+          }
+          
+          setCommentContent(lastSentence);
+          setReplaceWord(curseData);
+          //대체단어 리스트 보이는 코드
+          if(curseData === null){
+            setReplaceWordVisible(false);
+          } else {
+            setReplaceWordVisible(true);
+          }
+          setModalVisible(true);
         }
 
         // console.log(res);
@@ -346,20 +435,20 @@ const CommentListPage = ({route, navigation}) => {
               </Text>
             </View>
             <Text style={styles.modalText}>
-              색깔로 표시된 글자를 모두 수정해야
+              기호로 감싸진 글자를 모두 수정해야
             </Text>
             <Text style={styles.modalText}>SNS에 게시글을 올릴 수 있어요.</Text>
             <Text style={styles.modalText}>여러분의 댓글을 수정해볼까요?</Text>
 
             <View style={styles.modalAlertArea}>
               <View style={styles.alertBody}>
-                <Text style={styles.red}></Text>
+                <Text style={styles.alertInfo}>*개인정보*</Text>
                 <Text style={styles.alertText}>
                   개인정보, 민간한 정보가 포함되었을 경우
                 </Text>
               </View>
               <View style={styles.alertBody}>
-                <Text style={styles.blue}></Text>
+                <Text style={styles.alertInfo}>{'{'}욕설{'}'}</Text>
                 <Text style={styles.alertText}>
                   욕설, 비속어의 말이 포함되었을 경우
                 </Text>
@@ -368,7 +457,7 @@ const CommentListPage = ({route, navigation}) => {
             <View style={styles.modalBtnArea}>
               <TouchableOpacity
                 style={[styles.button]}
-                onPress={handleCommentSubmit}>
+                onPress={() => setModalVisible(false)}>
                 <Text style={styles.textStyle}>확인</Text>
               </TouchableOpacity>
             </View>
@@ -376,8 +465,57 @@ const CommentListPage = ({route, navigation}) => {
         </View>
       </Modal>
 
-      <View></View>
-
+      <View>
+        {/* loading modal */}
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={loadingModalVisible}>
+            <View style={styles.modalCenteredView}>
+              <View style={styles.loadingModalView}>
+                <View style={styles.modalBody}>
+                  <ActivityIndicator
+                    size="large"
+                    color="#98DC63"
+                    style={styles.modalIcon}
+                  />
+                  <View style={styles.loadingModalText}>
+                    <Text style={styles.strongText}>
+                      게시글에 부적절한 내용이 있는지 확인 중이에요!
+                      {'\n'}잠시만 기다려주세요.
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Modal>
+      </View>
+      <View style={[styles.replaceWordContainer, { display: replaceWordVisible ? 'flex' : 'none' }]}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={styles.uploadContentTitle}>대체어 목록</Text>
+          {replaceWord && Object.keys(replaceWord).map((key, index) => {
+            const value = replaceWord[key as keyof typeof replaceWord];
+              if (value !== null) {
+                return (
+                  <View key={index} style={{ flexDirection: 'row', marginLeft: 25 }}>
+                    <Text style={{ color: "#FF0000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${key}`}</Text>
+                    <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
+                    <Text style={{ color: "#000000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${value}`}</Text>
+                  </View>
+                );
+              }else {
+                return (
+                  <View key={index} style={{ flexDirection: 'row', marginLeft: 25 }}>
+                    <Text style={{ color: "#FF0000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${key}`}</Text>
+                    <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
+                    <Text style={{ color: "#0000FF", fontFamily: 'NanumSquareB', marginVertical: 3}}>삭제</Text>
+                  </View>
+                );
+              }
+              // return null; // null을 반환하여 해당 항목을 건너뜁니다.
+          })}
+        </ScrollView>
+      </View>
       <View style={styles.inputBody}>
         {profileImage !== '' && profileImage ? (
           <Image source={{uri: profileImage}} style={styles.userProfileImage} />
@@ -392,7 +530,7 @@ const CommentListPage = ({route, navigation}) => {
           style={styles.input}
           placeholder={'@' + userData.userId + '로 댓글 남기기'}
         />
-        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+        <TouchableOpacity onPress={handleCommentSubmit}>
           <CommentSendSvg />
         </TouchableOpacity>
       </View>
@@ -423,11 +561,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     position: 'absolute',
   },
+  loading: {
+    width: '100%',
+    marginBottom: 60,
+    height: 60,
+    padding: 10,
+    flexDirection: 'row',
+    borderRadius: 10,
+    bottom: 0,
+    backgroundColor: '#ffffff',
+    position: 'absolute',
+  },
   input: {
     width: '80%',
     fontFamily: 'NanumSquareB',
   },
   commentContainer: {
+    backgroundColor: '#ffffff',
     height: '92%',
     marginBottom: 0,
   },
@@ -592,6 +742,78 @@ const styles = StyleSheet.create({
   coloredText: {
     fontFamily: 'NanumSquareB',
     color: '#FF0000',
+  },
+  modalBody: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    flex: 0.8,
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  modalIcon: {
+    marginRight: 15,
+  },
+  strongText: {
+    fontSize: 13,
+    fontWeight: '200',
+    color: '#000000',
+  },
+  modalCenteredView: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+  },
+  loadingModalView: {
+    display: 'flex',
+    margin: 20,
+    width: '90%',
+    height: 80,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  loadingModalText: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  alertInfo: {
+    color: 'black',
+    fontSize: 12.5,
+    marginLeft: 7,
+    paddingBottom: 5,
+    fontFamily: 'NanumSquareB',
+  },
+  uploadContentTitle: {
+    fontSize: 16,
+    color: '#61A257',
+    marginTop: 10,
+    marginBottom: 10,
+    marginHorizontal: 20,
+    fontWeight: '700',
+    fontFamily: 'NanumSquareB',
+  },
+  replaceWordContainer: {
+    backgroundColor: "#F9FAC8", 
+    left: 0, 
+    right: 0, 
+    height: 100, 
+    position: 'absolute', 
+    bottom: 60, 
+    borderTopLeftRadius:20, 
+    borderTopRightRadius: 20
   },
 });
 
