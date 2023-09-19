@@ -42,7 +42,6 @@ const SelectGroupPage = ({navigation, route}) => {
 
   const handleSelectClick = () => {
     if (selectedGroup) {
-      console.log('Selected Group:', selectedGroup.groupCode.groupName);
       // 여기에서 선택된 그룹을 사용하거나 저장하는 로직을 추가할 수 있습니다.
       navigation.navigate('MainNavigator', {selectedGroup});
     }

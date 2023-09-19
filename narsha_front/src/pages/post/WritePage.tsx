@@ -18,6 +18,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Check from '../../assets/ic-check.svg';
 import ObjectLabel from '../../data/objectLabel.json';
 import Config from 'react-native-config';
+import basicProfile from '../../assets/graphic/basic-profile.jpg';
 
 type Comment = {
   userId: {
@@ -36,46 +37,38 @@ type UserData = {
 
 //@ts-ignore
 const WritePage = ({route, navigation}) => {
-  // params data
-  const resPhoto = route.params['resPhoto']['photos'];
-  const objectDetect = JSON.parse(route.params['objectDetect']['data'])[
-    'result'
-  ];
-  const objectImgSize = JSON.parse(route.params['objectDetect']['data'])[
-    'size'
+
+  const resPhoto = JSON.parse(route.params['objectDetect']['data'])[
+    'image'
   ];
 
-  let currentPhoto = useRef(resPhoto[0]);
-  const [selPhoto, useSelPhoto] = useState(resPhoto[0]);
-  const [selIndex, useSelIndex] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // 선택된 이미지의 인덱스 상태
+  
+  // 현재 선택된 이미지의 데이터를 저장할 상태 추가
+  const [selectedImage, setSelectedImage] = useState(resPhoto[0]);
+  // 프로필 이미지
+  const [profileImage, setProfileImage] = useState('');
+
   const [content, onChangeContent] = useState('');
   const queryClient = useQueryClient();
-  // const [postId, onChangePostId] = useState();
-  let postId = 0;
-  // console.log(objectDetect);
-  // console.log(objectImgSize);
   const [clickLabel, setClickLabel] = useState(true);
 
   // modal state
   const [guideModalVisible, setGuideModalVisible] = useState(false);
   const [loadingModalVisible, setLoadingModalVisible] = useState(false);
 
-  // get query data
+  // 사용자 아이디, 그룹 코드 가져오기
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
   }) as {data: UserData};
 
-  // modal timer
-  const guideTimeout = setTimeout(() => {
-    setGuideModalVisible(false);
-  }, 3000);
-
-  // modal timer
-  // const loadingTimeout = setTimeout(() => {
-  //   setLoadingModalVisible(false);
-
-  // }, 3000);
-
+  // 이미지 선택 시 호출되는 함수
+  const handleImageSelect = (index: number) => {
+  setSelectedImage(resPhoto[index]);
+  setSelectedImageIndex(index);
+  };
+  
+  // 모달 타이머
   useEffect(() => {
     setGuideModalVisible(true);
     guideTimeout;
@@ -83,64 +76,56 @@ const WritePage = ({route, navigation}) => {
       clearTimeout(guideTimeout);
     };
   }, []);
+  // modal timer
+  const guideTimeout = setTimeout(() => {
+    setGuideModalVisible(false);
+  }, 3000);
 
-  // render item
-  const _RenderItem = useCallback(({item, index}: any) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          currentPhoto.current = item;
-          useSelPhoto(item);
-          useSelIndex(index);
-        }}>
-        <ImageBackground
-          source={{uri: item}}
-          style={[styles.img, currentPhoto.current === item && styles.selPhoto]}
-          imageStyle={{borderRadius: 10}}>
-          {currentPhoto.current === item && (
-            <Text style={styles.selPhotoText}>선택</Text>
-          )}
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }, []);
-
-  // get profile //
-  const getProfileDetail = async () => {
+  // 사용자 프로필 불러오기
+  const fetchUserProfile = async (userId: string) => {
     try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/detail?userId=${userData.userId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
+      const response = await fetch(
+        `http://${Config.HOST_NAME}/api/user/detail?userId=${userId}`,
       );
-      const json = await res.json();
-      return json;
-    } catch (err) {
-      console.log(err);
+      const data = await response.json();
+      if (response.ok) {
+        setProfileImage(data.data.profileImage);
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error('사용자 프로필을 가져오는 중 오류가 발생했습니다:', error);
     }
   };
 
-  const profileQuery = useQuery({
-    queryKey: ['profile-detail'],
-    queryFn: getProfileDetail,
-  });
+  useEffect(() => {
+    if (userData && userData.userId) {
+      fetchUserProfile(userData.userId);
+    }
+  }, [userData]);
 
-  // uploading post //
-  const uploadPost = async () => {
+  const uploadPostMutation = useMutation((formData:FormData) =>
+  fetch(`http://${Config.HOST_NAME}/api/post/upload`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: formData,
+  }).then((response) => response.json())
+  );
+
+  const handlePostUpload = async () => {
+    // fromData 만들기
     try {
       let formData = new FormData(); // from-data object
       for (let i in resPhoto) {
         formData.append(
           'images',
           resPhoto.length && {
-            uri: resPhoto[i],
-            name: resPhoto[i],
+            uri: `data:image/jpeg;base64,${resPhoto[i]}`,
+            name: `image${i}.jpg`,
             type: 'image/jpg',
-          },
+          }
         );
       }
       formData.append(
@@ -149,42 +134,31 @@ const WritePage = ({route, navigation}) => {
           groupCode: userData.groupCode,
           writer: userData.userId,
           content: content,
-        }),
+        })
       );
       formData.append('fileType', 'png');
-      const res = await fetch(`http://${Config.HOST_NAME}/api/post/upload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: formData,
-      });
-
-      const json = await res.json();
-      console.log(json);
-      return json;
+  
+      // useMutation으로 업로드 함수 실행
+      const postData = await uploadPostMutation.mutateAsync(formData);
+  
+      if(postData.status === 200) {
+      // AI 댓글 달기
+      const postId = postData.data.postId;
+      getAIComment(postId);
+      // 업적(첫 게시물) 완료
+      AchieveMutateFunc.mutate();
+      // setLoadingModalVisible(true);
+      navigation.reset({ routes: [{ name: 'MainNavigator' }] });
+      } else {
+        console.log("포스트 업로드 중 오류가 발생했습니다.")
+      }
     } catch (err) {
       console.log(err);
     }
   };
 
-  // onMutate
-  const mutatePost = async () => {
-    // get old data
-    const oldData = await queryClient.getQueryData(['posting-list']);
-    // setting datas at UI, 특정 속성 수정
-    queryClient.setQueryData(
-      ['posting-list', 'data', 'user', 'userId'],
-      userData.userId,
-    );
-    queryClient.setQueryData(['posting-list', 'data', 'content'], content);
-    queryClient.setQueryData(['posting-list', 'data', 'imageArray'], resPhoto);
-
-    // if error -> rollback
-    return () => queryClient.setQueryData(['posting-list'], oldData);
-  };
-
-  const getAIComment = async () => {
+  // AI 댓글 달기 
+  const getAIComment = async (postId: number) => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/comment/create/chat?postId=${postId}`,
@@ -202,35 +176,14 @@ const WritePage = ({route, navigation}) => {
     }
   };
 
-  const AICommentQuery = useQuery({
-    queryKey: ['AI-comment'],
-    queryFn: getAIComment,
-    enabled: false,
-  });
+  // 포스트가 업로드될 때마다 실행
+  // const AICommentQuery = useQuery({
+  //   queryKey: ['AI-comment'],
+  //   queryFn: getAIComment,
+  //   enabled: false,
+  // });
 
-  // useMutation: post
-  const {mutate} = useMutation(['profile-update'], {
-    mutationFn: () => uploadPost(),
-    onMutate: mutatePost,
-    onSuccess: data => {
-      console.log(data.data.postId);
-      // onChangePostId(data.data.postId);
-      postId = data.data.postId;
-      console.log(postId);
-      AICommentQuery.refetch();
-    },
-    onError: (error, variable, rollback) => {
-      if (rollback) rollback();
-      else console.log(error);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(['profile-detail']);
-    },
-  });
-  console.log('여기입니당' + objectDetect[selIndex]);
-
-  // achieve mutate //
-  // uploading post
+  // 업적(첫 게시물) 완료 보내기
   const updateAchieve = async () => {
     try {
       const res = await fetch(
@@ -243,7 +196,6 @@ const WritePage = ({route, navigation}) => {
       );
 
       const json = await res.json();
-      console.log(json);
       return json;
     } catch (err) {
       console.log(err);
@@ -275,7 +227,7 @@ const WritePage = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      {/* top */}
+      {/* 헤더 부분 */}
       <View style={styles.top}>
         <View style={styles.progressbox}>
           <ArrowLeft />
@@ -284,174 +236,128 @@ const WritePage = ({route, navigation}) => {
             <View style={[styles.dot, {backgroundColor: '#98DC63'}]} />
             <View style={[styles.dot, {backgroundColor: '#98DC63'}]} />
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              mutate();
-              !JSON.parse(profileQuery.data.data.badgeList)[0] &&
-                AchieveMutateFunc.mutate();
-              navigation.reset({routes: [{name: 'MainNavigator'}]});
-              setLoadingModalVisible(true);
-              // loadingTimeout;
-              // return () => {
-              //   clearTimeout(loadingTimeout);
-              // };
-            }}>
-            <SendBtn />
+          <TouchableOpacity onPress={handlePostUpload}>
+          <SendBtn />
           </TouchableOpacity>
         </View>
         <Text>글을 작성해볼까요?</Text>
       </View>
-      {!profileQuery.isLoading && (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* content */}
-          <View style={styles.contentContainer}>
-            <View style={styles.selectPhotoBox}>
-              <TouchableOpacity
-                onPress={() => setClickLabel(!clickLabel)}
-                activeOpacity={1}>
-                <ImageBackground
-                  source={{uri: currentPhoto.current}}
-                  style={styles.pickImg}
-                  imageStyle={{borderRadius: 10}}>
-                  {clickLabel &&
-                  JSON.parse(objectDetect[selIndex].length) > 2 ? (
-                    <View
-                      style={
-                        objectStyles(
-                          JSON.parse(objectDetect[selIndex]),
-                          objectImgSize[selIndex],
-                        ).objectBox
-                      }>
-                      <Text style={styles.objectText}>
-                        {
-                          ObjectLabel[
-                            JSON.parse(objectDetect[selIndex])[0]['name']
-                          ]
-                        }
-                      </Text>
-                    </View>
-                  ) : (
-                    <></>
-                  )}
-                </ImageBackground>
-              </TouchableOpacity>
-              <View style={{alignItems: 'center', marginTop: 20}}></View>
+        {/* 사진 부분 */}
+        <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{paddingTop: 10}}>
+        <View>
+        <View style={styles.largeImageContainer}>
+        <Image
+              source={{ uri: `data:image/jpeg;base64,${selectedImage}` }}
+              style={styles.largeImage}
+            />
+        </View>
+        {/* 내가 선택한 이미지 부분 */}
+        <View style={styles.uploadContentBox}>
+        <View style={{marginTop: 10}}>
+        <Text style={styles.uploadContentTitle}>내가 선택한 이미지</Text>
+        <FlatList
+        horizontal
+        data={resPhoto}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity
+            style={[
+              styles.imageContainer,
+            ]}
+            onPress={() => handleImageSelect(index)} // 이미지 클릭 시 선택된 이미지의 인덱스 업데이트
+          >
+            <Image
+              source={{ uri: `data:image/jpeg;base64,${item}` }}
+              style={styles.smallImage}
+            />
+            {index === selectedImageIndex && (
+            <View style={styles.selectedText}>
+            <Check />
             </View>
-            {/*posting container*/}
-            <ScrollView
-              style={styles.uploadContentBox}
-              showsVerticalScrollIndicator={false}>
-              <View style={{marginTop: 20}}>
-                {/*select image list box*/}
-                <Text style={styles.uploadContentTitle}>
-                  내가 선택한 이미지
-                </Text>
-                {resPhoto ? (
-                  <FlatList
-                    data={resPhoto}
-                    renderItem={_RenderItem}
-                    key={'#'}
-                    scrollEnabled={false}
-                    keyExtractor={(item, index) => '#' + index.toString()}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                      marginHorizontal: 30,
-                      flexGrow: 1,
-                      justifyContent: 'flex-start',
-                      alignSelf: 'flex-start',
-                    }}
-                    numColumns={5}
-                  />
-                ) : (
-                  <Text>이미지가 없습니다.</Text>
-                )}
-                {/* height */}
-                <View style={{height: 30}}></View>
-                {/* writing box*/}
-                <Text style={styles.uploadContentTitle}>글 작성하기</Text>
-                <View style={styles.writingBox}>
-                  <Image
-                    source={
-                      profileQuery.data.data.profileImage !== null
-                        ? {uri: profileQuery.data.data.profileImage}
-                        : require('../../assets/graphic/basic-profile.jpg')
-                    }
-                    style={styles.profile}></Image>
-                  <TextInput
-                    placeholder="여러분의 글을 작성해주세요."
-                    value={content}
-                    textAlignVertical="top"
-                    multiline={true}
-                    onChangeText={onChangeContent}
-                    style={styles.content}
-                  />
-                </View>
-              </View>
-            </ScrollView>
+            )}
+          </TouchableOpacity>
+        )}
+        />
+
+        {/* writing box*/}
+        <Text style={styles.uploadContentTitle}>글 작성하기</Text>
+          <View style={styles.writingBox}>
+          {/* 프로필 이미지 */}
+          {profileImage ? (
+            <Image
+            source={{uri: profileImage}}
+            style={styles.profile}
+            />
+            ) : (
+            <Image source={basicProfile} style={styles.profile} />
+            )}
+
+          <TextInput
+          placeholder="여러분의 글을 작성해주세요."
+          value={content}
+          textAlignVertical="top"
+          multiline={true}
+          onChangeText={onChangeContent}
+          style={styles.content}
+          />
+        </View>
+        </View>
+        </View>
+      </View>
+      </ScrollView>
+    
+
+    {/* post guide modal */}
+    <Modal
+    animationType="fade"
+    transparent={true}
+    visible={guideModalVisible}>
+    <View style={styles.centeredView}>
+    <View style={styles.modalView}>
+    <View style={styles.modalBody}>
+    <Check style={styles.modalIcon} />
+    <View style={styles.modalText}>
+    <Text style={styles.strongText}>
+      이미지에서 여러분의 민감한 정보들을 가리는 과정이
+      끝났어요! {'\n'}어떤 이미지가 가려졌는지 확인해볼까요?
+    </Text>
+    </View>
+    </View>
+    </View>
+    </View>
+    </Modal>  
+
+    {/* loading modal */}
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={loadingModalVisible}>
+      <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+      <View style={styles.modalBody}>
+        <ActivityIndicator
+        size="large"
+        color="#98DC63"
+        style={styles.modalIcon}
+        />
+        <View style={styles.modalText}>
+          <Text style={styles.strongText}>
+              게시글에 부적절한 내용이 있는지 확인 중이에요!
+              {'\n'}잠시만 기다려주세요.
+          </Text>
           </View>
-          {/* post guide modal */}
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={guideModalVisible}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <View style={styles.modalBody}>
-                  <Check style={styles.modalIcon} />
-                  <View style={styles.modalText}>
-                    <Text style={styles.strongText}>
-                      이미지에서 여러분의 민감한 정보들을 가리는 과정이
-                      끝났어요! {'\n'}어떤 이미지가 가려졌는지 확인해볼까요?
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </Modal>
-          {/* loading modal */}
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={loadingModalVisible}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <View style={styles.modalBody}>
-                  <ActivityIndicator
-                    size="large"
-                    color="#98DC63"
-                    style={styles.modalIcon}
-                  />
-                  <View style={styles.modalText}>
-                    <Text style={styles.strongText}>
-                      게시글에 부적절한 내용이 있는지 확인 중이에요!
-                      {'\n'}잠시만 기다려주세요.
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </Modal>
-        </ScrollView>
-      )}
+        </View>
+        </View>
+        </View>
+    </Modal>
+
+
+
     </View>
   );
 };
-
-//@ts-ignore
-const objectStyles = (detect, size) =>
-  StyleSheet.create({
-    objectBox: {
-      display: 'flex',
-      position: 'absolute',
-      top: (detect[0]['xmin'] + detect[0]['xmax']) / 2 / (size[0] / 300),
-      left: (detect[0]['ymin'] + detect[0]['ymax']) / 2 / (size[1] / 300),
-      backgroundColor: '#AADF98a1',
-      padding: 5,
-      borderRadius: 10,
-      borderColor: 'white',
-      borderWidth: 1,
-    },
-  });
 
 const styles = StyleSheet.create({
   container: {
@@ -492,18 +398,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     margin: 20,
   },
-  pickImg: {
-    height: 300,
-    width: 300,
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    backgroundColor: '#C0C0C0',
-    marginHorizontal: 10,
-    marginVertical: 10,
-  },
-  contentContainer: {
-    flex: 1,
-  },
   uploadContentBox: {
     flex: 1,
     backgroundColor: '#ffffff',
@@ -514,12 +408,61 @@ const styles = StyleSheet.create({
       height: -10,
     },
     elevation: 10,
+    padding: 7
   },
-  writingBox: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingHorizontal: 18,
-    marginBottom: 10,
+  uploadContentTitle: {
+    fontSize: 16,
+    color: '#61A257',
+    paddingBottom: 8,
+    marginHorizontal: 15,
+    fontWeight: '700',
+    fontFamily: 'NanumSquareR',
+  },
+  largeImageContainer: {
+    // 선택한 이미지 크게 보여줄 컨테이너 스타일
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  largeImage: {
+    // 큰 이미지 스타일
+    width: '80%',
+    aspectRatio: 1,
+    resizeMode: 'cover',
+    borderRadius: 10,
+  },
+  imageContainer: {
+    width: 70, // 이미지의 가로 크기를 조절합니다.
+    height: 70, // 이미지의 세로 크기를 조절합니다.
+    marginHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 20, // 이미지 끝을 둥글게 만듭니다.
+    backgroundColor: '#C0C0C0',
+  },
+  smallImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10, // 이미지 끝을 둥글게 만듭니다.
+    resizeMode: 'cover',
+  },
+  selectedText: {
+    position: 'absolute',
+    top: '95%', // 수직 정렬을 위해 top을 50%로 설정
+    left: '97%', // 수평 정렬을 위해 left를 50%로 설정
+    transform: [{ translateX: -50 }, { translateY: -50 }], // 수평, 수직 정렬을 가운데로 조정
+    padding: 5,
+    borderRadius: 5,
+    fontFamily: 'NanumSquareR',
+  },
+  content: {
+    flex: 1,
+    height: 140,
+    borderRadius: 20,
+    backgroundColor: '#EFEFEF',
+    padding: 10,
+    marginBottom: 15,
+    fontFamily: 'NanumSquareR',
   },
   profile: {
     width: 45,
@@ -528,56 +471,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#C0C0C0',
     marginRight: 13,
   },
-  content: {
-    flex: 1,
-    height: 200,
-    borderRadius: 20,
-    backgroundColor: '#EFEFEF',
-    padding: 10,
-  },
-  gridView: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingTop: 7,
-    justifyContent: 'center',
-  },
-  img: {
-    backgroundColor: '#C0C0C0',
-    borderRadius: 10,
-    width: 55,
-    height: 55,
-    margin: 5,
-    resizeMode: 'cover',
-  },
-  selectPhotoBox: {
+  writingBox: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingHorizontal: 18,
+    
   },
-  selPhotoText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: '#000000',
-  },
-  selPhoto: {
-    opacity: 0.7,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    elevation: 5,
-  },
-  uploadContentTitle: {
-    fontSize: 16,
-    color: '#61A257',
-    marginBottom: 10,
-    marginHorizontal: 15,
-    fontWeight: '700',
-  },
-
   // modal
   centeredView: {
     flex: 1,
@@ -636,6 +535,7 @@ const styles = StyleSheet.create({
   modalText: {
     flexDirection: 'row',
     flex: 1,
+    fontFamily: 'NanumSquareR',
   },
   btn: {
     backgroundColor: '#AADF98',
@@ -649,11 +549,13 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',
+    fontFamily: 'NanumSquareR',
   },
   strongText: {
     fontSize: 13,
     fontWeight: '200',
     color: '#000000',
+    fontFamily: 'NanumSquareR',
   },
   modalContent: {
     marginLeft: 10,

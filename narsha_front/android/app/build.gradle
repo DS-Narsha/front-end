@@ -14,6 +14,7 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
 
 
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
 
 import com.android.build.OutputFile
 
@@ -190,8 +191,8 @@ dependencies {
     implementation project(':@react-native-camera-roll_camera-roll')
 
     // firebase
-    implementation 'com.google.firebase:firebase-messaging:23.2.1'
-    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation platform('com.google.firebase:firebase-bom:31.1.0')
     implementation 'com.google.firebase:firebase-analytics'
 
     // config
@@ -211,5 +212,4 @@ dependencies {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services' 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

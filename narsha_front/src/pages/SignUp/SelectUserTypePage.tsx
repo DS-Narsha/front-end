@@ -14,7 +14,6 @@ import StudentSvg from '../../assets/student.svg';
 
 // 선생님/학생 사용자 타입을 선택하는 페이지
 
-
 //@ts-ignore
 const UserPage = ({navigation}) => {
   const [modalTVisible, setModalTVisible] = useState(false);

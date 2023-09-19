@@ -1662,18 +1662,32 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
   "version" "0.1.11"
 
+<<<<<<< HEAD
 "@react-native-firebase/app@^18.3.1", "@react-native-firebase/app@18.3.2":
   "integrity" "sha512-2yX1PtpcVQirLDfnZiBU44vRr4jeIuvAf2oAAaf+/zBcDApU5cwPfyFoCCANfqR8W3w8zs9h9UyhRYdnksM4sQ=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.3.2.tgz"
   "version" "18.3.2"
+=======
+"@react-native-firebase/app@^18.4.0", "@react-native-firebase/app@18.4.0":
+  version "18.4.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.4.0.tgz"
+  integrity sha512-FPHwb4O5Bug5Q5WOfSPq38LHGrTRBIThNvs7Fl7OfotGpMbWKMCfwc5RN7F+PRRDeHyk2WDYvoH905zla1pPcw==
+>>>>>>> pyn
   dependencies:
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
 
+<<<<<<< HEAD
 "@react-native-firebase/messaging@^18.3.2":
   "integrity" "sha512-An8cRsYjpUdE5S9NU1d/8+pc8mGxqsPEB7yGbRps2JzaJsII8I63LdT/j2P2QYMx4a3RVQN4Nauw4Y07rrVVhA=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.3.2.tgz"
   "version" "18.3.2"
+=======
+"@react-native-firebase/messaging@^18.4.0":
+  version "18.4.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.4.0.tgz"
+  integrity sha512-oVxOHRmLrdEXBVHgnrTkzWFiL/SbXi9oaXf/kYuqgcMGkupIhBNpPxvnqq4Z1QO0d9huZp0KHDeTgNEwA5hq1Q==
+>>>>>>> pyn
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="

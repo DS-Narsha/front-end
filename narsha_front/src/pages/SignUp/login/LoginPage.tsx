@@ -22,7 +22,6 @@ const LoginPage = ({navigation}) => {
 
   // DB에 저장된 유효한 사용자인지 확인하기 위한 정보 넘기기
   const loginMutation = useMutation(async () => {
-    console.log(Config.HOST_NAME);
     const response = await fetch(`http://${Config.HOST_NAME}/api/user/login`, {
       method: 'POST',
       headers: {

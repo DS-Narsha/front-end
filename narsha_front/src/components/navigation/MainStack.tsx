@@ -38,7 +38,7 @@ export default function MainStack({route, navigation}) {
   useEffect(() => {
     // hide navigator
     const routeName = getFocusedRouteNameFromRoute(route);
-    console.log(routeName);
+    // console.log(routeName);
     switch (routeName) {
       case 'GuidePage':
         navigation.setOptions({tabBarStyle: {display: 'none'}});

@@ -79,14 +79,11 @@ const GroupPage = ({navigation, route}) => {
         const data = await groupMutation.mutateAsync();
         if (data.status === 200) {
           const userId = data.data;
-          console.log(userId);
           navigation.navigate('SignUp', {userType: 'teacher', userId});
         } else {
-          console.log(data.message);
           Alert.alert('그룹 생성 실패', data.message);
         }
       } catch (error) {
-        console.log(error);
         Alert.alert('오류', '그룹 생성 중 오류가 발생했습니다.');
       }
     } else {

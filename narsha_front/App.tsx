@@ -16,10 +16,12 @@ import {
 } from 'react-native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging, {
-  FirebaseMessagingTypes,
-} from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import pushNoti from './src/utils/pushNoti';
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('[Background Remote Message]', remoteMessage);
+});
 
 const isLoggedIn = false;
 
@@ -38,13 +40,20 @@ export const getData = async (key: string) => {
     console.log(e.message);
   }
 };
+
 export default function App() {
+  const getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    console.log('[FCM Token] ', fcmToken);
+  };
+  
   const foregroundListener = useCallback(() => {
     messaging().onMessage(async message => {
-      if (message.notification) {
-        console.log(message);
-        pushNoti.displayNoti(message);
-      }
+      console.log(message)
+      // if (message.notification) {
+      //   console.log(message);
+      //   pushNoti.displayNoti(message);
+      // }
     });
   }, []);
 
