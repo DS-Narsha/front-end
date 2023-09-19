@@ -342,12 +342,16 @@ const MainPost = ({item, navigation}: any) => {
             ) : (
               <View style={styles.commentContainer}>
                 <Image
-                  source={{
-                    uri: itemData.data.userId.profileImage.substring(
-                      0,
-                      itemData.data.userId.profileImage.length,
-                    ),
-                  }}
+                  source={
+                    itemData.data.userId.profileImage
+                      ? {
+                          uri: itemData.data.userId.profileImage.substring(
+                            0,
+                            itemData.data.userId.profileImage.length,
+                          ),
+                        }
+                      : basicProfile
+                  }
                   style={styles.cmtUserImg}
                 />
                 <View style={styles.commentBox}>
