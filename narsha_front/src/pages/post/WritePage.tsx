@@ -60,9 +60,6 @@ const WritePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const queryClient = useQueryClient();
 
-  console.log('objectDetect :');
-  console.log('objectImgSize :', objectImgSize);
-
   let textIndexArray: any[] = [];
   let totalIndexArray: any[] = [];
   let personalIndexArray: any[] = [];
@@ -70,8 +67,6 @@ const WritePage = ({route, navigation}) => {
   const [replaceWord, setReplaceWord] = useState('');
   // const [postId, onChangePostId] = useState();
   let postId = 0;
-  // console.log(objectDetect);
-  // console.log(objectImgSize);
 
   const [clickLabel, setClickLabel] = useState(true);
 
@@ -206,8 +201,9 @@ const WritePage = ({route, navigation}) => {
   //   enabled: false,
   // });
 
-  // 업적(첫 게시물) 완료 보내기
-  const updateAchieve = async () => {
+  // achieve mutate //
+  // uploading post
+  const updateWriteAchieve = async () => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
@@ -237,7 +233,7 @@ const WritePage = ({route, navigation}) => {
 
   // useMutation: post
   const AchieveMutateFunc = useMutation(['update-badge'], {
-    mutationFn: () => updateAchieve(),
+    mutationFn: () => updateWriteAchieve(),
     onMutate: mutateAchieve,
     onError: (error, variable, rollback) => {
       if (rollback) rollback();

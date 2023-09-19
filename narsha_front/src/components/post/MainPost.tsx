@@ -15,6 +15,8 @@ import heartSel from '../../assets/heart-sel.png';
 import Swiper from 'react-native-web-swiper';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
+import store, {turn} from '../../../Achievement';
+import {useDispatch} from 'react-redux';
 
 type UserData = {
   userId: string;
@@ -170,6 +172,9 @@ const MainPost = ({item, navigation}: any) => {
 
   // const mainLikeQuery = useQuery(['mainLikes'], getLikeList);
 
+  const ac = store.getState().achieve;
+  const dispatch = useDispatch();
+
   const uploadLike = async () => {
     try {
       const data = await createLike.mutateAsync();
@@ -179,6 +184,7 @@ const MainPost = ({item, navigation}: any) => {
         setIsLiked(true);
         // queryClient.invalidateQueries(['likes']);
         queryClient.invalidateQueries(['itemCountLikeData', postId]);
+        !ac.includes(2) ? handleLikeAchi() : null;
       } else {
         console.log(data.message);
       }
@@ -209,6 +215,32 @@ const MainPost = ({item, navigation}: any) => {
   const {data: itemCountLikeData} = useQuery(itemCountLikeQueryKey, () => {
     return getLikeList();
   });
+
+  // update Like achievement
+  const updateLikeAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${2}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleLikeAchi = async () => {
+    try {
+      dispatch(turn(2));
+      await updateLikeAchi.mutateAsync();
+    } catch (error) {}
+  };
 
   return (
     <View>

@@ -79,6 +79,30 @@ export default function BadgeList({route, navigation}) {
     queryFn: getProfileDetail,
   });
 
+  // get post listd
+  const getPostingList = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/post/user-post-list?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const postQuery = useQuery({
+    queryKey: ['posting-list'],
+    queryFn: getPostingList,
+  });
+
   // update achievement
   const updateBirthAchi = useMutation(async () => {
     try {
@@ -105,10 +129,66 @@ export default function BadgeList({route, navigation}) {
     } catch (error) {}
   };
 
+  const updateFiveAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${8}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      dispatch(turn(8));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleFiveAchi = async () => {
+    try {
+      await updateFiveAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  const updateFivePostAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${6}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      dispatch(turn(6));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleFivePostAchi = async () => {
+    try {
+      await updateFivePostAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  console.log(postQuery.data.data.length)
+
   // handleAchi();
   useEffect(()=> {
     !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null)?
     handleBirthAchi():null;
+
+    !(ac.includes(8)) && ac.length>=5? handleFiveAchi():null;
+    !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5)? handleFivePostAchi():null;
+
     console.log(ac)
   }, [])
 

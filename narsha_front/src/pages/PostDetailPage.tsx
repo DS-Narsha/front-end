@@ -125,9 +125,6 @@ export default function PostDetail({route, navigation}) {
         }),
       });
       const json = await res.json();
-      console.log('like' + ac);
-      // !(ac.include(2))? handleLikeAchi():null;
-      console.log('done');
       return json;
     } catch (err) {
       console.log(err);
@@ -244,7 +241,7 @@ export default function PostDetail({route, navigation}) {
       queryClient.invalidateQueries(['comments']);
 
       setCommentContent('');
-      // !(ac.include(3))? console.log("none 3"):null;
+      !ac.includes(3) ? handleCmtAchi() : null;
     } catch (error) {
       Alert.alert('오류');
 
@@ -283,6 +280,7 @@ export default function PostDetail({route, navigation}) {
       if (data.status === 200) {
         checkLikeQuery.refetch();
         queryClient.invalidateQueries(['likes']);
+        !ac.includes(2) ? handleLikeAchi() : null;
         // likeQuery.refetch(); // refetch
         //await countLike.mutateAsync();
       } else {
@@ -344,32 +342,6 @@ export default function PostDetail({route, navigation}) {
     );
   };
 
-  // update comment achievement
-  const updateCmtAchi = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${3}`,
-        {
-          method: 'PUT',
-        },
-      );
-
-      const json = await res.json();
-      dispatch(turn(3));
-      return json;
-    } catch (err) {
-      console.log(err);
-    }
-  });
-
-  const handleCmtAchi = async () => {
-    try {
-      await updateCmtAchi.mutateAsync();
-    } catch (error) {}
-  };
-
   // update Like achievement
   const updateLikeAchi = useMutation(async () => {
     try {
@@ -383,7 +355,25 @@ export default function PostDetail({route, navigation}) {
       );
 
       const json = await res.json();
-      dispatch(turn(2));
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  // update comment achievement
+  const updateCmtAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${3}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
       return json;
     } catch (err) {
       console.log(err);
@@ -392,7 +382,15 @@ export default function PostDetail({route, navigation}) {
 
   const handleLikeAchi = async () => {
     try {
+      dispatch(turn(2));
       await updateLikeAchi.mutateAsync();
+    } catch (error) {}
+  };
+
+  const handleCmtAchi = async () => {
+    try {
+      dispatch(turn(3));
+      await updateCmtAchi.mutateAsync();
     } catch (error) {}
   };
 

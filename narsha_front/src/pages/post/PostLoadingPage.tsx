@@ -52,7 +52,7 @@ const PostLoadingPage = ({route, navigation}) => {
         },
       );
       const json = await res.json();
-      console.log(json);
+      //console.log(json);
       return json;
     } catch (err) {
       console.log(err);

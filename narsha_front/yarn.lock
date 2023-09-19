@@ -1663,17 +1663,17 @@
   "version" "0.1.11"
 
 "@react-native-firebase/app@^18.4.0", "@react-native-firebase/app@18.4.0":
-  version "18.4.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.4.0.tgz"
-  integrity sha512-FPHwb4O5Bug5Q5WOfSPq38LHGrTRBIThNvs7Fl7OfotGpMbWKMCfwc5RN7F+PRRDeHyk2WDYvoH905zla1pPcw==
+  "integrity" "sha512-FPHwb4O5Bug5Q5WOfSPq38LHGrTRBIThNvs7Fl7OfotGpMbWKMCfwc5RN7F+PRRDeHyk2WDYvoH905zla1pPcw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.4.0.tgz"
+  "version" "18.4.0"
   dependencies:
     "opencollective-postinstall" "^2.0.1"
     "superstruct" "^0.6.2"
 
 "@react-native-firebase/messaging@^18.4.0":
-  version "18.4.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.4.0.tgz"
-  integrity sha512-oVxOHRmLrdEXBVHgnrTkzWFiL/SbXi9oaXf/kYuqgcMGkupIhBNpPxvnqq4Z1QO0d9huZp0KHDeTgNEwA5hq1Q==
+  "integrity" "sha512-oVxOHRmLrdEXBVHgnrTkzWFiL/SbXi9oaXf/kYuqgcMGkupIhBNpPxvnqq4Z1QO0d9huZp0KHDeTgNEwA5hq1Q=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-18.4.0.tgz"
+  "version" "18.4.0"
 
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="

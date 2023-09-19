@@ -22,6 +22,9 @@ import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import {useNavigationState} from '@react-navigation/native';
 import Config from 'react-native-config';
 import Arrow from '../../assets/text-arrow.svg';
+import store, {turn} from '../../../Achievement';
+import {useDispatch} from 'react-redux';
+
 // 댓글 목록 페이지
 
 type Comment = {
@@ -136,19 +139,55 @@ const CommentListPage = ({route, navigation}) => {
       const json = await res.json();
       console.log(json);
       console.log(JSON.parse(JSON.stringify(json)));
-      
+
       return json;
     } catch (err) {
       console.log(err);
     }
   };
 
+  const ac = store.getState().achieve;
+  const dispatch = useDispatch();
+
   const handleCommentSubmit = async () => {
     try {
       startTextFilter();
+
+      // setLoadingModalVisible(false);
+      setModalVisible(false);
+      // queryClient.invalidateQueries(['comments']);
+
+      // setCommentContent('');
+      !ac.includes(3) ? handleCmtAchi() : null;
     } catch (error) {
       Alert.alert('오류');
     }
+  };
+
+  // update comment achievement
+  const updateCmtAchi = useMutation(async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+          userData.userId
+        }&achieveNum=${3}`,
+        {
+          method: 'PUT',
+        },
+      );
+
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  const handleCmtAchi = async () => {
+    try {
+      dispatch(turn(3));
+      await updateCmtAchi.mutateAsync();
+    } catch (error) {}
   };
 
   const textFilterQuery = useQuery({
@@ -160,21 +199,17 @@ const CommentListPage = ({route, navigation}) => {
   const startTextFilter = async () => {
     try {
       console.log(commentContent);
-      setLoadingModalVisible(true); 
+      setLoadingModalVisible(true);
       const resData = await textFilterQuery.refetch();
       setLoadingModalVisible(false);
-      
+
       const status = 200;
 
       // if (status === 200) {
       if (resData.data.status === 200) {
-        const inputData =JSON.parse(resData['data']['data'])[
-          'input'
-        ];
+        const inputData = JSON.parse(resData['data']['data'])['input'];
         console.log(inputData);
-        const resultData = JSON.parse(resData['data']['data'])[
-          'result'
-        ];
+        const resultData = JSON.parse(resData['data']['data'])['result'];
         console.log(resultData);
         curseData = resultData.curse;
         console.log(curseData);
@@ -183,21 +218,21 @@ const CommentListPage = ({route, navigation}) => {
         const personalData = resultData.personal;
         console.log(personalData);
 
-        let sentence = "";
-        let midSentence = "";
-        let lastSentence = "";
-        
+        let sentence = '';
+        let midSentence = '';
+        let lastSentence = '';
+
         //clean한 문장
-        if ( resultData === true ) {
+        if (resultData === true) {
           setReplaceWordVisible(false);
           await commentMutation.mutateAsync();
           queryClient.invalidateQueries(['comments']);
           setCommentContent('');
         } else {
           //bad한 문장
-          
+
           // curse에 대한 처리
-          if(curseData !== null){
+          if (curseData !== null) {
             const curseKeys = Object.keys(curseData);
             console.log(curseKeys);
             //시작 인덱스 가져오기
@@ -206,19 +241,24 @@ const CommentListPage = ({route, navigation}) => {
               const index = inputData.indexOf(curseKeys[i]);
               textIndexArray.push(index);
             }
-  
+
             console.log(textIndexArray); //인덱스
-  
+
             //문자열 위치에 맞게 정렬
             const combinedArray = curseKeys.map((item, index) => ({
               curseKeysItem: item,
-              textIndexArrayItem: textIndexArray[index]
+              textIndexArrayItem: textIndexArray[index],
             }));
-            combinedArray.sort((a, b) => a.textIndexArrayItem - b.textIndexArrayItem);
-            const sortedcurseKeys = combinedArray.map(item => item.curseKeysItem);
-            const sortedtextIndexArray = combinedArray.map(item => item.textIndexArrayItem);
-  
-            
+            combinedArray.sort(
+              (a, b) => a.textIndexArrayItem - b.textIndexArrayItem,
+            );
+            const sortedcurseKeys = combinedArray.map(
+              item => item.curseKeysItem,
+            );
+            const sortedtextIndexArray = combinedArray.map(
+              item => item.textIndexArrayItem,
+            );
+
             let num = 0;
             for (let i = 0; i < sortedtextIndexArray.length; i++) {
               sentence +=
@@ -240,8 +280,7 @@ const CommentListPage = ({route, navigation}) => {
           } else {
             sentence = inputData;
           }
-          if(totalData[0] !== null){
-            
+          if (totalData[0] !== null) {
             //문장의 시작 인덱스 가져오기
             for (let i = 0; i < totalData.length; i++) {
               console.log(totalData[i]);
@@ -254,11 +293,17 @@ const CommentListPage = ({route, navigation}) => {
             //문장 배열들 정렬
             const combinedArray = totalData.map((item, index) => ({
               totalDataItem: item,
-              totalIndexArrayItem: totalIndexArray[index]
+              totalIndexArrayItem: totalIndexArray[index],
             }));
-            combinedArray.sort((a, b) => a.totalIndexArrayItem - b.totalIndexArrayItem);
-            const sortedtotalData = combinedArray.map(item => item.totalDataItem);
-            const sortedtotalIndexArray = combinedArray.map(item => item.totalIndexArrayItem);
+            combinedArray.sort(
+              (a, b) => a.totalIndexArrayItem - b.totalIndexArrayItem,
+            );
+            const sortedtotalData = combinedArray.map(
+              item => item.totalDataItem,
+            );
+            const sortedtotalIndexArray = combinedArray.map(
+              item => item.totalIndexArrayItem,
+            );
 
             //문자 삽입
             let num = 0;
@@ -282,8 +327,7 @@ const CommentListPage = ({route, navigation}) => {
           } else {
             midSentence = sentence;
           }
-          if(personalData[0] !== null){
-
+          if (personalData[0] !== null) {
             //개인정보 시작 인덱스 가져오기
             for (let i = 0; i < personalData.length; i++) {
               console.log(personalData[i]);
@@ -296,11 +340,17 @@ const CommentListPage = ({route, navigation}) => {
             //개인정보 배열 정렬
             const combinedArray = personalData.map((item, index) => ({
               personalDataItem: item,
-              personalIndexArrayItem: personalIndexArray[index]
+              personalIndexArrayItem: personalIndexArray[index],
             }));
-            combinedArray.sort((a, b) => a.personalIndexArrayItem - b.personalIndexArrayItem);
-            const sortedpersonalData = combinedArray.map(item => item.personalDataItem);
-            const sortedpersonalIndexArray = combinedArray.map(item => item.personalIndexArrayItem);
+            combinedArray.sort(
+              (a, b) => a.personalIndexArrayItem - b.personalIndexArrayItem,
+            );
+            const sortedpersonalData = combinedArray.map(
+              item => item.personalDataItem,
+            );
+            const sortedpersonalIndexArray = combinedArray.map(
+              item => item.personalIndexArrayItem,
+            );
 
             //문자 삽입
             let num = 0;
@@ -324,11 +374,11 @@ const CommentListPage = ({route, navigation}) => {
           } else {
             lastSentence = midSentence;
           }
-          
+
           setCommentContent(lastSentence);
           setReplaceWord(curseData);
           //대체단어 리스트 보이는 코드
-          if(curseData === null){
+          if (curseData === null) {
             setReplaceWordVisible(false);
           } else {
             setReplaceWordVisible(true);
@@ -448,7 +498,9 @@ const CommentListPage = ({route, navigation}) => {
                 </Text>
               </View>
               <View style={styles.alertBody}>
-                <Text style={styles.alertInfo}>{'{'}욕설{'}'}</Text>
+                <Text style={styles.alertInfo}>
+                  {'{'}욕설{'}'}
+                </Text>
                 <Text style={styles.alertText}>
                   욕설, 비속어의 말이 포함되었을 경우
                 </Text>
@@ -468,52 +520,83 @@ const CommentListPage = ({route, navigation}) => {
       <View>
         {/* loading modal */}
         <Modal
-            animationType="fade"
-            transparent={true}
-            visible={loadingModalVisible}>
-            <View style={styles.modalCenteredView}>
-              <View style={styles.loadingModalView}>
-                <View style={styles.modalBody}>
-                  <ActivityIndicator
-                    size="large"
-                    color="#98DC63"
-                    style={styles.modalIcon}
-                  />
-                  <View style={styles.loadingModalText}>
-                    <Text style={styles.strongText}>
-                      게시글에 부적절한 내용이 있는지 확인 중이에요!
-                      {'\n'}잠시만 기다려주세요.
-                    </Text>
-                  </View>
+          animationType="fade"
+          transparent={true}
+          visible={loadingModalVisible}>
+          <View style={styles.modalCenteredView}>
+            <View style={styles.loadingModalView}>
+              <View style={styles.modalBody}>
+                <ActivityIndicator
+                  size="large"
+                  color="#98DC63"
+                  style={styles.modalIcon}
+                />
+                <View style={styles.loadingModalText}>
+                  <Text style={styles.strongText}>
+                    게시글에 부적절한 내용이 있는지 확인 중이에요!
+                    {'\n'}잠시만 기다려주세요.
+                  </Text>
                 </View>
               </View>
             </View>
-          </Modal>
+          </View>
+        </Modal>
       </View>
-      <View style={[styles.replaceWordContainer, { display: replaceWordVisible ? 'flex' : 'none' }]}>
+      <View
+        style={[
+          styles.replaceWordContainer,
+          {display: replaceWordVisible ? 'flex' : 'none'},
+        ]}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.uploadContentTitle}>대체어 목록</Text>
-          {replaceWord && Object.keys(replaceWord).map((key, index) => {
-            const value = replaceWord[key as keyof typeof replaceWord];
+          {replaceWord &&
+            Object.keys(replaceWord).map((key, index) => {
+              const value = replaceWord[key as keyof typeof replaceWord];
               if (value !== null) {
                 return (
-                  <View key={index} style={{ flexDirection: 'row', marginLeft: 25 }}>
-                    <Text style={{ color: "#FF0000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${key}`}</Text>
-                    <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
-                    <Text style={{ color: "#000000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${value}`}</Text>
+                  <View
+                    key={index}
+                    style={{flexDirection: 'row', marginLeft: 25}}>
+                    <Text
+                      style={{
+                        color: '#FF0000',
+                        fontFamily: 'NanumSquareB',
+                        marginVertical: 3,
+                      }}>{`${key}`}</Text>
+                    <Arrow style={{marginHorizontal: 13, marginVertical: 3}} />
+                    <Text
+                      style={{
+                        color: '#000000',
+                        fontFamily: 'NanumSquareB',
+                        marginVertical: 3,
+                      }}>{`${value}`}</Text>
                   </View>
                 );
-              }else {
+              } else {
                 return (
-                  <View key={index} style={{ flexDirection: 'row', marginLeft: 25 }}>
-                    <Text style={{ color: "#FF0000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${key}`}</Text>
-                    <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
-                    <Text style={{ color: "#0000FF", fontFamily: 'NanumSquareB', marginVertical: 3}}>삭제</Text>
+                  <View
+                    key={index}
+                    style={{flexDirection: 'row', marginLeft: 25}}>
+                    <Text
+                      style={{
+                        color: '#FF0000',
+                        fontFamily: 'NanumSquareB',
+                        marginVertical: 3,
+                      }}>{`${key}`}</Text>
+                    <Arrow style={{marginHorizontal: 13, marginVertical: 3}} />
+                    <Text
+                      style={{
+                        color: '#0000FF',
+                        fontFamily: 'NanumSquareB',
+                        marginVertical: 3,
+                      }}>
+                      삭제
+                    </Text>
                   </View>
                 );
               }
               // return null; // null을 반환하여 해당 항목을 건너뜁니다.
-          })}
+            })}
         </ScrollView>
       </View>
       <View style={styles.inputBody}>
@@ -806,14 +889,14 @@ const styles = StyleSheet.create({
     fontFamily: 'NanumSquareB',
   },
   replaceWordContainer: {
-    backgroundColor: "#F9FAC8", 
-    left: 0, 
-    right: 0, 
-    height: 100, 
-    position: 'absolute', 
-    bottom: 60, 
-    borderTopLeftRadius:20, 
-    borderTopRightRadius: 20
+    backgroundColor: '#F9FAC8',
+    left: 0,
+    right: 0,
+    height: 100,
+    position: 'absolute',
+    bottom: 60,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });
 

@@ -8,10 +8,10 @@ const LoadingCloud = () => {
   // window size
   const windowHeight = Dimensions.get('window').height;
   const windowWidth = Dimensions.get('window').width;
-  console.log(windowHeight, windowWidth);
+  //console.log(windowHeight, windowWidth);
 
   const randomDelay = Math.floor(Math.random() * 5) + 1;
-  console.log(randomDelay);
+  //console.log(randomDelay);
 
   const startAnimation = useCallback(() => {
     Animated.delay(randomDelay);
