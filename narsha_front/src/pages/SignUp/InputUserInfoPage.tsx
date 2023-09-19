@@ -18,9 +18,6 @@ import BackSvg from '../../assets/back.svg';
 import {useFocusEffect} from '@react-navigation/native';
 import Config from 'react-native-config';
 
-// 이름, 닉네임, 아이디, 비밀번호와 같은 정보 입력하는 페이지
-// 뒤로가기 못하게
-
 //@ts-ignore
 const InputUserInfoPage = ({navigation, route}) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -108,7 +105,6 @@ const InputUserInfoPage = ({navigation, route}) => {
 
   const handleCheckAvailability = async () => {
     try {
-      console.log('check');
       const response = await fetch(
         `http://${Config.HOST_NAME}/api/user/check-userId?userId=${userId}`,
         {

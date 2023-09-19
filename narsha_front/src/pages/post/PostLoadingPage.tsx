@@ -8,16 +8,13 @@ import Config from 'react-native-config';
 
 //@ts-ignore
 const PostLoadingPage = ({route, navigation}) => {
-  //let [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
-  //console.log('photos:' + JSON.stringify(route.params.photos));
 
   // timer
   const timeout = setTimeout(() => {
     !isLoading &&
       data &&
       navigation.navigate('WritePage', {
-        resPhoto: route.params,
         objectDetect: data,
       });
   }, 2000 * route.params.photos.length - 1000);
@@ -44,7 +41,6 @@ const PostLoadingPage = ({route, navigation}) => {
           },
         );
       }
-      console.log('formData: ' + JSON.stringify(formData));
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/ai-flask/object-detect`,
         {
@@ -56,8 +52,6 @@ const PostLoadingPage = ({route, navigation}) => {
         },
       );
       const json = await res.json();
-      console.log('objectdect: ' + JSON.stringify(json));
-
       return json;
     } catch (err) {
       console.log(err);
@@ -66,7 +60,6 @@ const PostLoadingPage = ({route, navigation}) => {
 
   // onMutate
   const mutateSendImage = async () => {
-    console.log('mutateSendImage');
     // get old data
     const oldData = await queryClient.getQueryData(['send-image']);
     // setting datas at UI, 특정 속성 수정

@@ -97,11 +97,9 @@ const SignUpPage = ({navigation, route}) => {
             groupCode: data.data,
           });
         } else {
-          console.log(data.message);
           Alert.alert('그룹 코드 가져오기 실패', data.message);
         }
       } catch (error) {
-        console.log(error);
         Alert.alert('오류', '그룹 생성 중 오류가 발생했습니다.');
       }
     };

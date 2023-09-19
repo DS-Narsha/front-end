@@ -29,6 +29,14 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+      <!-- firebase 설정을 위해 추가 -->
+      <!-- <service
+      android:name=".java.MyFirebaseMessagingService"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+      </intent-filter>
+      </service> -->
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
