@@ -9,8 +9,13 @@ import {
 } from 'react-native';
 
 // @ts-ignore
-const Loading = () => {
-    const [modalVisible, setModalVisible] = useState(false);
+const Loading = (visible) => {
+    const [modalVisible, setModalVisible] = useState(visible);
+
+    // const changeModalVisible = (visible: any) => {
+    //     setModalVisible(visible);
+    // }
+    
     return (
         <View style={styles.container}>
             {/* 모달창 */}
@@ -18,9 +23,10 @@ const Loading = () => {
             animationType="slide"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}>
+            // onRequestClose={() => {
+            //     changeModalVisible(visible);
+            // }}
+            >
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                 <ActivityIndicator />
@@ -31,15 +37,6 @@ const Loading = () => {
                 </View>
                 </View>
             </Modal>
-
-            <View style={styles.btnArea}>
-                <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-                    <View style={styles.selectBtn}>
-                        <Text style={styles.btnText}>선택</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-
         </View>
     )
 }

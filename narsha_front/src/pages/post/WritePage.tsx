@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
 import SendBtn from '../../assets/send-btn.svg';
@@ -18,6 +19,7 @@ import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Check from '../../assets/ic-check.svg';
 import ObjectLabel from '../../data/objectLabel.json';
 import Config from 'react-native-config';
+import Arrow from '../../assets/text-arrow.svg';
 
 type Comment = {
   userId: {
@@ -49,7 +51,13 @@ const WritePage = ({route, navigation}) => {
   const [selPhoto, useSelPhoto] = useState(resPhoto[0]);
   const [selIndex, useSelIndex] = useState(0);
   const [content, onChangeContent] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const queryClient = useQueryClient();
+  let textIndexArray: any[] = [];
+  let totalIndexArray: any[] = [];
+  let personalIndexArray: any[] = [];
+  let curseData: any;
+  const [replaceWord, setReplaceWord] = useState('');
   // const [postId, onChangePostId] = useState();
   let postId = 0;
   // console.log(objectDetect);
@@ -273,6 +281,227 @@ const WritePage = ({route, navigation}) => {
     },
   });
 
+    //텍스트 필터링
+    const textFilter = async () => {
+      try {
+        const res = await fetch(
+          `http://${Config.HOST_NAME}/api/ai-flask/text-filter?text=${content}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const json = await res.json();
+        console.log(json);
+        console.log(JSON.parse(JSON.stringify(json)));
+        
+        return json;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  
+    const handlePostSubmit = async () => {
+      try {
+        startTextFilter();
+      } catch (error) {
+        Alert.alert('오류');
+      }
+    };
+  
+    const postTextFilterQuery = useQuery({
+      queryKey: ['post-text-filtering'],
+      queryFn: textFilter,
+      enabled: false,
+    });
+  
+    const startTextFilter = async () => {
+      try {
+        console.log(content);
+        
+        setLoadingModalVisible(true); 
+        const resData = await postTextFilterQuery.refetch();
+        setLoadingModalVisible(false);
+        
+        if (resData.data.status === 200) {
+          const inputData =JSON.parse(resData['data']['data'])[
+            'input'
+          ];
+          console.log(inputData);
+          const resultData = JSON.parse(resData['data']['data'])[
+            'result'
+          ];
+          console.log(resultData);
+          curseData = resultData.curse;
+          console.log(curseData);
+          const totalData = resultData.total;
+          console.log(totalData);
+          const personalData = resultData.personal;
+          console.log(personalData);
+  
+          let sentence = "";
+          let midSentence = "";
+          let lastSentence = "";
+          
+          //clean한 문장
+          if ( resultData === true ) {
+            {
+  
+            }
+            mutate();
+              !JSON.parse(profileQuery.data.data.badgeList)[0] &&
+                AchieveMutateFunc.mutate();
+              navigation.reset({routes: [{name: 'MainNavigator'}]});
+          } else {
+            //bad한 문장
+            
+            // curse에 대한 처리
+            if(curseData !== null){
+              const curseKeys = Object.keys(curseData);
+              console.log(curseKeys);
+              //시작 인덱스 가져오기
+              for (let i = 0; i < curseKeys.length; i++) {
+                console.log(curseKeys[i]);
+                const index = inputData.indexOf(curseKeys[i]);
+                textIndexArray.push(index);
+              }
+    
+              console.log(textIndexArray); //인덱스
+    
+              //문자열 위치에 맞게 정렬
+              const combinedArray = curseKeys.map((item, index) => ({
+                curseKeysItem: item,
+                textIndexArrayItem: textIndexArray[index]
+              }));
+              combinedArray.sort((a, b) => a.textIndexArrayItem - b.textIndexArrayItem);
+              const sortedcurseKeys = combinedArray.map(item => item.curseKeysItem);
+              const sortedtextIndexArray = combinedArray.map(item => item.textIndexArrayItem);
+    
+              
+              let num = 0;
+              for (let i = 0; i < sortedtextIndexArray.length; i++) {
+                sentence +=
+                  inputData.slice(num, sortedtextIndexArray[i]) +
+                  '{' +
+                  inputData.slice(
+                    sortedtextIndexArray[i],
+                    sortedtextIndexArray[i] + sortedcurseKeys[i].length,
+                  ) +
+                  '}';
+                num += sortedtextIndexArray[i] + sortedcurseKeys[i].length;
+                if (i == sortedtextIndexArray.length - 1) {
+                  sentence += inputData.slice(
+                    sortedtextIndexArray[i] + sortedcurseKeys[i].length,
+                    inputData.length,
+                  );
+                }
+              }
+            } else {
+              sentence = inputData;
+            }
+            if(totalData[0] !== null){
+              
+              //문장의 시작 인덱스 가져오기
+              for (let i = 0; i < totalData.length; i++) {
+                console.log(totalData[i]);
+                const index = sentence.indexOf(totalData[i]);
+                totalIndexArray.push(index);
+              }
+  
+              console.log(totalIndexArray);
+  
+              //문장 배열들 정렬
+              const combinedArray = totalData.map((item, index) => ({
+                totalDataItem: item,
+                totalIndexArrayItem: totalIndexArray[index]
+              }));
+              combinedArray.sort((a, b) => a.totalIndexArrayItem - b.totalIndexArrayItem);
+              const sortedtotalData = combinedArray.map(item => item.totalDataItem);
+              const sortedtotalIndexArray = combinedArray.map(item => item.totalIndexArrayItem);
+  
+              //문자 삽입
+              let num = 0;
+              for (let i = 0; i < sortedtotalIndexArray.length; i++) {
+                midSentence +=
+                  sentence.slice(num, sortedtotalIndexArray[i]) +
+                  '{' +
+                  sentence.slice(
+                    sortedtotalIndexArray[i],
+                    sortedtotalIndexArray[i] + sortedtotalData[i].length,
+                  ) +
+                  '}';
+                num += sortedtotalIndexArray[i] + sortedtotalData[i].length;
+                if (i == sortedtotalIndexArray.length - 1) {
+                  midSentence += sentence.slice(
+                    sortedtotalIndexArray[i] + sortedtotalData[i].length,
+                    sentence.length,
+                  );
+                }
+              }
+            } else {
+              midSentence = sentence;
+            }
+            if(personalData[0] !== null){
+  
+              //개인정보 시작 인덱스 가져오기
+              for (let i = 0; i < personalData.length; i++) {
+                console.log(personalData[i]);
+                const index = midSentence.indexOf(personalData[i]);
+                personalIndexArray.push(index);
+              }
+  
+              console.log(personalIndexArray);
+  
+              //개인정보 배열 정렬
+              const combinedArray = personalData.map((item, index) => ({
+                personalDataItem: item,
+                personalIndexArrayItem: personalIndexArray[index]
+              }));
+              combinedArray.sort((a, b) => a.personalIndexArrayItem - b.personalIndexArrayItem);
+              const sortedpersonalData = combinedArray.map(item => item.personalDataItem);
+              const sortedpersonalIndexArray = combinedArray.map(item => item.personalIndexArrayItem);
+  
+              //문자 삽입
+              let num = 0;
+              for (let i = 0; i < sortedpersonalIndexArray.length; i++) {
+                lastSentence +=
+                  midSentence.slice(num, sortedpersonalIndexArray[i]) +
+                  '*' +
+                  midSentence.slice(
+                    sortedpersonalIndexArray[i],
+                    sortedpersonalIndexArray[i] + sortedpersonalData[i].length,
+                  ) +
+                  '*';
+                num += sortedpersonalIndexArray[i] + sortedpersonalData[i].length;
+                if (i == sortedpersonalIndexArray.length - 1) {
+                  lastSentence += midSentence.slice(
+                    sortedpersonalIndexArray[i] + sortedpersonalData[i].length,
+                    midSentence.length,
+                  );
+                }
+              }
+            } else {
+              lastSentence = midSentence;
+            }
+            //필터링된 문장으로 저장
+            onChangeContent(lastSentence);
+            setReplaceWord(curseData);
+            setModalVisible(true);
+          }
+        } else {
+          setLoadingModalVisible(false);
+          console.log(resData.data.message);
+          Alert.alert('텍스트 필터링 실패', resData.data.message);
+        }
+      } catch (error) {
+        setLoadingModalVisible(false);
+        console.log(error);
+        Alert.alert('오류', '텍스트 필터링 중 오류 발생');
+      }
+    };
+
   return (
     <View style={styles.container}>
       {/* top */}
@@ -286,11 +515,7 @@ const WritePage = ({route, navigation}) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              mutate();
-              !JSON.parse(profileQuery.data.data.badgeList)[0] &&
-                AchieveMutateFunc.mutate();
-              navigation.reset({routes: [{name: 'MainNavigator'}]});
-              setLoadingModalVisible(true);
+              handlePostSubmit();
               // loadingTimeout;
               // return () => {
               //   clearTimeout(loadingTimeout);
@@ -367,6 +592,32 @@ const WritePage = ({route, navigation}) => {
                 )}
                 {/* height */}
                 <View style={{height: 30}}></View>
+                {/* 대체어 */}
+                <View>
+                  <Text style={styles.uploadContentTitle}>대체어 목록</Text>
+                  {replaceWord && Object.keys(replaceWord).map((key, index) => {
+                    const value = replaceWord[key as keyof typeof replaceWord];
+                    if (value !== null) {
+                      return (
+                        <View key={index} style={{ flexDirection: 'row', marginLeft: 25 }}>
+                          <Text style={{ color: "#FF0000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${key}`}</Text>
+                          <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
+                          <Text style={{ color: "#000000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${value}`}</Text>
+                        </View>
+                      );
+                    }else {
+                      return (
+                        <View key={index} style={{ flexDirection: 'row', marginLeft: 25 }}>
+                          <Text style={{ color: "#FF0000", fontFamily: 'NanumSquareB', marginVertical: 3}}>{`${key}`}</Text>
+                          <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
+                          <Text style={{ color: "#0000FF", fontFamily: 'NanumSquareB', marginVertical: 3}}>삭제</Text>
+                        </View>
+                      );
+                    }
+                  })}
+                </View>
+                {/* height */}
+                <View style={{height: 13}}></View>
                 {/* writing box*/}
                 <Text style={styles.uploadContentTitle}>글 작성하기</Text>
                 <View style={styles.writingBox}>
@@ -431,6 +682,52 @@ const WritePage = ({route, navigation}) => {
               </View>
             </View>
           </Modal>
+          {/* 모달창 */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.filterModalCenteredView}>
+          <View style={styles.filterModalView}>
+            <View style={styles.filterModalTitleArea}>
+              <Text style={styles.filterModalTitleText}>
+                여러분들의 댓글을 수정해주세요!
+              </Text>
+            </View>
+            <Text style={styles.filterModalText}>
+              기호로 감싸진 글자를 모두 수정해야
+            </Text>
+            <Text style={styles.filterModalText}>SNS에 게시글을 올릴 수 있어요.</Text>
+            <Text style={styles.filterModalText}>여러분의 댓글을 수정해볼까요?</Text>
+
+            <View style={styles.filterModalAlertArea}>
+              <View style={styles.alertBody}>
+                <Text style={styles.alertInfo}>*개인정보*</Text>
+                <Text style={styles.alertText}>
+                  개인정보, 민간한 정보가 포함되었을 경우
+                </Text>
+              </View>
+              <View style={styles.alertBody}>
+                <Text style={styles.alertInfo}>{'{'}욕설{'}'}</Text>
+                <Text style={styles.alertText}>
+                  욕설, 비속어의 말이 포함되었을 경우
+                </Text>
+              </View>
+            </View>
+            <View style={styles.filterModalBtnArea}>
+              <TouchableOpacity
+                style={[styles.button]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.filterTextStyle}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
         </ScrollView>
       )}
     </View>
@@ -663,6 +960,92 @@ const styles = StyleSheet.create({
   objectText: {
     fontFamily: 'NanumSquareR',
     fontSize: 15,
+  },
+  filterModalCenteredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(150, 150, 150, 0.5)',
+  },
+  filterModalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    width: '75%',
+    borderRadius: 20,
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingBottom: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  filterModalTitleArea: {
+    backgroundColor: '#AADF98',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 17,
+    width: '121%',
+    height: 60,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  filterModalTitleText: {
+    color: 'black',
+    fontSize: 17,
+    fontFamily: 'NanumSquareB',
+  },
+  filterModalText: {
+    marginBottom: 3,
+    textAlign: 'center',
+    color: 'black',
+    fontFamily: 'NanumSquareR',
+  },
+  filterModalAlertArea: {
+    marginTop: 25,
+  },
+  filterModalBtnArea: {
+    flexDirection: 'row',
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#AADF98',
+    width: 115,
+    marginTop: 20,
+    marginRight: 15,
+  },
+  alertBody: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  alertInfo: {
+    color: 'black',
+    fontSize: 12.5,
+    marginLeft: 7,
+    paddingBottom: 5,
+    fontFamily: 'NanumSquareB',
+  },
+  alertText: {
+    color: 'black',
+    fontSize: 12,
+    marginLeft: 7,
+    paddingBottom: 5,
+    fontFamily: 'NanumSquareR',
+  },
+  filterTextStyle: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingBottom: 2,
+    fontFamily: 'NanumSquareB',
   },
 });
 
