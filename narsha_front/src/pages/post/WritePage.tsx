@@ -688,7 +688,7 @@ const WritePage = ({route, navigation}) => {
           <View style={styles.filterModalView}>
             <View style={styles.filterModalTitleArea}>
               <Text style={styles.filterModalTitleText}>
-                여러분들의 댓글을 수정해주세요!
+                여러분들의 게시글을 수정해주세요!
               </Text>
             </View>
             <Text style={styles.filterModalText}>
@@ -698,7 +698,7 @@ const WritePage = ({route, navigation}) => {
               SNS에 게시글을 올릴 수 있어요.
             </Text>
             <Text style={styles.filterModalText}>
-              여러분의 댓글을 수정해볼까요?
+              여러분의 게시글 내용을 수정해볼까요?
             </Text>
 
             <View style={styles.filterModalAlertArea}>
