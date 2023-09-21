@@ -533,7 +533,7 @@ const CommentListPage = ({route, navigation}) => {
                 />
                 <View style={styles.loadingModalText}>
                   <Text style={styles.strongText}>
-                    게시글에 부적절한 내용이 있는지 확인 중이에요!
+                    댓글에 부적절한 내용이 있는지 확인 중이에요!
                     {'\n'}잠시만 기다려주세요.
                   </Text>
                 </View>
