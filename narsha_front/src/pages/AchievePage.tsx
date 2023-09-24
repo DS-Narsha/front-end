@@ -6,10 +6,8 @@ import AchieveItem from '../components/AchieveItem';
 import AchieveData from '../data/AchieveData.json';
 import {badgeSources} from '../data/BadgeSources';
 import Config from 'react-native-config';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import store, { turn } from '../../Achievement'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 type UserData = {
   userId: string;
@@ -113,90 +111,62 @@ const AchievePage = () => {
     queryFn: getPostingList,
   });
 
-  // update achievement
-  const updateBirthAchi = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${4}`,
-        {
-          method: 'PUT',
-        },
-      );
+// update achievement
+const updateAchi = useMutation(async (num) => {
+  try {
+    const res = await fetch(
+      `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+        userData.userId
+      }&achieveNum=${num}`,
+      {
+        method: 'PUT',
+      },
+    );
 
-      const json = await res.json();
-      dispatch(turn(4));
-      return json;
-    } catch (err) {
-      console.log(err);
+    const json = await res.json();
+
+    if (res.ok) {
+      dispatch(turn(num));
+    } else {
+      throw new Error(json.message);
     }
-  });
+
+  } catch (err) {
+    console.log(err);
+  }
+});
 
   const handleBirthAchi = async () => {
     try {
-      await updateBirthAchi.mutateAsync();
+      await updateAchi.mutateAsync(4);
     } catch (error) {}
   };
-
-  const updateFiveAchi = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${8}`,
-        {
-          method: 'PUT',
-        },
-      );
-
-      const json = await res.json();
-      dispatch(turn(8));
-      return json;
-    } catch (err) {
-      console.log(err);
-    }
-  });
 
   const handleFiveAchi = async () => {
     try {
-      await updateFiveAchi.mutateAsync();
+      await updateAchi.mutateAsync(8);
     } catch (error) {}
   };
 
-  const updateFivePostAchi = useMutation(async () => {
+  const handleFirstPostAchi = async () => {
     try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${6}`,
-        {
-          method: 'PUT',
-        },
-      );
-
-      const json = await res.json();
-      dispatch(turn(6));
-      return json;
-    } catch (err) {
-      console.log(err);
-    }
-  });
+      await updateAchi.mutateAsync(1);
+    } catch (error) {}
+  };
 
   const handleFivePostAchi = async () => {
     try {
-      await updateFivePostAchi.mutateAsync();
+      await updateAchi.mutateAsync(6);
     } catch (error) {}
   };
 
 
   // handleAchi();
   useEffect(()=> {
-    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null)?
-    handleBirthAchi():null;
-
-    !(ac.includes(8)) && ac.length>=5? handleFiveAchi():null;
-    !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5)? handleFivePostAchi():null;
+    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null) && handleBirthAchi();
+    !(ac.includes(8)) && ac.length>=5 &&  handleFiveAchi();
+    !(ac.includes(1)) && !postQuery.isLoading && (postQuery.data.data.length >= 1) && handleFirstPostAchi();
+    !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5) && handleFivePostAchi();
 
     console.log(ac)
   }, [])
@@ -258,19 +228,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// // Reducer 데이터를 props로 변환
-// function mapStateToProps(state){
-//   return {
-//     achieve: state.achieve
-//   };
-// }
-
-// // Actions을 props로 변환
-// function matchDispatchToProps(dispatch){
-//   return bindActionCreators({
-//     turn:turn
-//   }, dispatch);
-// }
-
-// export default connect(mapStateToProps, matchDispatchToProps)(AchievePage);
 export default AchievePage;

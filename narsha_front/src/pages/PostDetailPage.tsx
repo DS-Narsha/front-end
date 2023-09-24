@@ -124,7 +124,7 @@ export default function PostDetail({route, navigation}) {
           postId: id,
         }),
       });
-      const json = await res.json();
+      const json = await res.json(); 
       return json;
     } catch (err) {
       console.log(err);
@@ -342,39 +342,26 @@ export default function PostDetail({route, navigation}) {
     );
   };
 
-  // update Like achievement
-  const updateLikeAchi = useMutation(async () => {
+  // update achievement
+  const updateAchi = useMutation(async (num) => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
           userData.userId
-        }&achieveNum=${2}`,
+        }&achieveNum=${num}`,
         {
           method: 'PUT',
         },
       );
 
       const json = await res.json();
-      return json;
-    } catch (err) {
-      console.log(err);
-    }
-  });
 
-  // update comment achievement
-  const updateCmtAchi = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${3}`,
-        {
-          method: 'PUT',
-        },
-      );
-
-      const json = await res.json();
-      return json;
+      if (res.ok) {
+        dispatch(turn(num));
+      } else {
+        throw new Error(json.message);
+      }
+      
     } catch (err) {
       console.log(err);
     }
@@ -383,14 +370,14 @@ export default function PostDetail({route, navigation}) {
   const handleLikeAchi = async () => {
     try {
       dispatch(turn(2));
-      await updateLikeAchi.mutateAsync();
+      await updateAchi.mutateAsync(2);
     } catch (error) {}
   };
 
   const handleCmtAchi = async () => {
     try {
       dispatch(turn(3));
-      await updateCmtAchi.mutateAsync();
+      await updateAchi.mutateAsync(3);
     } catch (error) {}
   };
 

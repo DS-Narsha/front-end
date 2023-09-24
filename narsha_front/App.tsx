@@ -3,7 +3,6 @@ import React, {useEffect, useState, createContext, useCallback} from 'react';
 import MainNavigator from './src/components/navigation/MainNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import AuthStack from './src/components/navigation/AuthStack';
-import NotAvailable from './src/pages/NotAvailablePage';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -60,9 +59,6 @@ export default function App() {
   useEffect(() => {
     foregroundListener();
   }, []);
-
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
 
   useEffect(() => {
     SplashScreen.hide();

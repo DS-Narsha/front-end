@@ -103,91 +103,61 @@ export default function BadgeList({route, navigation}) {
     queryFn: getPostingList,
   });
 
-  // update achievement
-  const updateBirthAchi = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${4}`,
-        {
-          method: 'PUT',
-        },
-      );
+// update achievement
+const updateAchi = useMutation(async (num) => {
+  try {
+    const res = await fetch(
+      `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
+        userData.userId
+      }&achieveNum=${num}`,
+      {
+        method: 'PUT',
+      },
+    );
 
-      const json = await res.json();
-      dispatch(turn(4));
-      return json;
-    } catch (err) {
-      console.log(err);
+    const json = await res.json();
+
+    if (res.ok) {
+      dispatch(turn(num));
+    } else {
+      throw new Error(json.message);
     }
-  });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
   const handleBirthAchi = async () => {
     try {
-      await updateBirthAchi.mutateAsync();
+      await updateAchi.mutateAsync(4);
     } catch (error) {}
   };
-
-  const updateFiveAchi = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${8}`,
-        {
-          method: 'PUT',
-        },
-      );
-
-      const json = await res.json();
-      dispatch(turn(8));
-      return json;
-    } catch (err) {
-      console.log(err);
-    }
-  });
 
   const handleFiveAchi = async () => {
     try {
-      await updateFiveAchi.mutateAsync();
+      await updateAchi.mutateAsync(8);
     } catch (error) {}
   };
 
-  const updateFivePostAchi = useMutation(async () => {
+  const handleFirstPostAchi = async () => {
     try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-          userData.userId
-        }&achieveNum=${6}`,
-        {
-          method: 'PUT',
-        },
-      );
-
-      const json = await res.json();
-      dispatch(turn(6));
-      return json;
-    } catch (err) {
-      console.log(err);
-    }
-  });
+      await updateAchi.mutateAsync(1);
+    } catch (error) {}
+  };
 
   const handleFivePostAchi = async () => {
     try {
-      await updateFivePostAchi.mutateAsync();
+      await updateAchi.mutateAsync(6);
     } catch (error) {}
   };
 
-  console.log(postQuery.data.data.length)
 
   // handleAchi();
   useEffect(()=> {
-    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null)?
-    handleBirthAchi():null;
-
-    !(ac.includes(8)) && ac.length>=5? handleFiveAchi():null;
-    !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5)? handleFivePostAchi():null;
+    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null) && handleBirthAchi();
+    !(ac.includes(8)) && ac.length>=5 && handleFiveAchi();
+    !(ac.includes(1)) && !postQuery.isLoading && (postQuery.data.data.length >= 1) && handleFirstPostAchi();
+    !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5) && handleFivePostAchi();
 
     console.log(ac)
   }, [])
@@ -225,14 +195,14 @@ export default function BadgeList({route, navigation}) {
       {!achieveQuery.isLoading ? (
         achieveQuery.data && (
           <>
-            <View style={styles.ds_container}>
+            <View style={styles.dsContainer}>
               <Image
-                style={styles.ds_image}
+                style={styles.dsImage}
                 source={require('../../assets//graphic/applogo.png')}
               />
               <Text
                 style={
-                  styles.ds_text
+                  styles.dsText
                 }>{`업적을 달성하면 뱃지를 얻을 수 있는 거 아시나요? 여러분이 획득한 뱃지를 볼 수 있는 공간이에요~!`}</Text>
             </View>
             <View
@@ -281,18 +251,18 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     backgroundColor: '#E3F1A9',
   },
-  ds_container: {
+  dsContainer: {
     flexDirection: 'row',
     marginTop: 30,
     marginHorizontal: 20,
     marginBottom: 30,
   },
-  ds_image: {
+  dsImage: {
     width: 49,
     height: 49,
     borderRadius: 50,
   },
-  ds_text: {
+  dsText: {
     flex: 1,
     marginLeft: 7,
     backgroundColor: '#FFF',

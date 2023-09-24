@@ -8,8 +8,6 @@ import {
   Platform,
 } from 'react-native';
 import basicProfile from '../../assets/graphic/basic-profile.jpg';
-import images from '../../assets/images.jpeg';
-import Chat from '../../assets/chat.svg';
 import heartDesel from '../../assets/heart-desel.png';
 import heartSel from '../../assets/heart-sel.png';
 import Swiper from 'react-native-web-swiper';
@@ -55,7 +53,7 @@ const MainPost = ({item, navigation}: any) => {
         throw new Error(data.message);
       }
     } catch (error) {
-      console.error('Error fetching comments:', error);
+      console.error(error);
       throw error;
     }
   };
@@ -184,7 +182,7 @@ const MainPost = ({item, navigation}: any) => {
         setIsLiked(true);
         // queryClient.invalidateQueries(['likes']);
         queryClient.invalidateQueries(['itemCountLikeData', postId]);
-        !ac.includes(2) ? handleLikeAchi() : null;
+        !ac.includes(2) && handleLikeAchi();
       } else {
         console.log(data.message);
       }
@@ -225,7 +223,7 @@ const MainPost = ({item, navigation}: any) => {
         }&achieveNum=${2}`,
         {
           method: 'PUT',
-        },
+        }, 
       );
 
       const json = await res.json();
