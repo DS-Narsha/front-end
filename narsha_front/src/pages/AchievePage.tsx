@@ -11,6 +11,7 @@ import store, { turn } from '../../Achievement'
 
 type UserData = {
   userId: string;
+  groupCode: string;
 };
 
 const AchievePage = () => {
@@ -111,6 +112,54 @@ const AchievePage = () => {
     queryFn: getPostingList,
   });
 
+    // get comment count
+    const getCmtCount = async () => {
+      try {
+        const res = await fetch(
+          `http://${Config.HOST_NAME}/api/comment/count?userId=${userData.userId}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const json = await res.json();
+        return json;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
+    const commentQuery = useQuery({
+      queryKey: ['comment-count'],
+      queryFn: getCmtCount,
+    });
+
+      // get ten like count
+      const getTenLike = async () => {
+        try {
+          const res = await fetch(
+            `http://${Config.HOST_NAME}/api/like/check-tenLikes?userId=${userData.userId}&groupCode=${userData.groupCode}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            },
+          );
+          const json = await res.json();
+          return json;
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      
+      const tenLikeQuery = useQuery({
+        queryKey: ['ten-like'],
+        queryFn: getTenLike,
+      });
+
 // update achievement
 const updateAchi = useMutation(async (num) => {
   try {
@@ -160,6 +209,18 @@ const updateAchi = useMutation(async (num) => {
     } catch (error) {}
   };
 
+  const handleFiveCmtAchi = async () => {
+    try {
+      await updateAchi.mutateAsync(7);
+    } catch (error) {}
+  };
+
+  const handleTenLikeAchi = async () => {
+    try {
+      await updateAchi.mutateAsync(5);
+    } catch (error) {}
+  };
+
 
   // handleAchi();
   useEffect(()=> {
@@ -167,6 +228,8 @@ const updateAchi = useMutation(async (num) => {
     !(ac.includes(8)) && ac.length>=5 &&  handleFiveAchi();
     !(ac.includes(1)) && !postQuery.isLoading && (postQuery.data.data.length >= 1) && handleFirstPostAchi();
     !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5) && handleFivePostAchi();
+    !(ac.includes(7)) && !commentQuery.isLoading && (commentQuery.data.data >= 5) && handleFiveCmtAchi();
+    !(ac.includes(5)) && !tenLikeQuery.isLoading && tenLikeQuery.data && handleTenLikeAchi();
 
     console.log(ac)
   }, [])
