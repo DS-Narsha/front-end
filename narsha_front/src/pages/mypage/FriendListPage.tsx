@@ -46,21 +46,14 @@ export default function FriendList({navigation}: any) {
     queryFn: getFriendsList,
   });
 
-  const moveToFriendStack = (userId: any) => {
+  const moveToFriendStack = (userId: String) => {
     console.log('스택 존');
     console.log(userId);
-    const friendId = userId.toString();
 
     navigation.navigate('FriendStack', {
-      screen: 'FriendPage',
-      params: {
-        friendId: friendId,
-      },
+      friendId: userId,
     });
-
-    // navigation.navigate('FriendStack', {
-    //   friendId: String(userId),
-    // });
+    console.log(navigation);
   };
 
   return (
@@ -89,7 +82,7 @@ export default function FriendList({navigation}: any) {
                     return (
                       <TouchableOpacity
                         style={styles.container}
-                        onPress={() => moveToFriendStack(userId)}>
+                        onPress={() => moveToFriendStack(userId.toString())}>
                         <Image
                           source={
                             profileImage ? {uri: profileImage} : basicProfile

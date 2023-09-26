@@ -191,25 +191,6 @@ export default function PostDetail({route, navigation}) {
     }
   });
 
-  //좋아요 개수
-  const countLike = useMutation(async () => {
-    try {
-      const res = await fetch(
-        `http://${Config.HOST_NAME}/api/like/count?groupCode=${userData.groupCode}}&postId=${id}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      const data = await res.json();
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
-  });
-
   const commentMutation = useMutation(async () => {
     const response = await fetch(
       `http://${Config.HOST_NAME}/api/comment/create`,
@@ -282,7 +263,6 @@ export default function PostDetail({route, navigation}) {
         queryClient.invalidateQueries(['likes']);
         !ac.includes(2) ? handleLikeAchi() : null;
         // likeQuery.refetch(); // refetch
-        //await countLike.mutateAsync();
       } else {
         console.log(data.message);
       }
@@ -296,7 +276,6 @@ export default function PostDetail({route, navigation}) {
     checkLikeQuery.refetch();
     queryClient.invalidateQueries(['likes']);
     // likeQuery.refetch(); // refetch
-    //await countLike.mutateAsync();
   };
 
   const [a, setA] = useState<string[]>([]);
@@ -398,8 +377,7 @@ export default function PostDetail({route, navigation}) {
     <View>
       {!postQuery.isLoading &&
         postQuery.data &&
-        !checkLikeQuery.isLoading &&
-        !countLike.isLoading && (
+        !checkLikeQuery.isLoading && (
           <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.userInfo}>

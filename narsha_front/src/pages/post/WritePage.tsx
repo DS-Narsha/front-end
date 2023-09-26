@@ -8,8 +8,6 @@ import {
   ImageBackground,
   TextInput,
   Image,
-  Modal,
-  ActivityIndicator,
   Alert,
 } from 'react-native';
 import ArrowLeft from '../../assets/arrow-left.svg';
@@ -21,6 +19,9 @@ import ObjectLabel from '../../data/objectLabel.json';
 import Config from 'react-native-config';
 import basicProfile from '../../assets/graphic/basic-profile.jpg';
 import Arrow from '../../assets/text-arrow.svg';
+import ImageGuideModal from '../../components/modal/WriteImageGuideModal';
+import TextLoadingModal from '../../components/modal/WriteTextLoadingModal';
+import FilterModal from '../../components/modal/WriteFilterModal';
 
 type Comment = {
   userId: {
@@ -587,98 +588,13 @@ const WritePage = ({route, navigation}) => {
       </ScrollView>
 
       {/* post guide modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={guideModalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.modalBody}>
-              <Check style={styles.modalIcon} />
-              <View style={styles.modalText}>
-                <Text style={styles.strongText}>
-                  이미지에서 여러분의 민감한 정보들을 가리는 과정이 끝났어요!{' '}
-                  {'\n'}어떤 이미지가 가려졌는지 확인해볼까요?
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ImageGuideModal guideModalVisible={guideModalVisible}/>
+      
       {/* loading modal */}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={loadingModalVisible}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.modalBody}>
-              <ActivityIndicator
-                size="large"
-                color="#98DC63"
-                style={styles.modalIcon}
-              />
-              <View style={styles.modalText}>
-                <Text style={styles.strongText}>
-                  게시글에 부적절한 내용이 있는지 확인 중이에요!
-                  {'\n'}잠시만 기다려주세요.
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      {/* 모달창 */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.filterModalCenteredView}>
-          <View style={styles.filterModalView}>
-            <View style={styles.filterModalTitleArea}>
-              <Text style={styles.filterModalTitleText}>
-                여러분들의 게시글을 수정해주세요!
-              </Text>
-            </View>
-            <Text style={styles.filterModalText}>
-              기호로 감싸진 글자를 모두 수정해야
-            </Text>
-            <Text style={styles.filterModalText}>
-              SNS에 게시글을 올릴 수 있어요.
-            </Text>
-            <Text style={styles.filterModalText}>
-              여러분의 게시글 내용을 수정해볼까요?
-            </Text>
+      <TextLoadingModal loadingModalVisible={loadingModalVisible}/>
 
-            <View style={styles.filterModalAlertArea}>
-              <View style={styles.alertBody}>
-                <Text style={styles.alertInfo}>*개인정보*</Text>
-                <Text style={styles.alertText}>
-                  개인정보, 민간한 정보가 포함되었을 경우
-                </Text>
-              </View>
-              <View style={styles.alertBody}>
-                <Text style={styles.alertInfo}>
-                  {'{'}욕설{'}'}
-                </Text>
-                <Text style={styles.alertText}>
-                  욕설, 비속어의 말이 포함되었을 경우
-                </Text>
-              </View>
-            </View>
-            <View style={styles.filterModalBtnArea}>
-              <TouchableOpacity
-                style={[styles.button]}
-                onPress={() => setModalVisible(false)}>
-                <Text style={styles.filterTextStyle}>확인</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      {/* 모달창 */}
+      <FilterModal modalVisible={modalVisible}/>
     </View>
   );
 };
@@ -817,180 +733,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 18,
   },
-  // modal
-  centeredView: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(150, 150, 150, 0.5)',
-  },
-  modalView: {
-    display: 'flex',
-    margin: 20,
-    width: '90%',
-    height: 80,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalHead: {
-    flex: 0.5,
-    width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: '#AADF98',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalBody: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    flex: 0.8,
-    width: '100%',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-  },
-  modalEnd: {
-    flex: 0.9,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-  },
-  modalIcon: {
-    marginRight: 15,
-  },
-  modalText: {
-    flexDirection: 'row',
-    flex: 1,
-    fontFamily: 'NanumSquareR',
-  },
-  btn: {
-    backgroundColor: '#AADF98',
-    height: 30,
-    width: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 30,
-  },
-  modalTitleText: {
-    color: '#000000',
-    fontSize: 15,
-    fontWeight: '200',
-    fontFamily: 'NanumSquareR',
-  },
-  strongText: {
-    fontSize: 13,
-    fontWeight: '200',
-    color: '#000000',
-    fontFamily: 'NanumSquareR',
-  },
-  modalContent: {
-    marginLeft: 10,
-    fontSize: 14,
-    color: '#909090',
-  },
   objectText: {
     fontFamily: 'NanumSquareR',
     fontSize: 15,
-  },
-  filterModalCenteredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(150, 150, 150, 0.5)',
-  },
-  filterModalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    width: '75%',
-    borderRadius: 20,
-    paddingLeft: 25,
-    paddingRight: 25,
-    paddingBottom: 25,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  filterModalTitleArea: {
-    backgroundColor: '#AADF98',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 17,
-    width: '121%',
-    height: 60,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  filterModalTitleText: {
-    color: 'black',
-    fontSize: 17,
-    fontFamily: 'NanumSquareB',
-  },
-  filterModalText: {
-    marginBottom: 3,
-    textAlign: 'center',
-    color: 'black',
-    fontFamily: 'NanumSquareR',
-  },
-  filterModalAlertArea: {
-    marginTop: 25,
-  },
-  filterModalBtnArea: {
-    flexDirection: 'row',
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    backgroundColor: '#AADF98',
-    width: 115,
-    marginTop: 20,
-    marginRight: 15,
-  },
-  alertBody: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  alertInfo: {
-    color: 'black',
-    fontSize: 12.5,
-    marginLeft: 7,
-    paddingBottom: 5,
-    fontFamily: 'NanumSquareB',
-  },
-  alertText: {
-    color: 'black',
-    fontSize: 12,
-    marginLeft: 7,
-    paddingBottom: 5,
-    fontFamily: 'NanumSquareR',
-  },
-  filterTextStyle: {
-    color: 'black',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    paddingBottom: 2,
-    fontFamily: 'NanumSquareB',
   },
   replaceWordTextContainer: {
     flexDirection: 'row', 

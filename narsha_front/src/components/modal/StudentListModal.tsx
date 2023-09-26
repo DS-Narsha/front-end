@@ -11,9 +11,6 @@ import {
 
 export default function StudentListModal({item}: any) {
   const [modalVisible, setModalVisible] = useState(false);
-  // const length = item.profileImage.length;
-  // const profileImage = item.profileImage.substring(0,length);
-  // const profileImage = item.profileImage.substring(0,item.profileImage.length);
 
   return (
     <View style={styles.container}>

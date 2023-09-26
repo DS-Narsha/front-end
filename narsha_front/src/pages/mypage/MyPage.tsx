@@ -114,34 +114,19 @@ export default function MyPage({navigation}) {
               />
             </View>
             <Text
-              style={{
-                fontFamily: 'NanumSquareB',
-                color: '#000000',
-                fontSize: 15,
-                padding: 2,
-              }}>
+              style={styles.profileNicknameText}>
               {profileQuery.data.data.nikname === null
                 ? '닉네임을 작성해주세요.'
                 : profileQuery.data.data.nikname}
             </Text>
             <Text
-              style={{
-                fontFamily: 'NanumSquareR',
-                color: '#000000',
-                fontSize: 12,
-                padding: 2,
-              }}>
+              style={styles.profileBirthdayText}>
               {profileQuery.data.data.birth === null
                 ? '생일을 아직 등록하지 않았어요.'
                 : profileQuery.data.data.birth}
             </Text>
             <Text
-              style={{
-                fontFamily: 'NanumSquareR',
-                color: '#000000',
-                fontSize: 12.5,
-                padding: 3,
-              }}>
+              style={styles.profileIntroText}>
               {profileQuery.data.data.intro === null
                 ? '소개글을 아직 쓰지 않았어요.'
                 : profileQuery.data.data.intro}
@@ -150,13 +135,7 @@ export default function MyPage({navigation}) {
               style={{flexDirection: 'row', marginTop: 5}}
               onPress={() => navigation.navigate('EditProfile')}>
               <Text
-                style={{
-                  fontFamily: 'NanumSquareB',
-                  color: '#000000',
-                  fontWeight: 'bold',
-                  fontSize: 10,
-                  padding: 2,
-                }}>
+                style={styles.editProfileText}>
                 프로필 수정
               </Text>
               <View style={{paddingTop: 3}}>
@@ -195,11 +174,9 @@ export default function MyPage({navigation}) {
                   flexGrow: 0.5,
                   justifyContent: 'flex-start',
                   alignContent: 'flex-start',
-                  // flexDirection: 'column-reverse',
                   backgroundColor: '#FFFFFF',
                 }}
                 numColumns={3}
-                // columnWrapperStyle={{ flexDirection: 'row-reverse' }}
               />
             </View>
           ) : (
@@ -312,4 +289,29 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
+  profileNicknameText:{
+    fontFamily: 'NanumSquareB',
+    color: '#000000',
+    fontSize: 15,
+    padding: 2,
+  },
+  profileBirthdayText:{
+    fontFamily: 'NanumSquareR',
+    color: '#000000',
+    fontSize: 12,
+    padding: 2,
+  },
+  profileIntroText: {
+    fontFamily: 'NanumSquareR',
+    color: '#000000',
+    fontSize: 12.5,
+    padding: 3,
+  },
+  editProfileText:{
+    fontFamily: 'NanumSquareB',
+    color: '#000000',
+    fontWeight: 'bold',
+    fontSize: 10,
+    padding: 2,
+  }
 });

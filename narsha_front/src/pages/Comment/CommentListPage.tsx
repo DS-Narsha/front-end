@@ -527,17 +527,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     position: 'absolute',
   },
-  loading: {
-    width: '100%',
-    marginBottom: 60,
-    height: 60,
-    padding: 10,
-    flexDirection: 'row',
-    borderRadius: 10,
-    bottom: 0,
-    backgroundColor: '#ffffff',
-    position: 'absolute',
-  },
   input: {
     width: '80%',
     fontFamily: 'NanumSquareB',
@@ -605,10 +594,6 @@ const styles = StyleSheet.create({
     marginRight: 15,
     paddingLeft: 10,
     fontFamily: 'NanumSquareR',
-  },
-  coloredText: {
-    fontFamily: 'NanumSquareB',
-    color: '#FF0000',
   },
   uploadContentTitle: {
     fontSize: 16,

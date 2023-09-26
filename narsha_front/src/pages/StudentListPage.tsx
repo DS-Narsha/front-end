@@ -2,15 +2,9 @@ import React, {useCallback, useState} from 'react';
 import {
   View,
   StyleSheet,
-  Modal,
   Text,
-  Pressable,
-  ImageBackground,
   FlatList,
 } from 'react-native';
-import InitialProfileImage from '../assets/initial-profile-image.svg';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import StudentListModal from '../components/modal/StudentListModal';
 import Config from 'react-native-config';

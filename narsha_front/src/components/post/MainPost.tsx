@@ -261,11 +261,7 @@ const MainPost = ({item, navigation}: any) => {
                 style={styles.userImg}
               />
               <Text
-                style={{
-                  fontWeight: '600',
-                  fontSize: 18,
-                  fontFamily: 'NanumSquareR',
-                }}>
+                style={styles.postUserId}>
                 {item.user.userId}
               </Text>
             </View>
@@ -326,13 +322,7 @@ const MainPost = ({item, navigation}: any) => {
                 onPress={() =>
                   navigation.navigate('CommentListPage', {id: postId})
                 }>
-                <Text
-                  style={{
-                    marginTop: 15,
-                    color: '#61A257',
-                    fontFamily: 'NanumSquareR',
-                    marginHorizontal: 10,
-                  }}>
+                <Text style={styles.commentListBtn}>
                   댓글 {len}개 전체 보기
                 </Text>
               </TouchableOpacity>
@@ -451,6 +441,17 @@ const styles = StyleSheet.create({
   commentContent: {
     fontFamily: 'NanumSquareR',
   },
+  commentListBtn:{
+    marginTop: 15,
+    color: '#61A257',
+    fontFamily: 'NanumSquareR',
+    marginHorizontal: 10,
+  },
+  postUserId:{
+    fontWeight: '600',
+    fontSize: 18,
+    fontFamily: 'NanumSquareR',
+  }
 });
 
 export default MainPost;
