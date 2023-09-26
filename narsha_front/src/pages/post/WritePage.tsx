@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -66,7 +66,7 @@ const WritePage = ({route, navigation}) => {
   let curseData: any;
   const [replaceWord, setReplaceWord] = useState('');
   // const [postId, onChangePostId] = useState();
-  let postId = 0;
+  // let postId = 0;
 
   const [clickLabel, setClickLabel] = useState(true);
 
@@ -245,7 +245,7 @@ const WritePage = ({route, navigation}) => {
   });
 
   //텍스트 필터링
-  const textFilter = async () => {
+  const fetchTextFilter = async () => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/ai-flask/text-filter?text=${content}`,
@@ -257,9 +257,6 @@ const WritePage = ({route, navigation}) => {
         },
       );
       const json = await res.json();
-      console.log(json);
-      console.log(JSON.parse(JSON.stringify(json)));
-
       return json;
     } catch (err) {
       console.log(err);
@@ -276,29 +273,22 @@ const WritePage = ({route, navigation}) => {
 
   const postTextFilterQuery = useQuery({
     queryKey: ['post-text-filtering'],
-    queryFn: textFilter,
+    queryFn: fetchTextFilter,
     enabled: false,
   });
 
   const startTextFilter = async () => {
     try {
-      console.log(content);
-
       setLoadingModalVisible(true);
       const resData = await postTextFilterQuery.refetch();
       setLoadingModalVisible(false);
 
       if (resData.data.status === 200) {
         const inputData = JSON.parse(resData['data']['data'])['input'];
-        console.log(inputData);
         const resultData = JSON.parse(resData['data']['data'])['result'];
-        console.log(resultData);
         curseData = resultData.curse;
-        console.log(curseData);
         const totalData = resultData.total;
-        console.log(totalData);
         const personalData = resultData.personal;
-        console.log(personalData);
 
         let sentence = '';
         let midSentence = '';
@@ -306,8 +296,6 @@ const WritePage = ({route, navigation}) => {
 
         //clean한 문장
         if (resultData === true) {
-          {
-          }
           handlePostUpload(); // upload
           !badgeList[0] && AchieveMutateFunc.mutate();
           navigation.reset({routes: [{name: 'MainNavigator'}]});
@@ -317,15 +305,11 @@ const WritePage = ({route, navigation}) => {
           // curse에 대한 처리
           if (curseData !== null) {
             const curseKeys = Object.keys(curseData);
-            console.log(curseKeys);
             //시작 인덱스 가져오기
             for (let i = 0; i < curseKeys.length; i++) {
-              console.log(curseKeys[i]);
               const index = inputData.indexOf(curseKeys[i]);
               textIndexArray.push(index);
             }
-
-            console.log(textIndexArray); //인덱스
 
             //문자열 위치에 맞게 정렬
             const combinedArray = curseKeys.map((item, index) => ({
@@ -366,12 +350,9 @@ const WritePage = ({route, navigation}) => {
           if (totalData[0] !== null) {
             //문장의 시작 인덱스 가져오기
             for (let i = 0; i < totalData.length; i++) {
-              console.log(totalData[i]);
               const index = sentence.indexOf(totalData[i]);
               totalIndexArray.push(index);
             }
-
-            console.log(totalIndexArray);
 
             //문장 배열들 정렬
             const combinedArray = totalData.map((item, index) => ({
@@ -413,12 +394,9 @@ const WritePage = ({route, navigation}) => {
           if (personalData[0] !== null) {
             //개인정보 시작 인덱스 가져오기
             for (let i = 0; i < personalData.length; i++) {
-              console.log(personalData[i]);
               const index = midSentence.indexOf(personalData[i]);
               personalIndexArray.push(index);
             }
-
-            console.log(personalIndexArray);
 
             //개인정보 배열 정렬
             const combinedArray = personalData.map((item, index) => ({
@@ -564,46 +542,20 @@ const WritePage = ({route, navigation}) => {
                       return (
                         <View
                           key={index}
-                          style={{flexDirection: 'row', marginLeft: 25}}>
-                          <Text
-                            style={{
-                              color: '#FF0000',
-                              fontFamily: 'NanumSquareB',
-                              marginVertical: 3,
-                            }}>{`${key}`}</Text>
-                          <Arrow
-                            style={{marginHorizontal: 13, marginVertical: 3}}
-                          />
-                          <Text
-                            style={{
-                              color: '#000000',
-                              fontFamily: 'NanumSquareB',
-                              marginVertical: 3,
-                            }}>{`${value}`}</Text>
+                          style={styles.replaceWordTextContainer}>
+                          <Text style={[styles.replaceWordText, {color: '#FF0000'}]}>{`${key}`}</Text>
+                          <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
+                          <Text style={[styles.replaceWordText, {color: '#000000'}]}>{`${value}`}</Text>
                         </View>
                       );
                     } else {
                       return (
                         <View
                           key={index}
-                          style={{flexDirection: 'row', marginLeft: 25}}>
-                          <Text
-                            style={{
-                              color: '#FF0000',
-                              fontFamily: 'NanumSquareB',
-                              marginVertical: 3,
-                            }}>{`${key}`}</Text>
-                          <Arrow
-                            style={{marginHorizontal: 13, marginVertical: 3}}
-                          />
-                          <Text
-                            style={{
-                              color: '#0000FF',
-                              fontFamily: 'NanumSquareB',
-                              marginVertical: 3,
-                            }}>
-                            삭제
-                          </Text>
+                          style={styles.replaceWordTextContainer}>
+                          <Text style={[styles.replaceWordText, {color: '#FF0000'}]}>{`${key}`}</Text>
+                          <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
+                          <Text style={[styles.replaceWordText, {color: '#0000FF'}]}>삭제</Text>
                         </View>
                       );
                     }
@@ -1039,6 +991,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingBottom: 2,
     fontFamily: 'NanumSquareB',
+  },
+  replaceWordTextContainer: {
+    flexDirection: 'row', 
+    marginLeft: 25
+  },
+  replaceWordText: {
+    fontFamily: 'NanumSquareB',
+    marginVertical: 3,
   },
 });
 

@@ -49,11 +49,11 @@ export default function App() {
 
   const foregroundListener = useCallback(() => {
     messaging().onMessage(async message => {
-      console.log(message);
-      // if (message.notification) {
-      //   console.log(message);
-      //   pushNoti.displayNoti(message);
-      // }
+      console.log("메세지"+message);
+      if (message.notification) {
+        console.log(message);
+        pushNoti.displayNoti(message);
+      }
     });
   }, []);
 

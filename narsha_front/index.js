@@ -1,33 +1,31 @@
-
 /**
  * @format
  */
 
-import { AppRegistry } from 'react-native';
+import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import messaging from '@react-native-firebase/messaging';
 
 // import turnAchieve from './Achievement';
-import React from "react";
-import  { Provider }  from "react-redux";
-import store from './Achievement'
+import React from 'react';
+import {Provider} from 'react-redux';
+import store from './Achievement';
 
-// const store = createStore(turnAchieve); 
+// const store = createStore(turnAchieve);
 
 // const rootReducer = combineReducers({
 //     turnAchieve
 // });
-  
 
 messaging().setBackgroundMessageHandler(async message => {
-    console.log(message);
-})
+  console.log('메세지' + message);
+});
 
 const Root = () => (
-    <Provider store={store}>
-      <App />
-    </Provider>
-  );
-  
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+
 AppRegistry.registerComponent(appName, () => Root);
