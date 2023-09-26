@@ -807,39 +807,36 @@ const styles = StyleSheet.create({
     fontFamily: 'NanumSquareR',
   },
   largeImageContainer: {
-    // 선택한 이미지 크게 보여줄 컨테이너 스타일
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
   },
   largeImage: {
-    // 큰 이미지 스타일
     height: 300,
     width: 300,
     aspectRatio: 1,
     resizeMode: 'cover',
-    //borderRadius: 10,
   },
   imageContainer: {
-    width: 70, // 이미지의 가로 크기를 조절합니다.
-    height: 70, // 이미지의 세로 크기를 조절합니다.
+    width: 70, 
+    height: 70,
     marginHorizontal: 10,
     marginVertical: 10,
-    borderRadius: 20, // 이미지 끝을 둥글게 만듭니다.
+    borderRadius: 20,
     backgroundColor: '#C0C0C0',
   },
   smallImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 10, // 이미지 끝을 둥글게 만듭니다.
+    borderRadius: 10, 
     resizeMode: 'cover',
   },
   selectedText: {
     position: 'absolute',
-    top: '95%', // 수직 정렬을 위해 top을 50%로 설정
-    left: '97%', // 수평 정렬을 위해 left를 50%로 설정
-    transform: [{translateX: -50}, {translateY: -50}], // 수평, 수직 정렬을 가운데로 조정
+    top: '95%',
+    left: '97%',
+    transform: [{translateX: -50}, {translateY: -50}],
     padding: 5,
     borderRadius: 5,
     fontFamily: 'NanumSquareR',
@@ -865,7 +862,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 18,
   },
-  // modal
   centeredView: {
     flex: 1,
     justifyContent: 'flex-end',

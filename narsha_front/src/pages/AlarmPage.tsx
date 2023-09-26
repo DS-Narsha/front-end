@@ -82,9 +82,12 @@ const AlarmPage = ({navigation}) => {
       return '방금 전';
     } else if (timeDifferenceInMinutes < 60) {
       return `${timeDifferenceInMinutes}분 전`;
-    } else {
+    } else if (timeDifferenceInMinutes < 1440) { // 1440 분 = 1 일
       const timeDifferenceInHours = Math.floor(timeDifferenceInMinutes / 60);
       return `${timeDifferenceInHours}시간 전`;
+    } else {
+      const timeDifferenceInDays = Math.floor(timeDifferenceInMinutes / 1440);
+      return `${timeDifferenceInDays}일 전`;
     }
   };
 
@@ -109,31 +112,31 @@ const AlarmPage = ({navigation}) => {
 
   const renderAlarmItem = ({item}: {item: Alarm}) => (
     <TouchableOpacity onPress={() => handleAlarmItemClick(item)}>
-      <View style={styles.alarm_container}>
-        {item.actionType === 'LIKE' && <LikeSvg style={styles.alarm_image} />}
+      <View style={styles.alarmContainer}>
+        {item.actionType === 'LIKE' && <LikeSvg style={styles.alarmImage} />}
         {item.actionType === 'COMMENT' && (
-          <CommentSvg style={styles.alarm_image} />
+          <CommentSvg style={styles.alarmImage} />
         )}
         {item.actionType === 'NOTICE' && (
-          <NoticeSvg style={styles.alarm_image} />
+          <NoticeSvg style={styles.alarmImage} />
         )}
-        <View style={styles.alarm_text_container}>
+        <View style={styles.alarmTextContainer}>
           {item.actionType === 'LIKE' && (
-            <Text style={styles.alarm_text}>
+            <Text style={styles.alarmText}>
               @{item.userId.userId} 가 게시물에 좋아요를 눌렀어요!
             </Text>
           )}
           {item.actionType === 'COMMENT' && (
-            <Text style={styles.alarm_text}>
+            <Text style={styles.alarmText}>
               @{item.userId.userId} 가 게시물에 댓글을 작성했어요!
             </Text>
           )}
           {item.actionType === 'NOTICE' && (
-            <Text style={styles.alarm_text}>
+            <Text style={styles.alarmText}>
               선생님이 공지를 올리셨어요! 확인하러 가볼까요?
             </Text>
           )}
-          <Text style={styles.alarm_text}>
+          <Text style={styles.alarmText}>
             {getTimeDifference(item.createdAt)}
           </Text>
         </View>
@@ -160,13 +163,13 @@ const AlarmPage = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.ds_container}>
+      <View style={styles.dsContainer}>
         <Image
-          style={styles.ds_image}
+          style={styles.dsImage}
           source={require('../assets//graphic/applogo.png')}
         />
-        <View style={styles.ds_text_container}>
-          <Text style={styles.ds_text}>
+        <View style={styles.dsTextContainer}>
+          <Text style={styles.dsText}>
             좋아요, 공지, 댓글, 생일 등등의 여러가지 알림이{'\n'}오는
             페이지입니다!
           </Text>
@@ -199,17 +202,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  ds_container: {
+  dsContainer: {
     flexDirection: 'row',
     marginTop: 27,
     marginLeft: 20,
   },
-  ds_image: {
+  dsImage: {
     width: 49,
     height: 49,
     borderRadius: 50,
   },
-  ds_text_container: {
+  dsTextContainer: {
     backgroundColor: '#FFFFFF',
     marginLeft: 10,
     textAlign: 'center',
@@ -222,25 +225,25 @@ const styles = StyleSheet.create({
     },
     elevation: 4,
   },
-  ds_text: {
+  dsText: {
     color: '#61A257',
     fontFamily: 'NanumSquareR',
     fontSize: 14,
   },
-  alarm_container: {
+  alarmContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 20,
     marginTop: 15,
   },
-  alarm_image: {
+  alarmImage: {
     width: 60,
     height: 60,
   },
-  alarm_text_container: {
+  alarmTextContainer: {
     flexDirection: 'column',
   },
-  alarm_text: {
+  alarmText: {
     fontFamily: 'NanumSquareR',
     color: '#000000',
     marginLeft: 13,
