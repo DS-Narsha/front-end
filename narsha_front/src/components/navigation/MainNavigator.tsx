@@ -23,6 +23,7 @@ const Tab = createBottomTabNavigator();
 
 type UserData = {
   groupCode: string;
+  userType: string;
 };
 
 //@ts-ignore
@@ -34,6 +35,7 @@ const MainNavigator = ({route}) => {
 
   // alarm-list count 바로 반영
   queryClient.invalidateQueries(['alarm-list']);
+  queryClient.invalidateQueries(['time']);
 
   // get alarm count
   const getAlarmList = async () => {
@@ -77,7 +79,7 @@ const MainNavigator = ({route}) => {
     queryFn: getTime,
   });
 
-  const [bool, setBool] = useState<Boolean>();
+  const [available , setAvailable ] = useState<Boolean>();
 
   useEffect(() => {
     const makeTime = async () => {
@@ -100,28 +102,30 @@ const MainNavigator = ({route}) => {
           String(endTime.getHours()).padStart(2, '0') +
           String(endTime.getMinutes()).padStart(2, '0');
 
-        console.log('s:' + start);
-        console.log('n:' + now);
-        console.log('e:' + end);
-        console.log(
-          startTime.getHours() < endTime.getHours()
-            ? start < now && now < end
-            : start < now || now < end,
-        );
-        setBool(
+        // console.log('s:' + start);
+        // console.log('n:' + now);
+        // console.log('e:' + end);
+        // console.log(
+        //   startTime.getHours() < endTime.getHours()
+        //     ? start < now && now < end
+        //     : start < now || now < end,
+        // );
+        setAvailable (
           startTime.getHours() < endTime.getHours()
             ? start < now && now < end
             : start < now || now < end,
         );
 
-        console.log(bool);
+        // console.log("available: "+available);
       }
     };
 
     makeTime();
   }, [timeQuery.data]);
 
-  return !bool ? (
+
+  
+  return userData.userType == 'teacher' || (userData.userType == 'student' && available)? (
     <Tab.Navigator
       initialRouteName="MainStack"
       screenOptions={({route}) => ({
