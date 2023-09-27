@@ -180,7 +180,7 @@ const AlarmPage = ({navigation}) => {
         />
       ) : (
         <View style={styles.nonPostContainer}>
-          <Text>~ 아직 알림이 없어요 ~</Text>
+          <Text style={styles.contentText}>~ 아직 알림이 없어요 ~</Text>
         </View>
       )}
     </View>
@@ -245,6 +245,9 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginLeft: 13,
     marginTop: 5,
+  },
+  contentText: {
+    fontFamily: 'NanumSquareR',
   },
 });
 

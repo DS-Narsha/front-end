@@ -126,7 +126,9 @@ const MainScreen = ({navigation}) => {
               </View>
             ) : (
               <View style={styles.nonPostContainer}>
-                <Text>~ 아직 다른 친구들이 올린 게시글이 없어요~</Text>
+                <Text style={styles.contentText}>
+                  ~ 아직 다른 친구들이 올린 게시글이 없어요 ~
+                </Text>
               </View>
             )}
           </>
@@ -178,6 +180,9 @@ const styles = StyleSheet.create({
     fontFamily: 'NanumSquareR',
     textAlign: 'center',
     color: '#ffffff',
+  },
+  contentText: {
+    fontFamily: 'NanumSquareR',
   },
 });
 
