@@ -13,7 +13,7 @@ import {useQuery, useQueryClient} from '@tanstack/react-query';
 import GuidePage from './GuidePage';
 import Config from 'react-native-config';
 import store, {turn} from '../../Achievement';
-import {useSelector, useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 type UserData = {
   userId: string;
@@ -83,7 +83,7 @@ const MainScreen = ({navigation}) => {
       const json = await res.json();
       return json;
     } catch (err) {
-      console.log(err);
+      console.log(err); 
     }
   };
 

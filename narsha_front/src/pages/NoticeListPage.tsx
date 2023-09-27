@@ -3,16 +3,14 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   Image,
   FlatList,
 } from 'react-native';
 import SingleInfo from '../components/SingleInfo';
-import {ScrollView} from 'react-native-gesture-handler';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
 import store, { turn } from '../../Achievement'
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 
 type UserData = {
@@ -63,20 +61,25 @@ export default function NoticeList({navigation}) {
   const dispatch = useDispatch();
 
   // update achievement
-  const updateAchi = useMutation(async () => {
+  const updateAchi = useMutation(async (num) => {
     try {
       const res = await fetch(
         `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
           userData.userId
-        }&achieveNum=${9}`,
+        }&achieveNum=${num}`,
         {
           method: 'PUT',
         },
       );
 
       const json = await res.json();
-      dispatch(turn(9));
-      return json;
+
+      if (res.ok) {
+        dispatch(turn(num));
+      } else {
+        throw new Error(json.message);
+      }
+
     } catch (err) {
       console.log(err);
     }
@@ -84,28 +87,27 @@ export default function NoticeList({navigation}) {
 
   const handleAchi = async () => {
     try {
-      await updateAchi.mutateAsync();
+      await updateAchi.mutateAsync(9);
     } catch (error) {}
   };
 
   // handleAchi();
   useEffect(()=> {
-    !(ac.includes(9))?
-    handleAchi():null;
+    !(ac.includes(9)) && handleAchi();
   }, [])
 
   return (
     <View style={styles.body}>
       {!noticeQuery.isLoading && (
         <>
-          <View style={styles.ds_container}>
+          <View style={styles.dsContainer}>
             <Image
-              style={styles.ds_image}
+              style={styles.dsImage}
               source={require('../assets//graphic/applogo.png')}
             />
             <Text
               style={
-                styles.ds_text
+                styles.dsText
               }>{`선생님이 여러분 모두에게 알리기 위한 내용들은 \n이 곳에 올라온답니다.`}</Text>
           </View>
           <View style={{backgroundColor: '#FCFDE1'}}>
@@ -149,18 +151,18 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#FCFDE1',
   },
-  ds_container: {
+  dsContainer: {
     flexDirection: 'row',
     marginTop: 30,
     marginBottom: 30,
     paddingHorizontal: 16,
   },
-  ds_image: {
+  dsImage: {
     width: 49,
     height: 49,
     borderRadius: 50,
   },
-  ds_text: {
+  dsText: {
     flex: 1,
     marginLeft: 7,
     backgroundColor: '#FFF',
