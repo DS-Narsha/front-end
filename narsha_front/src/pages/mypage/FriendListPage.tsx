@@ -13,6 +13,7 @@ import FriendStack from '../../components/navigation/FriendStack';
 
 type UserData = {
   groupCode: string;
+  userId: string;
 };
 
 //@ts-ignore
@@ -26,7 +27,7 @@ export default function FriendList({navigation}: any) {
   const getFriendsList = async () => {
     try {
       const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/student-list?groupCode=${userData.groupCode}`,
+        `http://${Config.HOST_NAME}/api/user/student-list?groupCode=${userData.groupCode}&userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {

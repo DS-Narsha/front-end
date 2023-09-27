@@ -11,6 +11,7 @@ import Config from 'react-native-config';
 
 type UserData = {
   groupCode: string;
+  userId: string;
 };
 
 export default function StudentListPage({navigation}: any) {
@@ -26,7 +27,7 @@ export default function StudentListPage({navigation}: any) {
   const getStudentList = async () => {
     try {
       const res = await fetch(
-        `http://${Config.HOST_NAME}/api/user/student-list?groupCode=${userData.groupCode}`,
+        `http://${Config.HOST_NAME}/api/user/student-list?groupCode=${userData.groupCode}&userId=${userData.userId}`,
         {
           method: 'GET',
           headers: {
