@@ -123,7 +123,7 @@ const MainNavigator = ({route}) => {
     makeTime();
   }, [timeQuery.data]);
 
-  return userData.userType == 'teacher' || (userData.userType == 'student' && available)? (
+  return userData.userType == 'teacher' || (userData.userType == 'student' && !available)? (
     <Tab.Navigator
       initialRouteName="MainStack"
       screenOptions={({route}) => ({
