@@ -111,4 +111,176 @@ $ npm start:dev
 ```
 
 ## Project Structure
-
+```
+📦 front-end
+└─ narsha_front
+   ├─ .eslintrc.
+   ├─ .gitignore
+   ├─ .prettierrc.js
+   ├─ .vscode
+   │  └─ settings.json
+   ├─ Achievement.js
+   ├─ App.tsx
+   ├─ android
+   │  ├─ app
+   │  │  ├─ build.gradle
+   │  │  ├─ debug.keystore
+   │  │  ├─ proguard-rules.pro
+   │  │  └─ src
+   │  │     ├─ debug
+   │  │     │  ├─ AndroidManifest.xml
+   │  │     │  └─ java
+   │  │     │     └─ com
+   │  │     │        └─ narsha_front
+   │  │     │           └─ ReactNativeFlipper.java
+   │  │     ├─ main
+   │  │     │  ├─ AndroidManifest.xml
+   │  │     │  ├─ assets
+   │  │     │  │  └─ fonts
+   │  │     │  │     ├─ NanumSquareB.ttf
+   │  │     │  │     └─ NanumSquareR.ttf
+   │  │     │  ├─ java
+   │  │     │  │  └─ com
+   │  │     │  │     └─ narsha_front
+   │  │     │  │        ├─ MainActivity.java
+   │  │     │  │        ├─ MainApplication.java
+   │  │     │  │        └─ SplashActivity.java
+   │  │     │  └─ res
+   │  │     │     ├─ drawable
+   │  │     │     │  ├─ rn_edit_text_material.xml
+   │  │     │     │  └─ splash_bg.jpg
+   │  │     │     └─ layout
+   │  │     │        └─ launch_screen.xml
+   │  │     └─ release
+   │  │        └─ java
+   │  │           └─ com
+   │  │              └─ narsha_front
+   │  │                 └─ ReactNativeFlipper.java
+   │  ├─ build.gradle
+   │  ├─ gradle.properties
+   │  ├─ gradle
+   │  │  └─ wrapper
+   │  │     ├─ gradle-wrapper.jar
+   │  │     └─ gradle-wrapper.properties
+   │  ├─ gradlew
+   │  ├─ gradlew.bat
+   │  └─ settings.gradle
+   ├─ app.json
+   ├─ babel.config.js
+   ├─ declarations.d.ts
+   ├─ index.js
+   ├─ ios
+   │  ├─ .xcode.env
+   │  ├─ Podfile
+   │  ├─ narsha_front.xcodeproj
+   │  │  ├─ project.pbxproj
+   │  │  └─ xcshareddata
+   │  │     └─ xcschemes
+   │  │        └─ narsha_front.xcscheme
+   │  ├─ narsha_front
+   │    ├─ AppDelegate.h
+   │    ├─ AppDelegate.mm
+   │    ├─ Images.xcassets
+   │    │  ├─ AppIcon.appiconset
+   │    │  │  └─ Contents.json
+   │    │  └─ Contents.json
+   │    ├─ Info.plist
+   │    ├─ LaunchScreen.storyboard
+   │    └─ main.m
+   │       
+   ├─ metro.config.js
+   ├─ package-lock.json
+   ├─ package.json
+   ├─ react-native-config.d.ts
+   ├─ src
+   │  ├─ assets
+   │  ├─ components
+   │  │  ├─ AchieveItem.tsx
+   │  │  ├─ CustomButton.tsx
+   │  │  ├─ GroupButton.tsx
+   │  │  ├─ MultiTextInput.tsx
+   │  │  ├─ MyTextInput.tsx
+   │  │  ├─ SingleBadge.tsx
+   │  │  ├─ SingleInfo.tsx
+   │  │  ├─ SingleTextInput.tsx
+   │  │  ├─ TimePicker.tsx
+   │  │  ├─ animation
+   │  │  │  ├─ ImageCards.tsx
+   │  │  │  ├─ LoadingCloud.tsx
+   │  │  │  └─ ReadingGlasses.tsx
+   │  │  ├─ modal
+   │  │  │  ├─ CommentFilterModal.tsx
+   │  │  │  ├─ CommentLoadingModal.tsx
+   │  │  │  ├─ GroupCodeModal.tsx
+   │  │  │  ├─ GroupDeleteModal.tsx
+   │  │  │  ├─ NoticeModal.tsx
+   │  │  │  ├─ StudentListModal.tsx
+   │  │  │  ├─ WriteFilterModal.tsx
+   │  │  │  ├─ WriteImageGuideModal.tsx
+   │  │  │  └─ WriteTextLoadingModal.tsx
+   │  │  ├─ navigation
+   │  │  │  ├─ AchieveStack.tsx
+   │  │  │  ├─ AlarmStack.tsx
+   │  │  │  ├─ AuthStack.tsx
+   │  │  │  ├─ FriendStack.tsx
+   │  │  │  ├─ MainNavigator.tsx
+   │  │  │  ├─ MainStack.tsx
+   │  │  │  ├─ MyPageStack.tsx
+   │  │  │  ├─ PostStack.tsx
+   │  │  │  └─ Routes.tsx
+   │  │  └─ post
+   │  │     └─ MainPost.tsx
+   │  ├─ data
+   │  │  ├─ AchieveData.json
+   │  │  ├─ BadgeSources.js
+   │  │  ├─ GuideData.json
+   │  │  └─ objectLabel.json
+   │  ├─ pages
+   │  │  ├─ AchievePage.tsx
+   │  │  ├─ AlarmPage.tsx
+   │  │  ├─ Comment
+   │  │  │  ├─ CommentListPage.tsx
+   │  │  │  └─ Loading.tsx
+   │  │  ├─ GuidePage.tsx
+   │  │  ├─ Like
+   │  │  │  └─ LikeListPage.tsx
+   │  │  ├─ MainPage.tsx
+   │  │  ├─ NotAvailablePage.tsx
+   │  │  ├─ NoticeListPage.tsx
+   │  │  ├─ NoticeWritePage.tsx
+   │  │  ├─ PostDetailPage.tsx
+   │  │  ├─ SignUp
+   │  │  │  ├─ Admin
+   │  │  │  │  ├─ GroupPage.tsx
+   │  │  │  │  └─ SignUpPage.tsx
+   │  │  │  ├─ InputUserInfoPage.tsx
+   │  │  │  ├─ SelectUserTypePage.tsx
+   │  │  │  ├─ User
+   │  │  │  │  └─ InputGroupPage.tsx
+   │  │  │  ├─ UserPageModal.tsx
+   │  │  │  └─ login
+   │  │  │     ├─ LoginPage.tsx
+   │  │  │     └─ SelectGroupPage.tsx
+   │  │  ├─ StartPage.tsx
+   │  │  ├─ StudentListPage.tsx
+   │  │  ├─ TeacherMenuPage.tsx
+   │  │  ├─ TimeSelectPage.tsx
+   │  │  ├─ friendpage
+   │  │  │  ├─ FriendBadgeListPage.tsx
+   │  │  │  ├─ FriendPage.tsx
+   │  │  │  └─ FriendPostDetailPage.tsx
+   │  │  ├─ mypage
+   │  │  │  ├─ BadgeListPage.tsx
+   │  │  │  ├─ EditProfilePage.tsx
+   │  │  │  ├─ FriendListPage.tsx
+   │  │  │  └─ MyPage.tsx
+   │  │  └─ post
+   │  │     ├─ PostLoadingPage.tsx
+   │  │     ├─ PostPage.tsx
+   │  │     ├─ SelectImagePage.tsx
+   │  │     └─ WritePage.tsx
+   │  └─ utils
+   │     └─ pushNoti.tsx
+   ├─ tsconfig.json
+   └─ yarn.lock
+```
