@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import {Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import DeleteGroup from '../../assets/teacherMenu/deleteGroup.svg';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import AuthStack from '../navigation/AuthStack';
-import MyPageStack from '../navigation/MyPageStack';
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import Config from 'react-native-config';
 
 type UserData = {
@@ -59,9 +57,7 @@ export default function GroupCodeModal({navigation}: any) {
 
   return (
     <View>
-      {/* {!isLoading &&(
-      <> */}
-      <View style={styles.container}>
+      <View>
         <Modal
           animationType="fade"
           transparent={true}
@@ -77,28 +73,24 @@ export default function GroupCodeModal({navigation}: any) {
 
               <View style={styles.modalBody}>
                 <View style={styles.modalText}>
-                  <Text style={styles.boldText}>
+                  <Text style={styles.strongText}>
                     정말로 그룹을 삭제하시겠습니까?
                   </Text>
                   <Text style={styles.content}>
-                    (그룹을 삭제하면 해당 그룹의 모든 활동
-                  </Text>
-                  <Text style={styles.content}>내역이 삭제되며,</Text>
-                  <Text style={styles.content}>
-                    삭제 후에 복구는 불가능 합니다.)
+                    (그룹을 삭제하면 해당 그룹의 모든 활동{"\n"} 내역이 삭제되며, {"\n"} 삭제 후에 복구는 불가능 합니다.)
                   </Text>
                 </View>
               </View>
 
               <View style={styles.modalEnd}>
-                <Pressable onPress={() => setModalVisible(!modalVisible)}>
-                  <View style={styles.btn}>
-                    <Text style={styles.strongText}>닫기</Text>
-                  </View>
-                </Pressable>
                 <Pressable onPress={startDeleteGroup}>
                   <View style={styles.btn}>
                     <Text style={styles.strongText}>삭제하기</Text>
+                  </View>
+                </Pressable>
+                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <View style={styles.btn}>
+                    <Text style={styles.strongText}>닫기</Text>
                   </View>
                 </Pressable>
               </View>
@@ -114,8 +106,6 @@ export default function GroupCodeModal({navigation}: any) {
           </View>
         </Pressable>
       </View>
-      {/* </>
-      )} */}
     </View>
   );
 }
@@ -190,10 +180,9 @@ const styles = StyleSheet.create({
   modalTitleText: {
     fontFamily: 'NanumSquareB',
     color: '#000000',
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '200',
   },
-  container: {},
   strongText: {
     fontFamily: 'NanumSquareB',
     fontSize: 14,
@@ -201,16 +190,11 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   content: {
+    marginTop: 6,
+    textAlign: 'center',
     fontFamily: 'NanumSquareR',
     marginVertical: 2,
     fontSize: 14,
     color: '#909090',
-  },
-  boldText: {
-    fontFamily: 'NanumSquareB',
-    marginBottom: 5,
-    fontSize: 14,
-    fontWeight: '200',
-    color: '#000000',
   },
 });

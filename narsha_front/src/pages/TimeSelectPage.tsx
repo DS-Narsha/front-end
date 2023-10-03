@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import TimePicker from '../components/TimePicker';
 import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
@@ -77,20 +77,20 @@ export default function TimeSelectPage({navigation}: any) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.container2}>
-        <View style={styles.textContainer1}>
+      <View style={styles.timeContainer}>
+        <View style={styles.textContainer}>
           <Text style={styles.text}>학생들의 앱 사용시간을</Text>
         </View>
         <View>
           <TimePicker SetStart={setSTime} bool={true} />
         </View>
-        <View style={styles.textContainer2}>
+        <View style={styles.periodTextContainer}>
           <Text style={styles.text}>부터</Text>
         </View>
         <View>
           <TimePicker SetEnd={setETime} bool={false} />
         </View>
-        <View style={styles.textContainer2}>
+        <View style={styles.periodTextContainer}>
           <Text style={styles.text}>까지</Text>
         </View>
       </View>
@@ -114,13 +114,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  container2: {
+  timeContainer: {
     marginTop: 40,
   },
-  textContainer1: {
+  textContainer: {
     marginBottom: 20,
   },
-  textContainer2: {
+  periodTextContainer: {
     alignItems: 'flex-end',
   },
   text: {
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     marginTop: 120,
   },
   btnText: {
+    fontFamily: 'NanumSquareB',
     color: '#000000',
     fontSize: 15,
     fontWeight: '200',

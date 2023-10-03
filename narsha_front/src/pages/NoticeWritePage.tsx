@@ -2,15 +2,12 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Alert,
   TextInput,
   Modal,
   Pressable,
 } from 'react-native';
-import SingleTextInput from '../components/SingleTextInput';
-import MultiTextInput from '../components/MultiTextInput';
 import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
 import {ScrollView} from 'react-native-gesture-handler';
 import Config from 'react-native-config';
@@ -87,7 +84,7 @@ export default function NoticeWritePage({navigation}: any) {
             <View style={styles.titlecontainer}>
               <Text style={styles.title}>공지 제목</Text>
             </View>
-            <View style={styles.textinput}>
+            <View style={styles.textInput}>
               <View style={styles.titleTextContainer}>
                 <TextInput
                   style={styles.titleInputText}
@@ -99,7 +96,7 @@ export default function NoticeWritePage({navigation}: any) {
             <View style={styles.titlecontainer}>
               <Text style={styles.title}>공지 내용</Text>
             </View>
-            <View style={styles.textinput}>
+            <View style={styles.textInput}>
               <View style={styles.contentTextContainer}>
                 <TextInput
                   style={styles.contentInputText}
@@ -154,10 +151,6 @@ export default function NoticeWritePage({navigation}: any) {
               <Text style={styles.btntitle}>공지 올리기</Text>
             </View>
           </Pressable>
-
-          {/* <TouchableOpacity onPress={uploadNotice}>
-            
-          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </View>
@@ -174,7 +167,7 @@ const styles = StyleSheet.create({
   writingNoticeContainer: {
     marginTop: 45,
   },
-  textinput: {
+  textInput: {
     width: 350,
     margin: 10,
   },
@@ -287,8 +280,6 @@ const styles = StyleSheet.create({
   },
   modalText: {
     alignItems: 'center',
-    // flexDirection: 'row',
-    // marginLeft: 20,
     marginTop: 20,
   },
   strongText: {

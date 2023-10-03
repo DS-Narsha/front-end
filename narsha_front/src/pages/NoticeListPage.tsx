@@ -100,14 +100,14 @@ export default function NoticeList({navigation}) {
     <View style={styles.body}>
       {!noticeQuery.isLoading && (
         <>
-          <View style={styles.dsContainer}>
+          <View style={styles.guideContainer}>
             <Image
-              style={styles.dsImage}
+              style={styles.guideImage}
               source={require('../assets//graphic/applogo.png')}
             />
             <Text
               style={
-                styles.dsText
+                styles.guideText
               }>{`선생님이 여러분 모두에게 알리기 위한 내용들은 \n이 곳에 올라온답니다.`}</Text>
           </View>
           <View style={{backgroundColor: '#FCFDE1'}}>
@@ -124,15 +124,7 @@ export default function NoticeList({navigation}) {
                     setPageSize(pageSize + 5);
                   }}
                   showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{
-                    paddingTop: 10,
-                    paddingBottom: 500,
-                    flexGrow: 0.5,
-                    justifyContent: 'space-around',
-                    alignSelf: 'center',
-                    flexDirection: 'column-reverse',
-                    backgroundColor: '#FCFDE1',
-                  }}
+                  contentContainerStyle={styles.contentContainer}
                   numColumns={1}
                 />
               </View>
@@ -151,18 +143,18 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#FCFDE1',
   },
-  dsContainer: {
+  guideContainer: {
     flexDirection: 'row',
     marginTop: 30,
     marginBottom: 30,
     paddingHorizontal: 16,
   },
-  dsImage: {
+  guideImage: {
     width: 49,
     height: 49,
     borderRadius: 50,
   },
-  dsText: {
+  guideText: {
     flex: 1,
     marginLeft: 7,
     backgroundColor: '#FFF',
@@ -177,4 +169,13 @@ const styles = StyleSheet.create({
     },
     elevation: 5,
   },
+  contentContainer:{
+    paddingTop: 10,
+    paddingBottom: 500,
+    flexGrow: 0.5,
+    justifyContent: 'space-around',
+    alignSelf: 'center',
+    flexDirection: 'column-reverse',
+    backgroundColor: '#FCFDE1',
+  }
 });
