@@ -136,29 +136,53 @@ const AchievePage = () => {
       queryFn: getCmtCount,
     });
 
-      // get ten like count
-      const getTenLike = async () => {
-        try {
-          const res = await fetch(
-            `http://${Config.HOST_NAME}/api/like/check-tenLikes?userId=${userData.userId}&groupCode=${userData.groupCode}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          );
-          const json = await res.json();
-          return json;
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      
-      const tenLikeQuery = useQuery({
-        queryKey: ['ten-like'],
-        queryFn: getTenLike,
-      });
+  // receive ten like count
+  const receiveTenLike = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/like/receive-tenLikes?userId=${userData.userId}&groupCode=${userData.groupCode}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const receiveTenLikeQuery = useQuery({
+    queryKey: ['receive-ten-like'],
+    queryFn: receiveTenLike,
+  });
+
+  // give ten like count
+  const giveTenLike = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/like/give-tenLikes?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  const giveTenLikeQuery = useQuery({
+    queryKey: ['give-ten-like'],
+    queryFn: giveTenLike,
+  });
 
 // update achievement
 const updateAchi = useMutation(async (num) => {
@@ -215,9 +239,15 @@ const updateAchi = useMutation(async (num) => {
     } catch (error) {}
   };
 
-  const handleTenLikeAchi = async () => {
+  const handleReceiveTenLikeAchi = async () => {
     try {
       await updateAchi.mutateAsync(5);
+    } catch (error) {}
+  };
+  
+  const handleGiveTenLikeAchi = async () => {
+    try {
+      await updateAchi.mutateAsync(10);
     } catch (error) {}
   };
 
@@ -229,7 +259,8 @@ const updateAchi = useMutation(async (num) => {
     !(ac.includes(1)) && !postQuery.isLoading && (postQuery.data.data.length >= 1) && handleFirstPostAchi();
     !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5) && handleFivePostAchi();
     !(ac.includes(7)) && !commentQuery.isLoading && (commentQuery.data.data >= 5) && handleFiveCmtAchi();
-    !(ac.includes(5)) && !tenLikeQuery.isLoading && tenLikeQuery.data && handleTenLikeAchi();
+    !(ac.includes(5)) && !receiveTenLikeQuery.isLoading && receiveTenLikeQuery.data.data && handleReceiveTenLikeAchi();
+    !(ac.includes(10)) && !giveTenLikeQuery.isLoading && giveTenLikeQuery.data.data>=10 && handleGiveTenLikeAchi();
 
     console.log(ac)
   }, [])

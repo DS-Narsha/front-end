@@ -63,6 +63,7 @@ const MainScreen = ({navigation}) => {
       for (let i = 0; i < 10; i++) {
         if (arr[i] == true && !ac.includes(i + 1)) {
           dispatch(turn(i + 1));
+          console.log(i+1)
         }
       }
     }
