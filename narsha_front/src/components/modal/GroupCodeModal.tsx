@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import GroupCode from '../../assets/teacherMenu/groupCode.svg';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import Config from 'react-native-config';
+import Copy from '../../assets/teacherMenu/copy.svg';
+import CopySuccessModal from '../modal/CopySuccessModal';
 
 type UserData = {
   userId: string;
@@ -10,6 +13,7 @@ type UserData = {
 };
 
 export default function GroupCodeModal() {
+  const [copyModalVisible, setCopyModalVisible] = useState(false);
   const queryClient = useQueryClient();
   const {data: userData} = useQuery(['user'], () => {
     return queryClient.getQueryData(['user']);
@@ -38,12 +42,30 @@ export default function GroupCodeModal() {
     queryFn: getGroupCode,
   });
 
+  const handleCopyToClipboard = () => {
+    Clipboard.setString(userData.groupCode);
+    setCopyModalVisible(true);
+  };
+
+  // 모달 타이머
+  useEffect(() => {
+    setCopyModalVisible(true);
+    guideTimeout;
+    return () => {
+      clearTimeout(guideTimeout);
+    };
+  }, []);
+  // modal timer
+  const guideTimeout = setTimeout(() => {
+    setCopyModalVisible(false);
+  }, 3000);
+
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
       {!isLoading && (
         <>
-          <View style={styles.container}>
+          <View>
             <Modal
               animationType="fade"
               transparent={true}
@@ -61,6 +83,9 @@ export default function GroupCodeModal() {
                     <View style={styles.modalText}>
                       <Text style={styles.strongText}>그룹 코드: </Text>
                       <Text style={styles.content}>{userData.groupCode}</Text>
+                      <Pressable onPress={handleCopyToClipboard} style={styles.copyBtn}>
+                        <Copy/>
+                      </Pressable>
                     </View>
                   </View>
 
@@ -78,11 +103,13 @@ export default function GroupCodeModal() {
             <Pressable onPress={() => setModalVisible(true)}>
               <View>
                 <View>
-                  <GroupCode />
+                  <GroupCode/>
                 </View>
               </View>
             </Pressable>
           </View>
+
+          <CopySuccessModal copyModalVisible={copyModalVisible}/>
         </>
       )}
     </View>
@@ -126,7 +153,7 @@ const styles = StyleSheet.create({
   modalBody: {
     flex: 0.8,
     width: '100%',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   modalEnd: {
@@ -141,7 +168,6 @@ const styles = StyleSheet.create({
     fontFamily: 'NanumSquareR',
     color: '#000000',
     flexDirection: 'row',
-    marginLeft: 20,
     marginTop: 20,
   },
   btn: {
@@ -158,7 +184,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '200',
   },
-  container: {},
   strongText: {
     fontFamily: 'NanumSquareB',
     fontSize: 14,
@@ -170,5 +195,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 14,
     color: '#909090',
+  },
+  copyBtn:{
+    marginLeft: 10,
   },
 });

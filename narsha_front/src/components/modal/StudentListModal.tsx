@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   nickname: {
+    fontFamily: 'NanumSquareR',
     fontSize: 12,
     color: '#909090',
   },

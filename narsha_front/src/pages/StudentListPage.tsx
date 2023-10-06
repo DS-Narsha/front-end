@@ -69,19 +69,12 @@ export default function StudentListPage({navigation}: any) {
                   setPageSize(pageSize + 10);
                 }}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingTop: 40,
-                  paddingBottom: 500,
-                  flexGrow: 0.5,
-                  justifyContent: 'space-around',
-                  alignSelf: 'center',
-                  backgroundColor: '#FFFFFF',
-                }}
+                contentContainerStyle={styles.contentContainer}
                 numColumns={1}
               />
             </View>
           ) : (
-            <Text>등록된 학생이 없습니다.</Text>
+            <Text style={styles.contentText}>등록된 학생이 없습니다.</Text>
           )}
         </>
       )}
@@ -99,4 +92,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  contentText: {
+    fontFamily: 'NanumSquareR',
+  },
+  contentContainer:{
+    paddingTop: 40,
+    paddingBottom: 500,
+    flexGrow: 0.5,
+    justifyContent: 'space-around',
+    alignSelf: 'center',
+    backgroundColor: '#FFFFFF',
+  }
 });

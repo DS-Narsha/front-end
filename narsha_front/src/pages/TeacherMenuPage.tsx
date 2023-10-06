@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {Text, View, StyleSheet, Button, Pressable} from 'react-native';
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
 import Notification from '../assets/teacherMenu/notification.svg';
 import StudentList from '../assets/teacherMenu/studentList.svg';
 import AppTime from '../assets/teacherMenu/appTime.svg';
@@ -33,7 +33,6 @@ export default function TeacherMenu({navigation}: any) {
       <View style={styles.secondRowContainer}>
         <TouchableOpacity>
           <View style={{padding: 15}}>
-            {/* <GroupCode /> */}
             <GroupCodeModal/>
           </View>
         </TouchableOpacity>
@@ -42,11 +41,6 @@ export default function TeacherMenu({navigation}: any) {
             <GroupDeleteModal navigation={navigation}/>
           </View>
         </TouchableOpacity>
-        {/* <TouchableOpacity>
-          <View style={{padding: 15}}>
-            <Undefinedfunc />
-          </View>
-        </TouchableOpacity> */}
       </View>
     </View>
   );
