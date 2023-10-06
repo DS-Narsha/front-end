@@ -17,6 +17,8 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import pushNoti from './src/utils/pushNoti';
+// import { onDisplayNotification } from './src/utils/onDisplayNotification';
+import notifee, {AndroidImportance, AndroidColor} from '@notifee/react-native';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('[Background Remote Message]', remoteMessage);
@@ -40,23 +42,46 @@ export const getData = async (key: string) => {
   }
 };
 
+const displayNotification = async (message: any) => {
+  await notifee.createChannel({
+    id: 'channel_id',
+    name: 'Channel Name',
+    importance: AndroidImportance.HIGH,
+  });
+
+  const channelId = 'channel_id';
+
+  await notifee.displayNotification({
+    title: message.notification.title,
+    body: message.notification.body,
+    android: {
+      channelId,
+    },
+  });
+};
+
 export default function App() {
+
   const getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
-    console.log('[FCM Token] ', fcmToken);
   };
 
   const foregroundListener = useCallback(() => {
     messaging().onMessage(async message => {
-      console.log("메세지"+message);
       if (message.notification) {
-        console.log(message);
-        pushNoti.displayNoti(message);
+        const title = message.notification.title;
+        const body = message.notification.body;
+        //onDisplayNotification();
+        //await onDisplayNotification({title, body});
+        //pushNoti.displayNoti(message);
+        console.log(message)
+        displayNotification(message);
       }
     });
   }, []);
 
   useEffect(() => {
+    // getFcmToken();
     foregroundListener();
   }, []);
 

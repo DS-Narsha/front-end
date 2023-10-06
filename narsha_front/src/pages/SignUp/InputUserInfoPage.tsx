@@ -47,7 +47,7 @@ const InputUserInfoPage = ({navigation, route}) => {
   const [username, setUsername] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
-  const [isIdAvailable, setIsIdAvailable] = useState(false); // 중복 여부 상태
+  const [isIdAvailable, setIsIdAvailable] = useState('initial'); // 중복 여부 상태
 
   const queryClient = useQueryClient();
 
@@ -74,7 +74,7 @@ const InputUserInfoPage = ({navigation, route}) => {
 
   const handleRegister = async () => {
     if (username && userId && password) {
-      if (isIdAvailable) {
+      if (isIdAvailable === 'initial' || isIdAvailable === 'available') {
         try {
           const data = await registerMutation.mutateAsync();
 
@@ -118,9 +118,9 @@ const InputUserInfoPage = ({navigation, route}) => {
       const data = await response.json();
 
       if (data.status === 200) {
-        setIsIdAvailable(true);
+        setIsIdAvailable('available');
       } else {
-        setIsIdAvailable(false);
+        setIsIdAvailable('unavailable');
       }
     } catch (error) {
       console.log(error);
@@ -174,13 +174,16 @@ const InputUserInfoPage = ({navigation, route}) => {
               <Text style={styles.checkButtonText}>중복 확인</Text>
             </TouchableOpacity>
           </View>
-          {!isIdAvailable && (
+          {isIdAvailable === 'unavailable' && (
             <Text style={styles.warningText}>
               * 이미 존재하는 아이디입니다.
             </Text>
           )}
-          {isIdAvailable && (
+          {isIdAvailable === 'available' && (
             <Text style={styles.passText}>* 사용 가능한 아이디입니다.</Text>
+          )}
+          {isIdAvailable === 'initial' && (
+            <Text style={styles.passText}></Text>
           )}
           <Text style={styles.formText}>비밀번호</Text>
           <View style={styles.inputContainer}>
