@@ -19,6 +19,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E3F1A9',
   },
+  listContainer: {
+    marginTop: 10,
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
   top: {
     flexDirection: 'column',
     justifyContent: 'center',
@@ -257,26 +262,26 @@ export default function SelectImage({navigation}) {
         </View>
         <View style={styles.line} />
         {photos ? (
-          <FlatList
-            style={{paddingTop: 15}}
-            data={photos.edges}
-            renderItem={_RenderItem}
-            key={'#'}
-            keyExtractor={(item, index) => '#' + index.toString()}
-            // 페이징 처리
-            onEndReached={() => {
-              setPageSize(pageSize + 24);
-            }}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: 100,
-              flexGrow: 1,
-              marginHorizontal: 30,
-              justifyContent: 'flex-start',
-              alignContent: 'flex-start',
-            }}
-            numColumns={3}
-          />
+          <View style={styles.listContainer}>
+            <FlatList
+              data={photos.edges}
+              renderItem={_RenderItem}
+              key={'#'}
+              keyExtractor={(item, index) => '#' + index.toString()}
+              // 페이징 처리
+              onEndReached={() => {
+                setPageSize(pageSize + 24);
+              }}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 100,
+                flexGrow: 1,
+                justifyContent: 'flex-start',
+                alignContent: 'flex-start',
+              }}
+              numColumns={3}
+            />
+          </View>
         ) : (
           <Text>이미지가 없습니다.</Text>
         )}

@@ -113,20 +113,17 @@ export default function MyPage({navigation}) {
                 style={styles.profile}
               />
             </View>
-            <Text
-              style={styles.profileNicknameText}>
+            <Text style={styles.profileNicknameText}>
               {profileQuery.data.data.nikname === null
                 ? '닉네임을 작성해주세요.'
                 : profileQuery.data.data.nikname}
             </Text>
-            <Text
-              style={styles.profileBirthdayText}>
+            <Text style={styles.profileBirthdayText}>
               {profileQuery.data.data.birth === null
                 ? '생일을 아직 등록하지 않았어요.'
                 : profileQuery.data.data.birth}
             </Text>
-            <Text
-              style={styles.profileIntroText}>
+            <Text style={styles.profileIntroText}>
               {profileQuery.data.data.intro === null
                 ? '소개글을 아직 쓰지 않았어요.'
                 : profileQuery.data.data.intro}
@@ -134,10 +131,7 @@ export default function MyPage({navigation}) {
             <TouchableOpacity
               style={{flexDirection: 'row', marginTop: 5}}
               onPress={() => navigation.navigate('EditProfile')}>
-              <Text
-                style={styles.editProfileText}>
-                프로필 수정
-              </Text>
+              <Text style={styles.editProfileText}>프로필 수정</Text>
               <View style={{paddingTop: 3}}>
                 <PencilIcon />
               </View>
@@ -145,7 +139,8 @@ export default function MyPage({navigation}) {
           </View>
           <View style={{height: 10}} />
           <View style={styles.btnbox}>
-            <TouchableOpacity onPress={() => navigation.navigate('FriendList', { navigation })}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('FriendList', {navigation})}>
               <View style={styles.btn}>
                 <FriendList />
               </View>
@@ -157,7 +152,7 @@ export default function MyPage({navigation}) {
             </TouchableOpacity>
           </View>
           {PostQuery.data.data ? (
-            <View style={{marginTop: 10}}>
+            <View style={styles.listContainer}>
               <FlatList
                 data={PostQuery.data.data}
                 renderItem={_RenderItem}
@@ -170,10 +165,8 @@ export default function MyPage({navigation}) {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
                   paddingBottom: 400,
-                  marginHorizontal: 30,
                   flexGrow: 0.5,
                   justifyContent: 'flex-start',
-                  alignContent: 'flex-start',
                   backgroundColor: '#FFFFFF',
                 }}
                 numColumns={3}
@@ -229,6 +222,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     paddingTop: 40,
+  },
+  listContainer: {
+    marginTop: 10,
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   content: {
     height: 'auto',
@@ -289,13 +287,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 2,
   },
-  profileNicknameText:{
+  profileNicknameText: {
     fontFamily: 'NanumSquareB',
     color: '#000000',
     fontSize: 15,
     padding: 2,
   },
-  profileBirthdayText:{
+  profileBirthdayText: {
     fontFamily: 'NanumSquareR',
     color: '#000000',
     fontSize: 12,
@@ -307,11 +305,11 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     padding: 3,
   },
-  editProfileText:{
+  editProfileText: {
     fontFamily: 'NanumSquareB',
     color: '#000000',
     fontWeight: 'bold',
     fontSize: 10,
     padding: 2,
-  }
+  },
 });
