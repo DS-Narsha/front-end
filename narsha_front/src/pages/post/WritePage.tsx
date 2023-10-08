@@ -467,10 +467,6 @@ const WritePage = ({route, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               handlePostSubmit();
-              // loadingTimeout;
-              // return () => {
-              //   clearTimeout(loadingTimeout);
-              // };
             }}>
             <SendBtn />
           </TouchableOpacity>
@@ -661,15 +657,15 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   progress: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 70,
-    marginRight: 56,
   },
   progressbox: {
-    paddingHorizontal: 16,
+    display: 'flex',
     flexDirection: 'row',
+    marginHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
