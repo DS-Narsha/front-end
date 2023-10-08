@@ -13,8 +13,8 @@ import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
 import AchieveData from '../../data/AchieveData.json';
 import {badgeSources} from '../../data/BadgeSources';
 import Config from 'react-native-config';
-import { useSelector, useDispatch } from "react-redux";
-import store, { turn } from '../../../Achievement'
+import {useSelector, useDispatch} from 'react-redux';
+import store, {turn} from '../../../Achievement';
 
 type UserData = {
   userId: string;
@@ -52,9 +52,9 @@ export default function BadgeList({route, navigation}) {
   });
 
   // get Achievement
-  const ac = store.getState().achieve
+  const ac = store.getState().achieve;
   const dispatch = useDispatch();
-   
+
   // get profile
   const getProfileDetail = async () => {
     try {
@@ -97,35 +97,35 @@ export default function BadgeList({route, navigation}) {
       console.log(err);
     }
   };
-  
+
   const postQuery = useQuery({
     queryKey: ['posting-list'],
     queryFn: getPostingList,
   });
 
-    // get comment count
-    const getCmtCount = async () => {
-      try {
-        const res = await fetch(
-          `http://${Config.HOST_NAME}/api/comment/count?userId=${userData.userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+  // get comment count
+  const getCmtCount = async () => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/comment/count?userId=${userData.userId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
-        const json = await res.json();
-        return json;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    
-    const commentQuery = useQuery({
-      queryKey: ['comment-count'],
-      queryFn: getCmtCount,
-    });
+        },
+      );
+      const json = await res.json();
+      return json;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const commentQuery = useQuery({
+    queryKey: ['comment-count'],
+    queryFn: getCmtCount,
+  });
 
   // receive ten like count
   const receiveTenLike = async () => {
@@ -145,7 +145,7 @@ export default function BadgeList({route, navigation}) {
       console.log(err);
     }
   };
-  
+
   const receiveTenLikeQuery = useQuery({
     queryKey: ['receive-ten-like'],
     queryFn: receiveTenLike,
@@ -169,35 +169,33 @@ export default function BadgeList({route, navigation}) {
       console.log(err);
     }
   };
-  
+
   const giveTenLikeQuery = useQuery({
     queryKey: ['give-ten-like'],
     queryFn: giveTenLike,
   });
 
-// update achievement
-const updateAchi = useMutation(async (num) => {
-  try {
-    const res = await fetch(
-      `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${
-        userData.userId
-      }&achieveNum=${num}`,
-      {
-        method: 'PUT',
-      },
-    );
+  // update achievement
+  const updateAchi = useMutation(async num => {
+    try {
+      const res = await fetch(
+        `http://${Config.HOST_NAME}/api/user/check-achieve?userId=${userData.userId}&achieveNum=${num}`,
+        {
+          method: 'PUT',
+        },
+      );
 
-    const json = await res.json();
+      const json = await res.json();
 
-    if (res.ok) {
-      dispatch(turn(num));
-    } else {
-      throw new Error(json.message);
+      if (res.ok) {
+        dispatch(turn(num));
+      } else {
+        throw new Error(json.message);
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-});
+  });
 
   const handleBirthAchi = async () => {
     try {
@@ -234,26 +232,43 @@ const updateAchi = useMutation(async (num) => {
       await updateAchi.mutateAsync(5);
     } catch (error) {}
   };
-  
+
   const handleGiveTenLikeAchi = async () => {
     try {
       await updateAchi.mutateAsync(10);
     } catch (error) {}
   };
 
-
   // handleAchi();
-  useEffect(()=> {
-    !(ac.includes(4)) && !profileQuery.isLoading && !(profileQuery.data.data.birth === null) && handleBirthAchi();
-    !(ac.includes(8)) && ac.length>=5 && handleFiveAchi();
-    !(ac.includes(1)) && !postQuery.isLoading && (postQuery.data.data.length >= 1) && handleFirstPostAchi();
-    !(ac.includes(6)) && !postQuery.isLoading && (postQuery.data.data.length >= 5) && handleFivePostAchi();
-    !(ac.includes(7)) && !commentQuery.isLoading && (commentQuery.data.data >= 5) && handleFiveCmtAchi();
-    !(ac.includes(5)) && !receiveTenLikeQuery.isLoading && receiveTenLikeQuery.data.data && handleReceiveTenLikeAchi();
-    !(ac.includes(10)) && !giveTenLikeQuery.isLoading && giveTenLikeQuery.data.data>=10 && handleGiveTenLikeAchi();
+  useEffect(() => {
+    !ac.includes(4) &&
+      !profileQuery.isLoading &&
+      !(profileQuery.data.data.birth === null) &&
+      handleBirthAchi();
+    !ac.includes(8) && ac.length >= 5 && handleFiveAchi();
+    !ac.includes(1) &&
+      !postQuery.isLoading &&
+      postQuery.data.data.length >= 1 &&
+      handleFirstPostAchi();
+    !ac.includes(6) &&
+      !postQuery.isLoading &&
+      postQuery.data.data.length >= 5 &&
+      handleFivePostAchi();
+    !ac.includes(7) &&
+      !commentQuery.isLoading &&
+      commentQuery.data.data >= 5 &&
+      handleFiveCmtAchi();
+    !ac.includes(5) &&
+      !receiveTenLikeQuery.isLoading &&
+      receiveTenLikeQuery.data.data &&
+      handleReceiveTenLikeAchi();
+    !ac.includes(10) &&
+      !giveTenLikeQuery.isLoading &&
+      giveTenLikeQuery.data.data >= 10 &&
+      handleGiveTenLikeAchi();
 
-    console.log(ac)
-  }, [])
+    console.log(ac);
+  }, []);
 
   const _RenderItem = ({item, index}: any) => {
     // console.log(item.title);
@@ -313,7 +328,6 @@ const updateAchi = useMutation(async (num) => {
                 initialNumToRender={10}
                 contentContainerStyle={{
                   paddingBottom: 100,
-                  marginHorizontal: 20,
                   flexGrow: 0.5,
                   justifyContent: 'flex-start',
                   alignSelf: 'flex-start',
