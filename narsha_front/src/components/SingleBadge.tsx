@@ -61,8 +61,7 @@ const SingleBadge = props => {
 
 const styles = StyleSheet.create({
   img: {
-    borderRadius: 10,
-    width: 100,
+    width: 95,
     height: 100,
     margin: 10,
   },

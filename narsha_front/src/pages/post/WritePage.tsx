@@ -467,10 +467,6 @@ const WritePage = ({route, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               handlePostSubmit();
-              // loadingTimeout;
-              // return () => {
-              //   clearTimeout(loadingTimeout);
-              // };
             }}>
             <SendBtn />
           </TouchableOpacity>
@@ -521,7 +517,10 @@ const WritePage = ({route, navigation}) => {
                   >
                     <Image
                       source={{uri: `data:image/jpeg;base64,${item}`}}
-                      style={styles.smallImage}
+                      style={[
+                        styles.smallImage,
+                        objectDetect[index].length > 0 && styles.maskingImage,
+                      ]}
                     />
                     {index === selectedImageIndex && (
                       <View style={styles.selectedText}>
@@ -544,9 +543,19 @@ const WritePage = ({route, navigation}) => {
                         <View
                           key={index}
                           style={styles.replaceWordTextContainer}>
-                          <Text style={[styles.replaceWordText, {color: '#FF0000'}]}>{`${key}`}</Text>
-                          <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
-                          <Text style={[styles.replaceWordText, {color: '#000000'}]}>{`${value}`}</Text>
+                          <Text
+                            style={[
+                              styles.replaceWordText,
+                              {color: '#FF0000'},
+                            ]}>{`${key}`}</Text>
+                          <Arrow
+                            style={{marginHorizontal: 13, marginVertical: 3}}
+                          />
+                          <Text
+                            style={[
+                              styles.replaceWordText,
+                              {color: '#000000'},
+                            ]}>{`${value}`}</Text>
                         </View>
                       );
                     } else {
@@ -554,9 +563,21 @@ const WritePage = ({route, navigation}) => {
                         <View
                           key={index}
                           style={styles.replaceWordTextContainer}>
-                          <Text style={[styles.replaceWordText, {color: '#FF0000'}]}>{`${key}`}</Text>
-                          <Arrow style={{marginHorizontal: 13, marginVertical: 3}}/>
-                          <Text style={[styles.replaceWordText, {color: '#0000FF'}]}>삭제</Text>
+                          <Text
+                            style={[
+                              styles.replaceWordText,
+                              {color: '#FF0000'},
+                            ]}>{`${key}`}</Text>
+                          <Arrow
+                            style={{marginHorizontal: 13, marginVertical: 3}}
+                          />
+                          <Text
+                            style={[
+                              styles.replaceWordText,
+                              {color: '#0000FF'},
+                            ]}>
+                            삭제
+                          </Text>
                         </View>
                       );
                     }
@@ -588,13 +609,13 @@ const WritePage = ({route, navigation}) => {
       </ScrollView>
 
       {/* post guide modal */}
-      <ImageGuideModal guideModalVisible={guideModalVisible}/>
-      
+      <ImageGuideModal guideModalVisible={guideModalVisible} />
+
       {/* loading modal */}
-      <TextLoadingModal loadingModalVisible={loadingModalVisible}/>
+      <TextLoadingModal loadingModalVisible={loadingModalVisible} />
 
       {/* 모달창 */}
-      <FilterModal modalVisible={modalVisible}/>
+      <FilterModal modalVisible={modalVisible} />
     </View>
   );
 };
@@ -636,15 +657,15 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   progress: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 70,
-    marginRight: 56,
   },
   progressbox: {
-    paddingHorizontal: 16,
+    display: 'flex',
     flexDirection: 'row',
+    marginHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -686,8 +707,13 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     resizeMode: 'cover',
   },
+  maskingImage: {
+    borderColor: 'red',
+    borderWidth: 3,
+    borderRadius: 10,
+  },
   imageContainer: {
-    width: 70, 
+    width: 70,
     height: 70,
     marginHorizontal: 10,
     marginVertical: 10,
@@ -697,7 +723,7 @@ const styles = StyleSheet.create({
   smallImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 10, 
+    borderRadius: 10,
     resizeMode: 'cover',
   },
   selectedText: {
@@ -735,8 +761,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   replaceWordTextContainer: {
-    flexDirection: 'row', 
-    marginLeft: 25
+    flexDirection: 'row',
+    marginLeft: 25,
   },
   replaceWordText: {
     fontFamily: 'NanumSquareB',

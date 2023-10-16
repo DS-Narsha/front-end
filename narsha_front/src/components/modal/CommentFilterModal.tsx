@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import {useEffect, useState} from 'react';
+import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 export default function CommentFilterModal({modalVisible}: any) {
   const [filterModalVisible, setFilterModalVisible] = useState(modalVisible);
@@ -9,54 +8,52 @@ export default function CommentFilterModal({modalVisible}: any) {
     setFilterModalVisible(modalVisible);
   }, [modalVisible]);
 
-  return(
+  return (
     <Modal
-        animationType="fade"
-        transparent={true}
-        visible={filterModalVisible}
-        onRequestClose={() => {
-          setFilterModalVisible(!filterModalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.modalTitleArea}>
-              <Text style={styles.modalTitleText}>
-                여러분들의 댓글을 수정해주세요!
+      animationType="fade"
+      transparent={true}
+      visible={filterModalVisible}
+      onRequestClose={() => {
+        setFilterModalVisible(!filterModalVisible);
+      }}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <View style={styles.modalTitleArea}>
+            <Text style={styles.modalTitleText}>
+              여러분들의 댓글을 수정해주세요!
+            </Text>
+          </View>
+          <Text style={styles.modalText}>
+            기호로 감싸진 글자를 모두 수정해야 SNS에 댓글을 올릴 수 있어요.
+            여러분의 댓글을 수정해볼까요?
+          </Text>
+          <View style={styles.modalAlertArea}>
+            <View style={styles.alertBody}>
+              <Text style={styles.alertInfo}>*개인정보*</Text>
+              <Text style={styles.alertText}>
+                개인정보, 민간한 정보가 포함되었을 경우
               </Text>
             </View>
-            <Text style={styles.modalText}>
-              기호로 감싸진 글자를 모두 수정해야
-            </Text>
-            <Text style={styles.modalText}>SNS에 게시글을 올릴 수 있어요.</Text>
-            <Text style={styles.modalText}>여러분의 댓글을 수정해볼까요?</Text>
-
-            <View style={styles.modalAlertArea}>
-              <View style={styles.alertBody}>
-                <Text style={styles.alertInfo}>*개인정보*</Text>
-                <Text style={styles.alertText}>
-                  개인정보, 민간한 정보가 포함되었을 경우
-                </Text>
-              </View>
-              <View style={styles.alertBody}>
-                <Text style={styles.alertInfo}>
-                  {'{'}욕설{'}'}
-                </Text>
-                <Text style={styles.alertText}>
-                  욕설, 비속어의 말이 포함되었을 경우
-                </Text>
-              </View>
-            </View>
-            <View style={styles.modalBtnArea}>
-              <TouchableOpacity
-                style={[styles.button]}
-                onPress={() => setFilterModalVisible(false)}>
-                <Text style={styles.textStyle}>확인</Text>
-              </TouchableOpacity>
+            <View style={styles.alertBody}>
+              <Text style={styles.alertInfo}>
+                {'{'}욕설{'}'}
+              </Text>
+              <Text style={styles.alertText}>
+                욕설, 비속어의 말이 포함되었을 경우
+              </Text>
             </View>
           </View>
+          <View style={styles.modalBtnArea}>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={() => setFilterModalVisible(false)}>
+              <Text style={styles.textStyle}>확인</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </Modal>
-  )
+      </View>
+    </Modal>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -67,12 +64,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(150, 150, 150, 0.5)',
   },
   modalView: {
-    margin: 20,
+    display: 'flex',
+    flexDirection: 'column',
     backgroundColor: 'white',
-    width: '75%',
+    marginHorizontal: 30,
     borderRadius: 20,
-    paddingLeft: 25,
-    paddingRight: 25,
     paddingBottom: 25,
     alignItems: 'center',
     shadowColor: '#000',
@@ -85,22 +81,26 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitleArea: {
+    display: 'flex',
+    flexDirection: 'row',
     backgroundColor: '#AADF98',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 17,
-    width: '121%',
     height: 60,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   modalTitleText: {
+    textAlign: 'center',
+    flex: 1,
     color: 'black',
     fontSize: 17,
     fontFamily: 'NanumSquareB',
   },
   modalText: {
     marginBottom: 3,
+    marginHorizontal: 15,
     textAlign: 'center',
     color: 'black',
     fontFamily: 'NanumSquareR',
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
     fontFamily: 'NanumSquareB',
   },
-})
+});
