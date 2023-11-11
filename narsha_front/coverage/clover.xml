@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <coverage generated="1699719317776" clover="3.2.0">
   <project timestamp="1699719317776" name="All files">
+=======
+<coverage generated="1699715533119" clover="3.2.0">
+  <project timestamp="1699715533120" name="All files">
+>>>>>>> 8a9dc898dd371700a2fab5b48372071e5d34d3fe
     <metrics statements="14" coveredstatements="10" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="3" elements="22" coveredelements="14" complexity="0" loc="14" ncloc="14" packages="1" files="1" classes="1"/>
     <file name="TestLoginPage.tsx" path="C:\otcroz\narsha\front-end\narsha_front\test\TestLoginPage.tsx">
       <metrics statements="14" coveredstatements="10" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="3"/>
