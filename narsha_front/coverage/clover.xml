@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699688453944" clover="3.2.0">
-  <project timestamp="1699688453944" name="All files">
-    <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0" complexity="0" loc="0" ncloc="0" packages="0" files="0" classes="0"/>
+<<<<<<< HEAD
+<coverage generated="1699719317776" clover="3.2.0">
+  <project timestamp="1699719317776" name="All files">
+=======
+<coverage generated="1699715533119" clover="3.2.0">
+  <project timestamp="1699715533120" name="All files">
+>>>>>>> 8a9dc898dd371700a2fab5b48372071e5d34d3fe
+    <metrics statements="14" coveredstatements="10" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="3" elements="22" coveredelements="14" complexity="0" loc="14" ncloc="14" packages="1" files="1" classes="1"/>
+    <file name="TestLoginPage.tsx" path="C:\otcroz\narsha\front-end\narsha_front\test\TestLoginPage.tsx">
+      <metrics statements="14" coveredstatements="10" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="3"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="13" count="1" type="stmt"/>
+      <line num="14" count="1" type="stmt"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="17" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="18" count="1" type="stmt"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="21" count="0" type="stmt"/>
+      <line num="22" count="0" type="stmt"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="39" count="1" type="stmt"/>
+      <line num="49" count="0" type="stmt"/>
+      <line num="69" count="1" type="stmt"/>
+    </file>
   </project>
 </coverage>

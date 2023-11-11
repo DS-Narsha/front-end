@@ -1,10 +1,16 @@
-- name: Codecov
+name: test
 on:
   pull_request:
     branches:
       - main
       - release
 
-  uses: codecov/codecov-action@v3.1.4    
-  env:
-    CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code Coverage
+        uses: codecov/codecov-action@v3.1.4
+        with: 
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: unittests # optional
