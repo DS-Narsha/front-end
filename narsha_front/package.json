@@ -10,7 +10,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "test-codecov": "jest --coverage && codecov"
   },
   "dependencies": {
     "@notifee/react-native": "^7.8.0",
@@ -25,7 +26,9 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
     "@tanstack/react-query": "^4.29.14",
+    "@testing-library/react-native": "^12.3.2",
     "axios": "^1.4.0",
+    "codecov": "^3.8.3",
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.7",
@@ -53,8 +56,9 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native-community/eslint-config": "^3.2.0",
+    "@testing-library/jest-native": "^5.4.3",
     "@tsconfig/react-native": "^2.0.2",
-    "@types/jest": "^29.2.1",
+    "@types/jest": "^29.5.8",
     "@types/react": "^18.0.24",
     "@types/react-test-renderer": "^18.0.0",
     "babel-jest": "^29.2.1",
@@ -66,6 +70,9 @@
     "typescript": "4.8.4"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ]
   }
 }
