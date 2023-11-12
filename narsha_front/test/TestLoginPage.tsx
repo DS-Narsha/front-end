@@ -14,6 +14,9 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    if (userId == '' && password == '') {
+      Alert.alert('아이디와 비밀번호를 입력해주세요.');
+    }
     if (userId == '') {
       Alert.alert('아이디를 입력해주세요.');
       return;

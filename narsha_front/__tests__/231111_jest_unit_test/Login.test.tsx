@@ -47,4 +47,21 @@ describe('LoginPage', () => {
 
     expect(alertMock).toHaveBeenCalledWith('비밀번호를 입력해주세요.');
   });
+
+  it('아이디와 비밀번호를 입력하지 않았을 때', () => {
+    // 1. Arrange
+    render(<TestLoginPage />);
+
+    // 2. Act
+    const inputID = screen.getByPlaceholderText('아이디');
+    const inputPW = screen.getByPlaceholderText('비밀번호');
+    const TouchableOpacity = screen.getByText('확인!');
+
+    // 3. Assert
+    fireEvent.changeText(inputID, '');
+    fireEvent.changeText(inputPW, '');
+    fireEvent.press(TouchableOpacity);
+
+    expect(alertMock).toHaveBeenCalledWith('아이디와 비밀번호를 입력해주세요.');
+  });
 });
