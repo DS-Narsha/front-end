@@ -72,3 +72,6 @@ android/app/google-services.json
 .env.local
 .env.development
 .env.production
+
+# code coverage
+coverage/
