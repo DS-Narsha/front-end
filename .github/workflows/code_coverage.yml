@@ -8,9 +8,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+
     steps:
-      - name: Code Coverage
-        uses: codecov/codecov-action@v3.1.4
-        with: 
-          token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unittests # optional
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Code Coverage
+      uses: codecov/codecov-action@v3.1.4
+      with: 
+        token: ${{ secrets.CODECOV_TOKEN }}
+        flags: unittests # optional
