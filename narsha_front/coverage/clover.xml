@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699721258491" clover="3.2.0">
-  <project timestamp="1699721258491" name="All files">
-    <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="4" elements="22" coveredelements="21" complexity="0" loc="14" ncloc="14" packages="1" files="1" classes="1"/>
+<coverage generated="1699773483313" clover="3.2.0">
+  <project timestamp="1699773483313" name="All files">
+    <metrics statements="16" coveredstatements="16" conditionals="8" coveredconditionals="7" methods="4" coveredmethods="4" elements="28" coveredelements="27" complexity="0" loc="16" ncloc="16" packages="1" files="1" classes="1"/>
     <file name="TestLoginPage.tsx" path="C:\otcroz\narsha\front-end\narsha_front\test\TestLoginPage.tsx">
-      <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="3" methods="4" coveredmethods="4"/>
+      <metrics statements="16" coveredstatements="16" conditionals="8" coveredconditionals="7" methods="4" coveredmethods="4"/>
       <line num="12" count="1" type="stmt"/>
-      <line num="13" count="4" type="stmt"/>
-      <line num="14" count="4" type="stmt"/>
-      <line num="16" count="4" type="stmt"/>
-      <line num="17" count="2" type="cond" truecount="2" falsecount="0"/>
-      <line num="18" count="1" type="stmt"/>
-      <line num="19" count="1" type="stmt"/>
-      <line num="20" count="1" type="cond" truecount="1" falsecount="1"/>
-      <line num="21" count="1" type="stmt"/>
-      <line num="22" count="1" type="stmt"/>
-      <line num="26" count="4" type="stmt"/>
-      <line num="39" count="2" type="stmt"/>
-      <line num="49" count="1" type="stmt"/>
-      <line num="69" count="1" type="stmt"/>
+      <line num="13" count="5" type="stmt"/>
+      <line num="14" count="5" type="stmt"/>
+      <line num="16" count="5" type="stmt"/>
+      <line num="17" count="3" type="cond" truecount="4" falsecount="0"/>
+      <line num="18" count="2" type="stmt"/>
+      <line num="20" count="3" type="cond" truecount="2" falsecount="0"/>
+      <line num="21" count="2" type="stmt"/>
+      <line num="22" count="2" type="stmt"/>
+      <line num="23" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="24" count="1" type="stmt"/>
+      <line num="25" count="1" type="stmt"/>
+      <line num="29" count="5" type="stmt"/>
+      <line num="42" count="3" type="stmt"/>
+      <line num="52" count="2" type="stmt"/>
+      <line num="72" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>
