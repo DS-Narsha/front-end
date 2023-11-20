@@ -16,6 +16,17 @@ describe('LoginPage', () => {
     restoreAlertMock();
   });
 
+  it('사용자가 로그인 화면을 볼 수 있다.', () => {
+    // 1. Arrange
+    render(<TestLoginPage />);
+
+    // 2. Act
+    const textDisplay = screen.getByText('로그인');
+
+    // 3. Assert
+    expect(textDisplay).toHaveBeenCalledWith('로그인');
+  });
+
   it('아이디를 입력하지 않았을 때', async () => {
     // 1. Arrange
     render(<TestLoginPage />);
